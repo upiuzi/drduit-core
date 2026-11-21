@@ -57,7 +57,7 @@ def _lock_for_table(name: str) -> threading.Lock:
 
 
 def database_url() -> str:
-    return os.environ.get("ONW_DATABASE_URL") or f"sqlite:///{DB_FILE}"
+    return os.environ.get("DRDUIT_DATABASE_URL") or os.environ.get("ONW_DATABASE_URL") or f"sqlite:///{DB_FILE}"
 
 
 def _attach_request_timing(eng: Engine) -> None:

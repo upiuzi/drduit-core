@@ -69,7 +69,9 @@ SESSIONS_DIR = DATA_DIR / "sessions"
 # creation closes that gap without touching a directory an operator already has (a
 # pre-2026-08-23 install, or one that deliberately customized permissions) — chmod
 # fires only on the "we just made this" path, never on an existing root.
-_home_root = Path.home() / ".open-net-worth"
+_drduit_home = Path.home() / ".drduit"
+_legacy_home = Path.home() / ".open-net-worth"
+_home_root = _legacy_home if _legacy_home.exists() and not _drduit_home.exists() else _drduit_home
 _creating_home_root = not _home_root.exists()
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -79,16 +81,16 @@ SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
 if _creating_home_root and _home_root.is_dir():
     platform_fs.restrict_to_owner(_home_root)
 
-DB_FILE = (
-    DATA_DIR / "onw.db"
-)  # the SQLite database (spec 2026-08-05); Postgres via ONW_DATABASE_URL
+_legacy_db = DATA_DIR / "onw.db"
+_drduit_db = DATA_DIR / "drduit.db"
+DB_FILE = _legacy_db if _legacy_db.exists() and not _drduit_db.exists() else _drduit_db
 
 # Same QA data-safety guard as above, for the ONW_DATABASE_URL override: a QA
 # boot that isolates DATA_DIR but sets ONW_DATABASE_URL to the live sqlite file
 # would still write QA rows into the operator's real database. No-op for a
 # non-sqlite URL (e.g. a deliberately provisioned QA Postgres server) and
 # outside QA mode.
-assert_qa_database_url_safe(os.environ.get("ONW_DATABASE_URL"))
+assert_qa_database_url_safe(os.environ.get("DRDUIT_DATABASE_URL") or os.environ.get("ONW_DATABASE_URL"))
 
 # ── User data ─────────────────────────────────────────────────────────────────
 INSTRUMENTS_JSON = DATA_DIR / "instruments.json"  # instrument master (the "what")

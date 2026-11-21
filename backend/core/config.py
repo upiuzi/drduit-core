@@ -140,7 +140,9 @@ _BACKEND = Path(__file__).resolve().parent.parent
 # The demo dataset that used to live beside them under `examples/`
 # is GENERATED now (backend/scripts/demo/), not checked in — see ADR
 # 2026-08-23-the-demo-book-is-generated-not-a-fixture.
-_INSTANCE_ROOT = Path.home() / ".open-net-worth"
+_drduit_instance = Path.home() / ".drduit"
+_legacy_instance = Path.home() / ".open-net-worth"
+_INSTANCE_ROOT = _legacy_instance if _legacy_instance.exists() and not _drduit_instance.exists() else _drduit_instance
 
 
 _DEFAULT_DATA_DIR = _INSTANCE_ROOT / "data"
@@ -153,7 +155,9 @@ _DEFAULT_BACKUPS_DIR = _INSTANCE_ROOT / "backups"
 # folder in first run or moves the instance later — it is never hand-edited, and it exists so
 # the choice survives a restart WITHOUT anyone having to keep a .env in sync. Kept outside the
 # data directory on purpose: it is the thing that says where that directory IS.
-POINTER_FILE = Path.home() / ".config" / "open-net-worth" / "location.json"
+_drduit_pointer = Path.home() / ".config" / "drduit" / "location.json"
+_legacy_pointer = Path.home() / ".config" / "open-net-worth" / "location.json"
+POINTER_FILE = _drduit_pointer if _drduit_pointer.exists() or not _legacy_pointer.exists() else _legacy_pointer
 
 
 def read_pointer() -> Optional[Path]:
@@ -207,7 +211,7 @@ def _resolve_root() -> Optional[Path]:
     (a container, the QA harness) must not be dragged onto a previously-recorded instance —
     that is the difference between an isolated test boot and one writing to real money data.
     """
-    explicit = os.environ.get("ONW_ROOT", "").strip()
+    explicit = os.environ.get("DRDUIT_ROOT", "").strip() or os.environ.get("ONW_ROOT", "").strip()
     if explicit:
         return Path(explicit).expanduser()
     return read_pointer()
@@ -221,10 +225,10 @@ def _resolve_sibling(env_var: str, name: str, fallback: Path) -> Path:
     isolated, but ONW_ROOT beats them because naming a root and then contradicting one of its
     children is never what someone means.
     """
-    root = os.environ.get("ONW_ROOT", "").strip()
+    root = os.environ.get("DRDUIT_ROOT", "").strip() or os.environ.get("ONW_ROOT", "").strip()
     if root:
         return Path(root).expanduser() / name
-    explicit = os.environ.get(env_var, "").strip()
+    explicit = os.environ.get(f"DRDUIT_{name.upper()}", "").strip() or os.environ.get(env_var, "").strip()
     if explicit:
         return Path(explicit).expanduser()
     # A legacy boot names DATA_DIR but not necessarily every sibling (the test harness and the
@@ -232,7 +236,7 @@ def _resolve_sibling(env_var: str, name: str, fallback: Path) -> Path:
     # falling through to the GLOBAL default — that would point an ISOLATED boot's backups at
     # the real instance's folder, which is the exact accident this whole seam exists to
     # prevent.
-    data = os.environ.get("DATA_DIR", "").strip()
+    data = os.environ.get("DRDUIT_DATA_DIR", "").strip() or os.environ.get("DATA_DIR", "").strip()
     if data:
         d = Path(data).expanduser()
         return (d.parent if d.name == "data" else d) / name
@@ -248,10 +252,10 @@ def _resolve_data_dir() -> Path:
     directory, which looks exactly like data loss to the person it happens to. So an
     in-repo `onw.db` with no instance root beside it keeps being used, and says so loudly.
     """
-    root = os.environ.get("ONW_ROOT", "").strip()
+    root = os.environ.get("DRDUIT_ROOT", "").strip() or os.environ.get("ONW_ROOT", "").strip()
     if root:
         return Path(root).expanduser() / "data"
-    explicit = os.environ.get("DATA_DIR", "").strip()
+    explicit = os.environ.get("DRDUIT_DATA_DIR", "").strip() or os.environ.get("DATA_DIR", "").strip()
     if explicit:
         return Path(explicit).expanduser()
     pointed = read_pointer()
@@ -292,7 +296,7 @@ def _env_gateway_token() -> str | None:
 
     Unset/blank means gateway mode is off. A set-but-short value REFUSES to resolve: a weak
     secret on a mode that replaces the login screen is worse than no boot."""
-    token = os.environ.get("ONW_GATEWAY_TOKEN", "").strip()
+    token = os.environ.get("DRDUIT_GATEWAY_TOKEN", "").strip() or os.environ.get("ONW_GATEWAY_TOKEN", "").strip()
     if not token:
         return None
     if len(token) < _GATEWAY_TOKEN_MIN_LEN:
@@ -551,7 +555,7 @@ def _live_instance_roots() -> list[Path]:
     """Every folder holding an operator's REAL data on this machine, resolved at call time:
     the default instance root, the root a folder pick recorded (the pointer wins the default
     for an unconfigured process, so it is just as live), and the in-repo seed data."""
-    roots = [_INSTANCE_ROOT, _BACKEND / "data"]
+    roots = [Path.home() / ".drduit", Path.home() / ".open-net-worth", _BACKEND / "data"]
     pointed = read_pointer()
     if pointed is not None:
         roots.append(pointed)

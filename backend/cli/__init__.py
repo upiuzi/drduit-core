@@ -44,13 +44,13 @@ def build_parser() -> argparse.ArgumentParser:
     from backend.core.version import APP_VERSION
 
     parser = argparse.ArgumentParser(
-        prog="onw",
-        description="Open Net Worth — self-hosted personal finance with an AI assistant.",
-        epilog="Run `onw help <command>` to see a command's options.",
+        prog="drduit",
+        description="Dr Duit — self-hosted personal finance with an AI assistant (Uzi).",
+        epilog="Run `drduit help <command>` to see a command's options.",
         formatter_class=_ListFormatter,
     )
     parser.add_argument(
-        "-V", "--version", action="version", version=f"open-net-worth {APP_VERSION}"
+        "-V", "--version", action="version", version=f"dr-duit {APP_VERSION}"
     )
     sub = parser.add_subparsers(dest="command", metavar="<command>", title="commands")
 

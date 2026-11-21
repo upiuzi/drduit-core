@@ -61,20 +61,20 @@ serve:
 ## daemon-start: load the launchd services so the backend (:8080) and frontend (:5174)
 ##               run persistently, restart on crash, and start at login again.
 daemon-start:
-	launchctl bootstrap gui/$$(id -u) $$HOME/Library/LaunchAgents/ai.opennetworth.backend.plist
-	launchctl bootstrap gui/$$(id -u) $$HOME/Library/LaunchAgents/ai.opennetworth.frontend.plist
+	launchctl bootstrap gui/$$(id -u) $$HOME/Library/LaunchAgents/id.drduit.backend.plist 2>/dev/null || launchctl bootstrap gui/$$(id -u) $$HOME/Library/LaunchAgents/ai.opennetworth.backend.plist
+	launchctl bootstrap gui/$$(id -u) $$HOME/Library/LaunchAgents/id.drduit.frontend.plist 2>/dev/null || launchctl bootstrap gui/$$(id -u) $$HOME/Library/LaunchAgents/ai.opennetworth.frontend.plist
 	@echo "==> Loaded. Check with: make daemon-status"
 
 ## daemon-stop: unload the launchd services — stops the backend/frontend and, unlike
 ##              a plain kill, actually prevents them from auto-restarting.
 daemon-stop:
-	launchctl bootout gui/$$(id -u)/ai.opennetworth.backend 2>/dev/null || true
-	launchctl bootout gui/$$(id -u)/ai.opennetworth.frontend 2>/dev/null || true
+	launchctl bootout gui/$$(id -u)/id.drduit.backend 2>/dev/null || launchctl bootout gui/$$(id -u)/ai.opennetworth.backend 2>/dev/null || true
+	launchctl bootout gui/$$(id -u)/id.drduit.frontend 2>/dev/null || launchctl bootout gui/$$(id -u)/ai.opennetworth.frontend 2>/dev/null || true
 	@echo "==> Unloaded."
 
 ## daemon-status: show whether the launchd services are currently loaded.
 daemon-status:
-	@launchctl list 2>/dev/null | grep opennetworth || echo "not loaded"
+	@launchctl list 2>/dev/null | grep -E "drduit|opennetworth" || echo "not loaded"
 
 # Where a HOSTED demo keeps its book. Outside the repo, like the live instance dir, so a
 # `git clean` can never touch it. Override per-invocation: `make demo-host DEMO_ROOT=/srv/onw`.

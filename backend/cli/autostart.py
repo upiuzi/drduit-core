@@ -26,8 +26,8 @@ from xml.sax.saxutils import escape
 
 from backend.cli import autostart_windows
 
-LABEL = "ai.opennetworth.app"
-UNIT_NAME = "open-net-worth.service"
+LABEL = "id.drduit.app"
+UNIT_NAME = "drduit.service"
 # Carried into the service verbatim when set in the installing shell — PATH for the CLI
 # providers, the rest so `PORT=9000 onw autostart on` sticks across reboots. The last ones
 # decide where uv keeps this install: without them the service looks elsewhere and can't upgrade.
@@ -35,6 +35,9 @@ PASSTHROUGH_ENV = (
     "PATH",
     "HOST",
     "PORT",
+    "DRDUIT_ROOT",
+    "DRDUIT_DATA_DIR",
+    "DRDUIT_DATABASE_URL",
     "ONW_ROOT",
     "DATA_DIR",
     "CACHE_DIR",
