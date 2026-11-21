@@ -9,4 +9,4 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: open-net-worth:local
+    image: drduit:local

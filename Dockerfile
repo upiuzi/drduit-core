@@ -54,11 +54,11 @@ RUN npm install -g @anthropic-ai/claude-code @openai/codex opencode-ai
 FROM python:3.12-slim AS runtime
 
 # Non-root user. HOME matters here specifically: the app's zero-config default
-# data/cache/log directories resolve to ~/.open-net-worth (backend/core/config.py)
+# data/cache/log directories resolve to ~/.drduit (backend/core/config.py)
 # — creating a real user with a real HOME means the default just works with the
 # named volume mounted below, with no DATA_DIR/CACHE_DIR/LOGS_DIR env override.
-RUN groupadd --gid 1000 onw \
-    && useradd --uid 1000 --gid onw --create-home --shell /bin/bash onw
+RUN groupadd --gid 1000 drduit \
+    && useradd --uid 1000 --gid drduit --create-home --shell /bin/bash drduit
 
 WORKDIR /app
 
@@ -115,16 +115,16 @@ RUN ln -s ../lib/node_modules/@anthropic-ai/claude-code/bin/claude.exe /usr/loca
     && test -e /usr/local/bin/claude && test -e /usr/local/bin/codex \
     && test -e /usr/local/bin/opencode
 
-# Pre-create the volume mount points, owned by onw, BEFORE they're ever mounted —
+# Pre-create the volume mount points, owned by drduit, BEFORE they're ever mounted —
 # a fresh named volume (or bind mount) attached at a path with no prior image
-# content is otherwise created root-owned, which the non-root `onw` user can't
+# content is otherwise created root-owned, which the non-root `drduit` user can't
 # write to. .claude/.codex/.local/share/opencode are where each CLI's own subscription
 # login state lives (see docker-compose.yml) — this app never reads or writes them itself.
-RUN mkdir -p /home/onw/.open-net-worth /home/onw/.claude /home/onw/.codex \
-       /home/onw/.local/share/opencode \
-    && chown -R onw:onw /app /home/onw/.open-net-worth /home/onw/.claude /home/onw/.codex \
-       /home/onw/.local
-USER onw
+RUN mkdir -p /home/drduit/.drduit /home/drduit/.claude /home/drduit/.codex \
+       /home/drduit/.local/share/opencode \
+    && chown -R drduit:drduit /app /home/drduit/.drduit /home/drduit/.claude /home/drduit/.codex \
+       /home/drduit/.local
+USER drduit
 
 # Zero-config default HOST is 127.0.0.1 (correct for a bare local process, not
 # for a container reached from outside its network namespace) — override it here.

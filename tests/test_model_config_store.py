@@ -300,12 +300,14 @@ def test_catalog_has_expected_provider_keys():
         "claude_cli",
         "codex_cli",
         "custom",
+        "drduit_ai",
         "gemini",
         "glm",
         "litellm",
         "ollama",
         "openai",
         "openrouter",
+        "sumopod",
         "xai",
     ], f"PROVIDER_CATALOG keys changed unexpectedly; got {keys}"
 

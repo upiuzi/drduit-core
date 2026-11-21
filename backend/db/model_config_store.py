@@ -168,6 +168,8 @@ PROVIDER_HINTS: dict = {
         "label": "OpenAI-compatible (OpenAI, Ollama, LM Studio, OpenRouter, vLLM)",
         "needs_base_url": True,
         "base_url_hints": [
+            {"label": "Dr Duit AI (9Router)", "base_url": "http://localhost:20128/v1"},
+            {"label": "SumoPod AI", "base_url": "https://ai.sumopod.com/v1"},
             {"label": "OpenAI", "base_url": "https://api.openai.com/v1"},
             {"label": "Ollama (local)", "base_url": "http://localhost:11434/v1"},
             {"label": "LM Studio (local)", "base_url": "http://localhost:1234/v1"},
@@ -275,6 +277,37 @@ PROVIDER_CATALOG: list = [
             "gpt-6-astra",
             "gpt-5.6-terra",
             "gpt-5.5",
+        ],
+    },
+    {
+        # Dr Duit AI (9Router) — OpenAI-compatible proxy gateway (http://localhost:20128/v1)
+        "key": "drduit_ai",
+        "label": "Dr Duit AI (9Router)",
+        "transport": "openai_compatible",
+        "base_url": "http://localhost:20128/v1",
+        "needs_api_key": True,
+        "editable_base_url": True,
+        "model_hints": [
+            "gpt-4o-mini",
+            "gpt-4o",
+            "claude-3-5-sonnet",
+            "gemini-2.5-flash",
+            "deepseek-chat",
+        ],
+    },
+    {
+        # SumoPod AI — OpenAI-compatible provider (https://ai.sumopod.com/v1)
+        "key": "sumopod",
+        "label": "SumoPod AI",
+        "transport": "openai_compatible",
+        "base_url": "https://ai.sumopod.com/v1",
+        "needs_api_key": True,
+        "editable_base_url": False,
+        "model_hints": [
+            "gpt-4o-mini",
+            "gpt-4o",
+            "claude-3-5-sonnet",
+            "gemini-2.5-flash",
         ],
     },
     {

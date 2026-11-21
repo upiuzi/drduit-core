@@ -61,7 +61,7 @@ const CLI_KEYS = new Set(['claude_cli', 'codex_cli', 'antigravity_cli'])
 // Preferred order for the ones people ask for by name; anything else follows, catalog order.
 // OpenRouter leads — one key, and it shops the same models plus cheaper capable ones (GLM,
 // DeepSeek) instead of defaulting someone onto Anthropic's full-price Sonnet.
-const KEYED_ORDER = ['openrouter', 'anthropic', 'openai', 'gemini', 'ollama']
+const KEYED_ORDER = ['drduit_ai', 'sumopod', 'openrouter', 'anthropic', 'openai', 'gemini', 'ollama']
 
 /** The keyed (non-CLI) catalog entry KEYED_ORDER puts first — the default provider. */
 function firstKeyedEntry(catalog: CatalogEntry[]): CatalogEntry | null {
