@@ -67,7 +67,7 @@ def service_spec(
     python: str = sys.executable,
     auto_upgrade: bool = False,
 ) -> ServiceSpec:
-    root = home / ".open-net-worth"
+    root = (home / ".drduit") if (home / ".drduit").exists() or not (home / ".open-net-worth").exists() else (home / ".open-net-worth")
     start_args = (AUTO_UPGRADE_FLAG, "--service") if auto_upgrade else ()
     return ServiceSpec(
         command=(python, "-m", "backend.cli", "start", *start_args),
@@ -115,19 +115,26 @@ def render_launchd_plist(spec: ServiceSpec) -> str:
     )
 
 
+def _is_root() -> bool:
+    try:
+        return os.getuid() == 0
+    except (AttributeError, OSError):
+        return False
+
+
 def _systemd_quote(arg: str) -> str:
     if arg and not any(ch in arg for ch in ' \t"\\'):
         return arg
     return '"' + arg.replace("\\", "\\\\").replace('"', '\\"') + '"'
 
 
-def render_systemd_unit(spec: ServiceSpec) -> str:
+def render_systemd_unit(spec: ServiceSpec, target: str = "default.target") -> str:
     env_lines = "".join(
         f"Environment={_systemd_quote(f'{key}={value}')}\n" for key, value in spec.env.items()
     )
     exec_start = " ".join(_systemd_quote(arg) for arg in spec.command)
     return (
-        "[Unit]\nDescription=Open Net Worth\nAfter=network.target\n\n"
+        "[Unit]\nDescription=Dr Duit\nAfter=network.target\n\n"
         "[Service]\n"
         f"WorkingDirectory={spec.working_dir}\n"
         f"{env_lines}"
@@ -142,7 +149,7 @@ def render_systemd_unit(spec: ServiceSpec) -> str:
         # `journalctl --user -u open-net-worth`.
         "StandardOutput=journal\n"
         "StandardError=journal\n\n"
-        "[Install]\nWantedBy=default.target\n"
+        f"[Install]\nWantedBy={target}\n"
     )
 
 
@@ -183,12 +190,35 @@ def _install_launchd(spec: ServiceSpec, home: Path, runner: Runner) -> int:
 
 
 def _install_systemd(spec: ServiceSpec, home: Path, runner: Runner) -> int:
+    if "XDG_RUNTIME_DIR" not in os.environ:
+        try:
+            uid = os.getuid()
+            candidate = Path(f"/run/user/{uid}")
+            if candidate.is_dir():
+                os.environ["XDG_RUNTIME_DIR"] = str(candidate)
+        except (AttributeError, OSError):
+            pass
+
     path = unit_path(home)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(render_systemd_unit(spec))
     runner(["systemctl", "--user", "daemon-reload"])
     result = runner(["systemctl", "--user", "enable", "--now", UNIT_NAME])
     if result.returncode != 0:
+        # If running as root and systemctl --user failed (common on VPS without dbus user session),
+        # fall back to system-wide service in /etc/systemd/system
+        if _is_root():
+            sys_unit = Path("/etc/systemd/system") / UNIT_NAME
+            try:
+                sys_unit.write_text(render_systemd_unit(spec, target="multi-user.target"))
+                runner(["systemctl", "daemon-reload"])
+                sys_res = runner(["systemctl", "enable", "--now", UNIT_NAME])
+                if sys_res.returncode == 0:
+                    print("==> Autostart is on (system-wide systemd service). It's running now, and starts by itself after every restart.")
+                    print(f"    Logs: {spec.log_dir}/app.log, or `journalctl -u {UNIT_NAME}`")
+                    return 0
+            except OSError:
+                pass
         print(f"systemctl enable failed: {result.stderr.strip()}", file=sys.stderr)
         return result.returncode
     print("==> Autostart is on. It's running now, and starts by itself after every restart.")
@@ -210,6 +240,11 @@ def stop(system: str, home: Path, runner: Runner) -> int:
         runner(["systemctl", "--user", "disable", "--now", UNIT_NAME])
         unit_path(home).unlink(missing_ok=True)
         runner(["systemctl", "--user", "daemon-reload"])
+        sys_unit = Path("/etc/systemd/system") / UNIT_NAME
+        if sys_unit.exists():
+            runner(["systemctl", "disable", "--now", UNIT_NAME])
+            sys_unit.unlink(missing_ok=True)
+            runner(["systemctl", "daemon-reload"])
     elif system == "Windows":
         return autostart_windows.stop(home / ".open-net-worth", runner)
     else:
@@ -239,8 +274,13 @@ def status(system: str, home: Path, runner: Runner) -> int:
         installed = plist_path(home).exists()
         probe = ["launchctl", "print", f"gui/{os.getuid()}/{LABEL}"]
     elif system == "Linux":
-        installed = unit_path(home).exists()
-        probe = ["systemctl", "--user", "is-active", UNIT_NAME]
+        sys_unit = Path("/etc/systemd/system") / UNIT_NAME
+        if sys_unit.exists():
+            installed = True
+            probe = ["systemctl", "is-active", UNIT_NAME]
+        else:
+            installed = unit_path(home).exists()
+            probe = ["systemctl", "--user", "is-active", UNIT_NAME]
     elif system == "Windows":
         code = autostart_windows.status(runner)
         _print_auto_upgrade(system, home)

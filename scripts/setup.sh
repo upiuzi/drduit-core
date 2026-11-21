@@ -89,7 +89,7 @@ fi
 log "Node OK: $(node --version)"
 
 # ── venv ───────────────────────────────────────────────────────────────────────
-if [ ! -x "$REPO_ROOT/.venv/bin/python3" ]; then
+if [ ! -x "$REPO_ROOT/.venv/bin/python3" ] || ! "$REPO_ROOT/.venv/bin/python3" -m pip --version >/dev/null 2>&1; then
   log "Creating .venv ..."
   "$PY_INTERP" -m venv --clear "$REPO_ROOT/.venv"
 else
@@ -123,6 +123,7 @@ print(f"    macOS build, run: \"/Applications/Python {sys.version_info.major}.{s
 PY
 
 # ── Frontend deps + build ────────────────────────────────────────────────────
+export NODE_OPTIONS="${NODE_OPTIONS:---max-old-space-size=2048}"
 log "Installing frontend dependencies ..."
 (cd "$REPO_ROOT/frontend" && npm ci)
 log "Building frontend (this serves from frontend/dist/ — no separate frontend server needed) ..."
