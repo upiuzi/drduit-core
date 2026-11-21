@@ -477,7 +477,7 @@ function InstRow({ c, i, fx, m, split }: InstRowProps) {
                 )
               }
             >
-              Cover the gap with Lucius
+              Cover the gap with Uzi
               <ArrowRight size={14} aria-hidden="true" />
             </Button>
           )}
@@ -529,7 +529,7 @@ export function Schedule({ commitment: c, fx, envelope, m }: ScheduleProps) {
               )
             }
           >
-            Manage with Lucius <ArrowRight size={13} aria-hidden="true" />
+            Manage with Uzi <ArrowRight size={13} aria-hidden="true" />
           </button>
         </span>
       </div>

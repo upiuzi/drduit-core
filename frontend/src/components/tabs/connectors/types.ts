@@ -9,7 +9,7 @@ export type ConnectorKind = string
 export type ConnectorStatus = 'not_configured' | 'configured' | 'active' | 'error' | string
 
 /** One tool a connector contributes — PRESENTATIONAL metadata for the detail view.
- *  `name` is the exact registry tool id (Lucius-callable); `source` is `native` (static map)
+ *  `name` is the exact registry tool id (Uzi-callable); `source` is `native` (static map)
  *  or `mcp` (live-advertised by an external MCP server). Display-only — no dispatch change. */
 export interface ConnectorTool {
   name: string

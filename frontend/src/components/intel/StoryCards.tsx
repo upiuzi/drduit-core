@@ -96,7 +96,7 @@ export function StoryLine({
           : lead
             ? signalMeta(lead.type).label
             : hasRead
-              ? 'Lucius’s read'
+              ? 'Uzi’s read'
               : 'Price signal'}
       </span>
       <span className="intel-desk-line-title">{title}</span>

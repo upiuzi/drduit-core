@@ -5,7 +5,7 @@ import { Login } from './Login'
 
 const authFetch = vi.hoisted(() => vi.fn())
 vi.mock('../api/client', () => ({ authFetch }))
-vi.mock('../brand-context', () => ({ useBrand: () => ({ app_name: 'Open Net Worth' }) }))
+vi.mock('../brand-context', () => ({ useBrand: () => ({ app_name: 'Dr Duit' }) }))
 
 afterEach(() => {
   cleanup()

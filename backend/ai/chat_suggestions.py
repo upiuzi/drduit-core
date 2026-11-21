@@ -26,7 +26,7 @@ from backend.core.untrusted import is_screen_context_block
 logger = logging.getLogger(__name__)
 
 _FOLLOWUP_SYSTEM = """\
-You are Lucius, a personal wealth manager. Based on the last exchange, propose what \
+You are Uzi, a personal wealth manager. Based on the last exchange, propose what \
 the client would tap to send next. These are buttons that send the text verbatim, so \
 their whole job is to save the client from typing.
 FIRST decide which case you're in:

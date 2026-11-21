@@ -498,8 +498,8 @@ export function StepLucius({
     <Stack gap="--space-6">
       <Text as="p" tone="muted" className="firstrun-lead">
         {gatewayMode
-          ? 'Lucius needs a model to think with — a provider’s API key. To use a Claude Code or Codex subscription instead, finish setup and open Settings → Terminal. Change it any time in Settings.'
-          : 'Lucius needs a model to think with — a subscription you already pay for, a provider’s key, or one running on this machine. Change it any time in Settings.'}
+          ? 'Uzi needs a model to think with — a provider’s API key. To use a Claude Code or Codex subscription instead, finish setup and open Settings → Terminal. Change it any time in Settings.'
+          : 'Uzi needs a model to think with — a subscription you already pay for, a provider’s key, or one running on this machine. Change it any time in Settings.'}
       </Text>
       {gatewayMode && (
         <Text as="p" size="sm" tone="muted">
@@ -636,7 +636,7 @@ export function StepLucius({
                     </span>
                     {keyedChosen && keyedChosen.key !== 'openrouter' && (
                       <Text as="span" size="xs" tone="faint" className="firstrun-row__note">
-                        Running Lucius can get pricey.{' '}
+                        Running Uzi can get pricey.{' '}
                         {keyedChosen.key === 'anthropic' &&
                           'Claude Max and Team plans include monthly API credits. '}
                         Consider a cheaper capable model like GLM or DeepSeek via OpenRouter.
@@ -644,7 +644,7 @@ export function StepLucius({
                     )}
                     {keyedChosen?.key === 'openrouter' && (
                       <Text as="span" size="xs" tone="faint" className="firstrun-row__note">
-                        Pick a model on par with Claude Sonnet 5.0, such as GLM 5.3 or Kimi. Lucius
+                        Pick a model on par with Claude Sonnet 5.0, such as GLM 5.3 or Kimi. Uzi
                         works in long chains of tool calls, and weaker models slip.
                       </Text>
                     )}

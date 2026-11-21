@@ -67,7 +67,7 @@ export const PRIMARY_TABS: TabId[] = [
 export const CONFIG_TABS: TabId[] = ['automations', 'skills', 'connectors', 'settings']
 
 export const TAB_LABELS: Record<TabId, string> = {
-  lucius: 'Lucius',
+  lucius: 'Uzi',
   dashboard: 'Dashboard',
   inbox: 'Inbox',
   investments: 'Investments',
@@ -109,7 +109,7 @@ export const SELF_HEADER_TABS = new Set<TabId>([
 ])
 
 export const TAB_SUBTITLES: Record<TabId, string> = {
-  lucius: 'Chat with Lucius — your personal wealth manager',
+  lucius: 'Chat with Uzi — your personal wealth manager',
   dashboard: 'Your complete financial picture',
   inbox: 'Everything that needs your attention, in one place',
   investments: 'Stocks, ETFs, crypto, and commodities across all accounts',
@@ -118,12 +118,12 @@ export const TAB_SUBTITLES: Record<TabId, string> = {
   commitments: "Dated obligations and how you'll fund them",
   plan: 'Budgets, projections, and retirement planning',
   intel: "What's moving what you hold, watch and follow — plus copy and paper trading",
-  skills: 'Reusable playbooks Lucius can run for you — one-click routines',
+  skills: 'Reusable playbooks Uzi can run for you — one-click routines',
   automations:
     'Run on a schedule or when something happens. Every run is a conversation you can pick back up.',
-  build: 'Customize Open Net Worth with a local coding engine',
+  build: 'Customize Dr Duit with a local coding engine',
   profile: 'Personal details, income, and FIRE settings',
   connectors: 'Channels, data sources, and tools this instance connects to',
   settings: 'AI model, appearance, security, and your data — instance-level settings',
-  help: 'Guides, concepts, and answers for running Open Net Worth',
+  help: 'Guides, concepts, and answers for running Dr Duit',
 }

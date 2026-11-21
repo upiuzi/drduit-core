@@ -740,7 +740,7 @@ export function DashboardGrid({
           const menuItems: KebabItem[] = [
             { label: 'Display…', onClick: () => setDisplayFor(displayItem.instanceId) },
             ...(onShareWithLucius
-              ? [{ label: 'Share with Lucius', onClick: () => onShareWithLucius(label) }]
+              ? [{ label: 'Share with Uzi', onClick: () => onShareWithLucius(label) }]
               : []),
             { label: 'Duplicate', onClick: () => layout.duplicateItem(displayItem.instanceId) },
             ...(sourceTab

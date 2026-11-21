@@ -61,7 +61,7 @@ function UpdateReadyBanner() {
   // Later is per version AND per stage: hiding "available" must not hide the "ready" that follows.
   const key = `${ready ? 'ready' : 'available'}:${state.version ?? ''}`
   if (dismissed === key) return null
-  const name = state.version ? `Open Net Worth ${state.version}` : 'An update'
+  const name = state.version ? `Dr Duit ${state.version}` : 'An update'
   return (
     // data-portal-layer: tappable over an open modal — see NewVersionBanner.
     <div className="app-update" role="status" data-portal-layer>

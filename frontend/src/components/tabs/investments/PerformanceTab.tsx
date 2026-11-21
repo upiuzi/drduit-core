@@ -335,7 +335,7 @@ export function PerformanceTab({
                 </Button>
               )}
               <LuciusCta
-                label="Add with Lucius"
+                label="Add with Uzi"
                 message={ADD_ALL_MESSAGE}
                 onAskLucius={onAskLucius}
               />

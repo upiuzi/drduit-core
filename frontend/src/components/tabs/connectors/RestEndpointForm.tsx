@@ -115,7 +115,7 @@ export function EndpointForm({ id, endpoint, onChange, onRemove, onDone }: Endpo
         label="Description"
         htmlFor={`${id}-desc`}
         full={false}
-        help="What it returns or does. Lucius reads this to decide when to call it."
+        help="What it returns or does. Uzi reads this to decide when to call it."
       >
         <input
           id={`${id}-desc`}

@@ -154,7 +154,7 @@ export function SqlAccessPanel({ toast }: SectionProps) {
   return (
     <Panel
       title="SQL access"
-      sub="Lucius can read this database directly — read-only, and never your credentials"
+      sub="Uzi can read this database directly — read-only, and never your credentials"
       actions={
         <Btn
           size="xs"
@@ -172,8 +172,8 @@ export function SqlAccessPanel({ toast }: SectionProps) {
       {row(
         'Direct SQL reads',
         enabled
-          ? 'Lucius may run a single read-only SELECT for questions the ordinary tools cannot express. Writes and credential tables are refused by the database itself.'
-          : 'Blocked. Lucius falls back to the ordinary read tools.',
+          ? 'Uzi may run a single read-only SELECT for questions the ordinary tools cannot express. Writes and credential tables are refused by the database itself.'
+          : 'Blocked. Uzi falls back to the ordinary read tools.',
         <Toggle
           on={enabled}
           disabled={!config.data}
@@ -186,7 +186,7 @@ export function SqlAccessPanel({ toast }: SectionProps) {
         ? row(
             'Not working on this database',
             <>
-              {`Lucius can't run SQL right now: ${config.data?.reason ?? ''}`}
+              {`Uzi can't run SQL right now: ${config.data?.reason ?? ''}`}
               {fix
                 ? ' Run this once as a database admin; it starts working within a minute, no restart needed.'
                 : null}
@@ -230,7 +230,7 @@ export function SqlAccessPanel({ toast }: SectionProps) {
           title="No queries yet"
           body={
             enabled
-              ? "Nothing has been asked of the database directly. Ask Lucius something the ordinary tools can't answer and it will show up here."
+              ? "Nothing has been asked of the database directly. Ask Uzi something the ordinary tools can't answer and it will show up here."
               : 'SQL access is off, so nothing can run.'
           }
         />

@@ -120,7 +120,7 @@ export function OverviewTab({ commitment: c, fx, envelope, positions, goTo, m }:
         </div>
         {(c.funding_plan || []).length === 0 ? (
           <div className="c2-fund-empty">
-            No funding sources yet — ask Lucius how you'll cover these{' '}
+            No funding sources yet — ask Uzi how you'll cover these{' '}
             {tracker ? 'contributions' : 'installments'}.
           </div>
         ) : !tracker ? (

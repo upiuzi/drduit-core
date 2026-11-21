@@ -34,7 +34,7 @@ export function DataInHero({
           <Button variant="primary" size="sm" onClick={onAddAccount}>
             Add an account myself
           </Button>
-          <LuciusCta label="Add with Lucius" message={luciusMessage} onAskLucius={onAskLucius} />
+          <LuciusCta label="Add with Uzi" message={luciusMessage} onAskLucius={onAskLucius} />
         </Cluster>
       }
     />

@@ -23,7 +23,7 @@ export function MonitoringCadencePanel({ cfg, save }: PanelProps) {
   return (
     <Panel
       title="Monitoring"
-      sub="How often Lucius checks prices and scans news on your watchlists"
+      sub="How often Uzi checks prices and scans news on your watchlists"
     >
       {row(
         'Monitoring active',

@@ -10,15 +10,15 @@ interface Shortcut {
 const EVERYWHERE: Shortcut[] = [
   { label: 'Command palette', keys: ['Mod', 'K'] },
   { label: 'Show or hide the sidebar', keys: ['Mod', 'B'] },
-  { label: 'Show or hide the Lucius panel', keys: ['Mod', '/'] },
+  { label: 'Show or hide the Uzi panel', keys: ['Mod', '/'] },
   { label: 'Hide amounts', keys: ['H'] },
   { label: 'Keyboard shortcuts', keys: ['Mod', 'Shift', '/'] },
 ]
 
 function desktopShortcuts(mac: boolean): Shortcut[] {
   return [
-    { label: 'Open Lucius', keys: ['Mod', 'L'] },
-    { label: 'New Lucius conversation', keys: ['Mod', 'N'] },
+    { label: 'Open Uzi', keys: ['Mod', 'L'] },
+    { label: 'New Uzi conversation', keys: ['Mod', 'N'] },
     { label: 'New transaction', keys: ['Mod', 'Shift', 'N'] },
     { label: 'Import statement or receipt', keys: ['Mod', 'O'] },
     { label: 'Export book', keys: ['Mod', 'Shift', 'E'] },

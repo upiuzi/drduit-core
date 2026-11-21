@@ -293,7 +293,7 @@ def render_pdf(html: str, *, title: str) -> bytes:
             fontname="helv",
             color=muted,
         )
-    doc.set_metadata({"title": title, "creator": "Open Net Worth", "producer": "Open Net Worth"})
+    doc.set_metadata({"title": title, "creator": "Dr Duit", "producer": "Dr Duit"})
     return doc.tobytes(garbage=3, deflate=True)
 
 

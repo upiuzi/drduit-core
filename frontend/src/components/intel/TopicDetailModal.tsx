@@ -125,7 +125,7 @@ export function TopicDetailModal({ item, onClose, onSaved, onDelete }: Props) {
           </div>
           <div className="intel-pa-mute-sub">
             {muted
-              ? "Paused — Lucius won't flag matches for this topic."
+              ? "Paused — Uzi won't flag matches for this topic."
               : 'Mute to stop flagging this topic without deleting it.'}
           </div>
         </div>
@@ -143,7 +143,7 @@ export function TopicDetailModal({ item, onClose, onSaved, onDelete }: Props) {
 
       <div className="intel-td-field">
         <div className="intel-pa-instr-head">
-          <span className="intel-pa-instr-label">Instructions for Lucius</span>
+          <span className="intel-pa-instr-label">Instructions for Uzi</span>
           <LuciusDraftLink
             label={note.trim() ? 'Rewrite' : 'Draft from topic name'}
             onDraft={() => setNote(luciusDraftTopicInstruction(label))}
@@ -153,7 +153,7 @@ export function TopicDetailModal({ item, onClose, onSaved, onDelete }: Props) {
           rows={5}
           value={note}
           onChange={(e) => setNote(e.target.value)}
-          placeholder="What should Lucius watch for and flag? e.g. escalation or ceasefire; gold safe-haven bid; oil spikes; risk-off equity moves — and what it means for my book."
+          placeholder="What should Uzi watch for and flag? e.g. escalation or ceasefire; gold safe-haven bid; oil spikes; risk-off equity moves — and what it means for my book."
         />
       </div>
 

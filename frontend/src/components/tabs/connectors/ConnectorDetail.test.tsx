@@ -435,20 +435,20 @@ describe('the publisher panel is MCP-only (spec §5)', () => {
   it('is absent for a native connector', () => {
     const { container } = renderDetail(entry())
     expect(screen.queryByText('Publisher')).toBeNull()
-    // Always "Developed by Open Net Worth" for a native connector (2026-08-21, simplified
+    // Always "Developed by Dr Duit" for a native connector (2026-08-21, simplified
     // same day) — IBKR is a real vendor, but WE wrote this integration; its own name is
     // dropped from this line entirely rather than named alongside ours.
-    expect(container.textContent).toContain('Developed by Open Net Worth')
+    expect(container.textContent).toContain('Developed by Dr Duit')
     expect(container.textContent).not.toContain('Interactive Brokers')
   })
 
   it('carries NO trust prose either, for a native connector (CNR-TRUST-NATIVE-ABSENT)', () => {
     // The panel was already gated on `mcp`; its PROSE half was not, so it fired on exactly the
     // wrong set — every native connector whose publisher is not us. The reported case is
-    // Serper, a Web provider we build and operate, reading "Open Net Worth does not control
+    // Serper, a Web provider we build and operate, reading "Dr Duit does not control
     // third-party servers". The developer line is the whole answer here.
     const { container } = renderDetail(entry({ id: 'web_search:serper', developer: 'Serper' }))
-    expect(container.textContent).toContain('Developed by Open Net Worth')
+    expect(container.textContent).toContain('Developed by Dr Duit')
     expect(container.textContent).not.toContain('Serper')
     expect(container.textContent).not.toContain('does not control third-party servers')
     expect(container.textContent).not.toContain('Only connectors you add are reachable')
@@ -470,8 +470,8 @@ describe('the publisher panel is MCP-only (spec §5)', () => {
   })
 
   it('says the same for a connector WE publish — the name, and nothing more', () => {
-    const { container } = renderDetail(entry({ id: 'telegram', developer: 'Open Net Worth' }))
-    expect(container.textContent).toContain('Developed by Open Net Worth')
+    const { container } = renderDetail(entry({ id: 'telegram', developer: 'Dr Duit' }))
+    expect(container.textContent).toContain('Developed by Dr Duit')
     expect(container.textContent).not.toContain('third-party')
   })
 

@@ -67,7 +67,7 @@ export function GenericEngineSetup({
               )
             }
           >
-            Set up with Lucius
+            Set up with Uzi
           </Button>
         )}
         {canSetUp && (

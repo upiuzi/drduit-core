@@ -57,7 +57,7 @@ type StartChoice = 'empty' | 'demo'
 // steps that are actually reachable on the chosen path — never a misleading
 // "6 of 6" after only doing 5 things.
 const STEP_TITLES = [
-  'Welcome to Open Net Worth',
+  'Welcome to Dr Duit',
   'Set a password',
   'Connect your AI assistant',
   'Choose your base currency',
@@ -366,7 +366,7 @@ export function OnboardingWizard({
               worth — all on your own machine.
             </Text>
             <Text as="p" tone="muted">
-              This quick setup takes about a minute. You can change anything later, and Lucius (your
+              This quick setup takes about a minute. You can change anything later, and Uzi (your
               AI assistant) can help with the rest in conversation.
             </Text>
           </Stack>
@@ -408,7 +408,7 @@ export function OnboardingWizard({
         return (
           <Stack gap="--space-5">
             <Text as="p" tone="muted">
-              Lucius, your AI assistant, needs a language model to answer questions and help manage
+              Uzi, your AI assistant, needs a language model to answer questions and help manage
               your finances. Pick a provider and paste your API key — or choose Ollama if you run a
               local model. You can change this later in{' '}
               <Text as="span" tone="faint" size="sm">
@@ -446,7 +446,7 @@ export function OnboardingWizard({
             {aiProvider === 'ollama' && (
               <Text as="p" size="sm" tone="faint">
                 Ollama runs locally — no key needed. Make sure Ollama is running before you start
-                chatting with Lucius.
+                chatting with Uzi.
               </Text>
             )}
             {aiError && (
@@ -490,7 +490,7 @@ export function OnboardingWizard({
                   Start empty
                 </Text>
                 <Text size="xs" tone="muted" as="p">
-                  A blank slate. Add your own accounts, holdings, and transactions — or ask Lucius
+                  A blank slate. Add your own accounts, holdings, and transactions — or ask Uzi
                   to help.
                 </Text>
               </button>
@@ -518,7 +518,7 @@ export function OnboardingWizard({
           <Stack gap="--space-5">
             <Text as="p" tone="muted">
               Add your first account to anchor your net worth — or skip and add accounts later via
-              Lucius or the Accounts tab.
+              Uzi or the Accounts tab.
             </Text>
             <FormField label="Account name" htmlFor="onb-acct">
               <TextField
@@ -585,7 +585,7 @@ export function OnboardingWizard({
             ) : (
               <>
                 <Text as="p" tone="muted">
-                  You&rsquo;re set. Open the dashboard to see your net worth, or ask Lucius to help
+                  You&rsquo;re set. Open the dashboard to see your net worth, or ask Uzi to help
                   you go further.
                 </Text>
                 <Text as="p" tone="faint" size="sm">
@@ -627,7 +627,7 @@ export function OnboardingWizard({
             <Button
               variant="ghost"
               onClick={skipToChat}
-              title="Open the dashboard immediately and start chatting with Lucius"
+              title="Open the dashboard immediately and start chatting with Uzi"
             >
               Skip to dashboard
             </Button>
@@ -691,7 +691,7 @@ export function OnboardingWizard({
                 variant="secondary"
                 onClick={() => setStep(STEP_DONE)}
                 disabled={busy}
-                title="You can add accounts later from the Accounts tab or by asking Lucius"
+                title="You can add accounts later from the Accounts tab or by asking Uzi"
               >
                 Skip for now
               </Button>
@@ -709,9 +709,9 @@ export function OnboardingWizard({
               className="fi-lucius"
               iconLeft={<Spark size={15} ariaHidden />}
               onClick={skipToChat}
-              title="Open chat with Lucius pre-filled to help you get started"
+              title="Open chat with Uzi pre-filled to help you get started"
             >
-              Ask Lucius to help
+              Ask Uzi to help
             </Button>
             <Button variant="primary" onClick={finish}>
               Open dashboard

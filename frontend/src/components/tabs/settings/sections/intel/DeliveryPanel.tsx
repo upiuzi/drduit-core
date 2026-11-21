@@ -11,7 +11,7 @@ export function DeliveryPanel({ cfg, save }: PanelProps) {
   return (
     <Panel
       title="What Intel should tell me"
-      sub="In your own words — e.g. 'Don't tell me about analyst upgrades. Not at night unless it's serious.' Lucius reads this each time it decides what reaches you."
+      sub="In your own words — e.g. 'Don't tell me about analyst upgrades. Not at night unless it's serious.' Uzi reads this each time it decides what reaches you."
     >
       <textarea
         className="rd-textarea"

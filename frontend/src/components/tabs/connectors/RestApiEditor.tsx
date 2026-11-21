@@ -16,7 +16,7 @@ import type { RestApi, RestApiDraft, RestAuthType, RestHeaderDraft } from './res
 //
 // Drawn in the connectors screen's own form language (`rd-*`, see ./restFormParts), the one
 // the MCP server form uses. `data-ctx-secret` on the form keeps every field of it out of the
-// screen snapshot Lucius can read: the base URL is a credential, and so may a path or a note be.
+// screen snapshot Uzi can read: the base URL is a credential, and so may a path or a note be.
 
 const AUTH_OPTIONS: { value: RestAuthType; label: string }[] = [
   { value: 'none', label: 'None' },
@@ -95,7 +95,7 @@ function Headers({ headers, onChange }: HeadersProps) {
   return (
     <RestField
       label="Extra headers (optional)"
-      help="Sent with every request — an API version header, for example. Lucius cannot see or change them."
+      help="Sent with every request — an API version header, for example. Uzi cannot see or change them."
     >
       {headers.map((header, i) => (
         <div key={i} className="rest-header-row">
@@ -193,18 +193,18 @@ export function RestApiEditor({ initial, onSaved, onSaveError }: RestApiEditorPr
     <div className="rd-formgrid rest-form" data-ctx-secret="">
       {!draft.id && (
         <span className="rd-help full">
-          Add an API by its address and key. Lucius can then request data from it and record what it
+          Add an API by its address and key. Uzi can then request data from it and record what it
           finds. Requests only ever go to the address you save, and the key is added by the app and
-          never shown to Lucius. Each API you add is its own connector.
+          never shown to Uzi. Each API you add is its own connector.
         </span>
       )}
 
-      {/* First, where it is seen: what Lucius is told about this API in every conversation
+      {/* First, where it is seen: what Uzi is told about this API in every conversation
           (owner, 2026-11-11). */}
       <RestField
-        label="Instructions for Lucius"
+        label="Instructions for Uzi"
         htmlFor="rest-notes"
-        help="Given to Lucius in every conversation while this API is on, like an MCP server's own instructions. Tell him what the endpoints don't: which one to use for what, what to call first, how paging and dates work, units and signs, and which of your accounts the data is for."
+        help="Given to Uzi in every conversation while this API is on, like an MCP server's own instructions. Tell him what the endpoints don't: which one to use for what, what to call first, how paging and dates work, units and signs, and which of your accounts the data is for."
       >
         <textarea
           id="rest-notes"
@@ -253,7 +253,7 @@ export function RestApiEditor({ initial, onSaved, onSaveError }: RestApiEditorPr
         label="Base URL"
         htmlFor="rest-base"
         required
-        help="Every request goes to an address that starts with this. Lucius chooses only what comes after it."
+        help="Every request goes to an address that starts with this. Uzi chooses only what comes after it."
       >
         <input
           id="rest-base"
@@ -321,7 +321,7 @@ export function RestApiEditor({ initial, onSaved, onSaveError }: RestApiEditorPr
           help={
             draft.auth_saved
               ? 'Saved. Leave blank to keep it, or type a new one to replace it.'
-              : 'Added to each request by the app. Lucius never sees it.'
+              : 'Added to each request by the app. Uzi never sees it.'
           }
         >
           <SecretInput
@@ -337,7 +337,7 @@ export function RestApiEditor({ initial, onSaved, onSaveError }: RestApiEditorPr
 
       <RestField
         label="Endpoints"
-        help="Each endpoint becomes a tool Lucius can call, with its own permission. These are all he can call on this API."
+        help="Each endpoint becomes a tool Uzi can call, with its own permission. These are all he can call on this API."
       >
         <RestEndpointsEditor
           endpoints={draft.endpoints}

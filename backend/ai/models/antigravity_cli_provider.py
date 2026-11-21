@@ -176,6 +176,22 @@ _NO_ENFORCED_OFFER = (
 )
 
 
+def _cli_effort(model: str, effort: str) -> str:
+    """The --effort flag to pass to agy, or "" when no flag should be passed.
+
+    agy rejects --effort completely for models that do not support it (e.g. Claude models).
+    For models that already embed an effort tier in their ID (e.g. -high, -medium, -low),
+    passing a conflicting --effort flag causes agy to exit with 'conflicts with --effort=...'.
+    """
+    m_lower = (model or "").strip().lower()
+    if not m_lower or "claude" in m_lower:
+        return ""
+    if any(m_lower.endswith(sfx) for sfx in ("-high", "-medium", "-low")):
+        return ""
+    eff = (effort or "").strip().lower()
+    return eff if eff in ("low", "medium", "high") else ""
+
+
 class AntigravityCliProvider(AIProvider):
     """AIProvider implementation backed by the local `agy` CLI binary."""
 
@@ -211,8 +227,9 @@ class AntigravityCliProvider(AIProvider):
         ]
         if model.strip():
             cmd.extend(["--model", model.strip()])
-        if effort.strip().lower() in ("low", "medium", "high"):
-            cmd.extend(["--effort", effort.strip().lower()])
+        cli_eff = _cli_effort(model, effort)
+        if cli_eff:
+            cmd.extend(["--effort", cli_eff])
         return cmd
 
     async def _run_subprocess(

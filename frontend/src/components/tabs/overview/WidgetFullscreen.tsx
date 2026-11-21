@@ -336,7 +336,7 @@ function SwatchRow({
 }
 
 interface Ctrl {
-  group: 'Appearance' | 'Settings' | 'Data' | 'Lucius'
+  group: 'Appearance' | 'Settings' | 'Data' | 'Uzi'
   key: string
   node: ReactNode
 }
@@ -659,7 +659,7 @@ export function WidgetFullscreen({
   if (instance.defId === 'briefing') {
     // The briefing's prompt is its server-side standing instruction, not a chat message.
     lux.push({
-      group: 'Lucius',
+      group: 'Uzi',
       key: 'prompt',
       node: (
         <BriefingFocusControl
@@ -678,15 +678,15 @@ export function WidgetFullscreen({
   } else if (isLux) {
     const promptValue = isRecord(cfg) && typeof cfg.prompt === 'string' ? cfg.prompt : ''
     lux.push({
-      group: 'Lucius',
+      group: 'Uzi',
       key: 'prompt',
       node: (
         <div className="ov-fs-ctl" key="prompt">
-          <span className="ov-fs-ctl-l">Lucius prompt</span>
+          <span className="ov-fs-ctl-l">Uzi prompt</span>
           <textarea
             className="ov-fs-prompt"
             defaultValue={promptValue}
-            placeholder="Describe the widget you want Lucius to build…"
+            placeholder="Describe the widget you want Uzi to build…"
             onBlur={(e) => onPatch({ config: { ...cfg, prompt: e.target.value } })}
           />
           <button
@@ -880,7 +880,7 @@ export function WidgetFullscreen({
               <div className="ov-fs-main">
                 <div className="ov-fs-preview">{preview}</div>
                 {/* Every widget: how it looks goes under the preview; what it shows (filters,
-                    its own settings, a Lucius prompt) in the column on the right. */}
+                    its own settings, a Uzi prompt) in the column on the right. */}
                 <div className="ov-fs-below">
                   <div className="ov-fs-bar-h">Appearance</div>
                   <div className="ov-fs-stack">{appearance.map((c) => c.node)}</div>

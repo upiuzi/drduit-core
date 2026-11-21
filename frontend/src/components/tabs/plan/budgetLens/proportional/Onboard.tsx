@@ -199,7 +199,7 @@ export function Onboard({
             onClick={onLucius}
             disabled={busy}
           >
-            Let Lucius set it up
+            Let Uzi set it up
           </Button>
           <span className="bo-spacer" />
           {step === 1 && (

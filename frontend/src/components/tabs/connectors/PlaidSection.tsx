@@ -24,7 +24,7 @@ import { PlaidBanksStep, type PlaidBank } from './PlaidBanksStep'
 // Link, see ./usePlaidLink — "Link bank" saves unsaved keys first, so there is no "Save or Link
 // first?" question), ③ choose which of the bank's accounts to track (ConnectorAccountsList).
 // The secret is read back through its own eye (GET /api/connectors/plaid/secret/secret); the
-// access token stays write-only. Fetching/booking transactions is Lucius's job (the list's
+// access token stays write-only. Fetching/booking transactions is Uzi's job (the list's
 // "Next" step opens the sync Automation). The footer Save (./formSave) stays for editing keys
 // later; the unified /api/connectors PATCH owns the card-header enable toggle.
 
@@ -328,7 +328,7 @@ export function PlaidSection() {
             />
           ) : (
             <Text size="xs" tone="muted">
-              Link an account above first — then Lucius can add its transactions.
+              Link an account above first — then Uzi can add its transactions.
             </Text>
           )}
           {cfg.last_synced_at && (

@@ -30,7 +30,7 @@ export function MacroColdStart({
               {scanning ? 'Scanning…' : 'Scan now'}
             </Button>
             <LuciusCta
-              label="Follow with Lucius"
+              label="Follow with Uzi"
               message={TOPICS_MESSAGE}
               onAskLucius={onAskLucius}
             />

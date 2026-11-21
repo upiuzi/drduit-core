@@ -22,7 +22,7 @@ function opSym(op: 'above' | 'below'): string {
 // ── Draft / Rewrite link (instruction fields) ─────────────────────────────────
 
 export function LuciusDraftLink({
-  label = 'Draft with Lucius',
+  label = 'Draft with Uzi',
   onDraft,
 }: {
   label?: string
@@ -120,7 +120,7 @@ export function LuciusAlertSuggest({
         </span>
         <span className="intel-lx-shown-title">
           {items.length
-            ? `Lucius suggests ${items.length} alert${items.length === 1 ? '' : 's'}`
+            ? `Uzi suggests ${items.length} alert${items.length === 1 ? '' : 's'}`
             : 'All suggestions handled'}
         </span>
         <div className="intel-lx-shown-actions">

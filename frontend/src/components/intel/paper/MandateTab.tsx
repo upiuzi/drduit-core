@@ -14,7 +14,7 @@ export function MandateTab({
     return (
       <EmptyState
         title="No mandate yet"
-        body="Write down what this portfolio is for and the limits every buy keeps: the most in one holding, the least cash, a stop loss. Buys that break them ask first, and Lucius trades within them."
+        body="Write down what this portfolio is for and the limits every buy keeps: the most in one holding, the least cash, a stop loss. Buys that break them ask first, and Uzi trades within them."
         action={
           onEdit && (
             <Button size="sm" variant="primary" onClick={onEdit}>

@@ -210,15 +210,15 @@ export function AutopilotTab({
             {a.instructions ? (
               <p className="paper-ap-goal">{a.instructions}</p>
             ) : (
-              <p className="a3-muted">None. Lucius follows the mandate.</p>
+              <p className="a3-muted">None. Uzi follows the mandate.</p>
             )}
           </section>
           <section className="a3-block">
             <div className="a3-block-h">How it trades</div>
             <p className="a3-muted">
               {auto
-                ? 'Lucius trades only this paper portfolio, with pretend money, and never breaks its mandate. Two failed reviews in a row pause it.'
-                : 'Off: only you, and Lucius when you ask him in chat, trade this portfolio. On: Lucius reviews it on a schedule, trades within its mandate, and writes down why.'}
+                ? 'Uzi trades only this paper portfolio, with pretend money, and never breaks its mandate. Two failed reviews in a row pause it.'
+                : 'Off: only you, and Uzi when you ask him in chat, trade this portfolio. On: Uzi reviews it on a schedule, trades within its mandate, and writes down why.'}
             </p>
           </section>
         </div>
@@ -371,7 +371,7 @@ function SettingsDialog({
             id="pp-ap-notes"
             rows={3}
             maxLength={600}
-            placeholder="Anything Lucius should keep in mind, such as: add to winners on pullbacks; leave the fund alone."
+            placeholder="Anything Uzi should keep in mind, such as: add to winners on pullbacks; leave the fund alone."
             value={instructions}
             onChange={(e) => setInstructions(e.target.value)}
           />

@@ -156,7 +156,7 @@ export function ChatList({
           revoking
             ? {
                 title: `Remove ${who(revoking)}?`,
-                body: `They won't be able to chat with Lucius or approve anything from Telegram. ${regainAccess}`,
+                body: `They won't be able to chat with Uzi or approve anything from Telegram. ${regainAccess}`,
                 confirmLabel: 'Remove',
                 danger: true,
                 confirmDisabled: busy,

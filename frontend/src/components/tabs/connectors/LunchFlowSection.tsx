@@ -30,7 +30,7 @@ import { ConnectorAccountsList } from './ConnectorAccountsList'
 // ADR). The client secret is read back through its own eye (GET
 // /api/connectors/lunch_flow/secret/client_secret); the OAuth tokens stay write-only and are
 // never revealed to the browser at all, not even behind an eye. This form owns the config
-// fields (creds / email / enable) + Connect/Disconnect; fetching transactions is now Lucius's
+// fields (creds / email / enable) + Connect/Disconnect; fetching transactions is now Uzi's
 // job via a template (see the connector page's Automate button) — the unified /api/connectors PATCH owns the
 // card-header enable toggle. Save lives in the modal footer — see ./formSave.
 
@@ -207,7 +207,7 @@ export function LunchFlowSection() {
         </a>{' '}
         developer client ID and secret, then connect a bank — you&apos;ll sign in at Lunch
         Flow&apos;s own hosted page in a new window and link your bank there. Fetching and booking
-        transactions is Lucius's job — automate it with a template below.
+        transactions is Uzi's job — automate it with a template below.
       </Text>
 
       {cfg.configured && !cfg.enabled && (

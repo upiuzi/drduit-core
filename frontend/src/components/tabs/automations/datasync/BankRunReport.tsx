@@ -337,7 +337,7 @@ function CategorizeWithLucius({ r, onClose }: { r: RunRecord; onClose: () => voi
         onClose()
       }}
     >
-      Categorize with Lucius
+      Categorize with Uzi
     </Button>
   )
 }

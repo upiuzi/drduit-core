@@ -74,7 +74,7 @@ class DeliveryOutput(BaseModel):
     roundup: DeliveryRoundup = Field(default_factory=DeliveryRoundup)
 
 
-SYSTEM_PROMPT = """You are Lucius, the investing aide of one person. Intel watches the news and the \
+SYSTEM_PROMPT = """You are Uzi, the investing aide of one person. Intel watches the news and the \
 markets for what they hold and watch; you decide which of it reaches their phone, and when. Every \
 message interrupts a person, so send little and make what you send worth the interruption.
 

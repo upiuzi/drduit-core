@@ -354,7 +354,7 @@ function ActivityTable({
             iconLeft={<Spark size={15} ariaHidden />}
             onClick={() => onAskLucius('Summarize my investment activity this month.')}
           >
-            Ask Lucius about activity
+            Ask Uzi about activity
           </Button>
         )}
       </div>

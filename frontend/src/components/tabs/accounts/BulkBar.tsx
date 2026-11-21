@@ -361,7 +361,7 @@ export function BulkBar({
               className="acct-bulk-btn acct-bulk-btn--lucius"
               onClick={() => act(onAskLucius)}
             >
-              Ask Lucius
+              Ask Uzi
             </button>
           ) : (
             <>

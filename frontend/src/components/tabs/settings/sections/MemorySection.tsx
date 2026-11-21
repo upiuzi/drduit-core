@@ -72,31 +72,31 @@ export function MemorySection({ toast }: SectionProps) {
         placeBack={placeBack}
         disabled={settings?.enabled === false}
         header={
-          <Panel sub="What Lucius remembers about you between conversations">
+          <Panel sub="What Uzi remembers about you between conversations">
             {row(
               'Search and reference chats',
-              'Let Lucius search your past conversations for relevant details. Even when this is off, he can still read them with a SQL query.',
+              'Let Uzi search your past conversations for relevant details. Even when this is off, he can still read them with a SQL query.',
               toggle('search_chats', 'Search and reference chats', (on) =>
-                on ? 'Lucius can search your past chats' : 'Lucius won’t search your past chats',
+                on ? 'Uzi can search your past chats' : 'Uzi won’t search your past chats',
               ),
             )}
             {row(
               'Generate memory from chats',
-              'Let Lucius remember useful details from your conversations and automations, and use them in replies.',
+              'Let Uzi remember useful details from your conversations and automations, and use them in replies.',
               toggle('enabled', 'Generate memory from chats', (on) =>
                 on ? 'Memory on' : 'Memory off — nothing is extracted or recalled',
               ),
             )}
             {row(
               'Include sensitive topics in memory',
-              'Let Lucius save details about sensitive topics like health conditions or religious beliefs.',
+              'Let Uzi save details about sensitive topics like health conditions or religious beliefs.',
               toggle('sensitive_topics', 'Include sensitive topics in memory', (on) =>
                 on ? 'Sensitive topics can be remembered' : 'Sensitive topics won’t be remembered',
               ),
             )}
             {row(
               'Import memory from other AI providers',
-              'Bring relevant context and data from another AI provider to Lucius. We’ll provide a prompt you can use to fetch the memory from your other account.',
+              'Bring relevant context and data from another AI provider to Uzi. We’ll provide a prompt you can use to fetch the memory from your other account.',
               <Btn size="xs" onClick={() => setImporting(true)}>
                 Start import
               </Btn>,

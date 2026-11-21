@@ -372,7 +372,7 @@ export function DisposalForm({ row, event, onDone, onClose }: Props) {
           ) : openLots.length === 0 ? (
             <div className="disposal-error">
               No open units to sell for this holding — it's already fully disposed. Add to the
-              position from the portfolio, or ask Lucius to record a new acquisition.
+              position from the portfolio, or ask Uzi to record a new acquisition.
             </div>
           ) : (
             <>

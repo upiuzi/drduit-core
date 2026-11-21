@@ -72,7 +72,7 @@ export const NOTIFY_KINDS: { id: NotifyKind; label: string; sub: string }[] = [
     sub: 'Default for new alerts. Each alert can change its own.',
   },
   { id: 'watch_alerts', label: 'Watch alerts', sub: 'Big moves on what you hold or watch.' },
-  { id: 'news', label: 'News analyses', sub: 'Lucius on news that moves your names.' },
+  { id: 'news', label: 'News analyses', sub: 'Uzi on news that moves your names.' },
 ]
 
 export function notifyRoutes(cfg: Pick<MonitoringConfig, 'notify_routes'> | null): NotifyRoutes {
@@ -90,12 +90,12 @@ export const OPINION_OPTIONS: { value: OpinionLevel; label: string; help: string
   {
     value: 'information',
     label: 'Information only',
-    help: 'Lucius explains what happened and what it could mean for you, and lists considerations. It never takes a side.',
+    help: 'Uzi explains what happened and what it could mean for you, and lists considerations. It never takes a side.',
   },
   {
     value: 'lean',
     label: 'Show a lean',
-    help: 'Adds Lucius’s overall lean — bullish, bearish or neutral — with its reason. Still no instructions to buy or sell.',
+    help: 'Adds Uzi’s overall lean — bullish, bearish or neutral — with its reason. Still no instructions to buy or sell.',
   },
   {
     value: 'suggest',
@@ -104,7 +104,7 @@ export const OPINION_OPTIONS: { value: OpinionLevel; label: string; help: string
   },
 ]
 
-export const NOT_ADVICE = "Lucius's view, not financial advice. The decision is always yours."
+export const NOT_ADVICE = "Uzi's view, not financial advice. The decision is always yours."
 
 export const DEFAULT_CRASH: CrashThresholds = { equity: 12, commodity: 15, crypto: 25 }
 export const PRICE_OPTS = [60, 300, 900, 1800]

@@ -100,11 +100,11 @@ export interface ConnectorDetailProps {
    *  surfacing the backend's honest, named refusal rather than a confirmation step for an
    *  action that can never succeed. */
   alwaysOn?: boolean
-  /** Seeds the Lucius composer with a suggested prompt. */
+  /** Seeds the Uzi composer with a suggested prompt. */
   onUsePrompt: (prompt: string) => void
   /** Persist one level. Resolving `false` means the write did NOT land, and the ladder rolls
    *  the optimistic change back — a grid showing "Blocked" over a row the backend never
-   *  stored is a tool the operator believes is off while Lucius is still offered it. */
+   *  stored is a tool the operator believes is off while Uzi is still offered it. */
   onSetToolPermission: (tool: string, level: PermissionLevel) => void | Promise<boolean>
   onSetGroupPermission: (tools: string[], level: PermissionLevel) => void | Promise<boolean>
   /** This connector's credential form. Absent → it has none (MCP, or `.env`-managed), so
@@ -179,7 +179,7 @@ export function ConnectorDetail({
   useEffect(() => setPerms(entry.perms), [entry.id, entry.perms])
   // A REST API's settings take a request to read: start it now, so Edit configuration opens on
   // the whole form rather than a "Loading…" line it then replaces.
-  // The same read gives the page the API's Instructions for Lucius — a secret field, so not in
+  // The same read gives the page the API's Instructions for Uzi — a secret field, so not in
   // the status feed MCP's handshake instructions arrive in.
   const restSlug = restSlugOf(entry.id)
   const [restNotes, setRestNotes] = useState<string>('')
@@ -203,7 +203,7 @@ export function ConnectorDetail({
    *
    * Optimism alone was a fail-open bug: the grid rendered "Blocked" while the backend held no
    * row at all, so the operator read a tool as off while it sat at `ask` and was still being
-   * offered to Lucius. Only the tools in THIS change are reverted, so a slower failing write
+   * offered to Uzi. Only the tools in THIS change are reverted, so a slower failing write
    * cannot stomp a later successful one on a different tool.
    */
   function applyLevel(tools: string[], level: PermissionLevel, saved: void | Promise<boolean>) {
@@ -250,7 +250,7 @@ export function ConnectorDetail({
   const automateKey = templateKeyForConnector(entry.kind)
   const openTemplate = (key: string) =>
     void navigate({ to: '/automations', search: { template: key } as never } as never)
-  // A bank connector's Automate offers both ways: its no-AI sync and a Lucius Automation.
+  // A bank connector's Automate offers both ways: its no-AI sync and a Uzi Automation.
   const bankChoices = useBankAutomateChoices(
     entry.kind,
     automateKey ? () => openTemplate(automateKey) : null,
@@ -389,7 +389,7 @@ export function ConnectorDetail({
         >
           {entry.mcp ? (
             <>
-              Remove <strong>{entry.name}</strong>? Lucius loses{' '}
+              Remove <strong>{entry.name}</strong>? Uzi loses{' '}
               {entry.tools.length > 0
                 ? `the ${entry.tools.length} tool${entry.tools.length === 1 ? '' : 's'} it offers`
                 : 'access to it'}
@@ -606,10 +606,10 @@ export function ConnectorDetail({
               {entry.mcp ? (
                 <div className="cn-errorbox-note">
                   {entry.fixLabel === 'Authenticate'
-                    ? 'Lucius can’t use these tools until you sign in with Authenticate.'
+                    ? 'Uzi can’t use these tools until you sign in with Authenticate.'
                     : entry.tone === 'warn'
-                      ? 'Lucius can’t use these tools until you reconnect.'
-                      : 'Lucius can’t use these tools until this connects again. Open Net Worth tries again by itself every hour; Reconnect tries now.'}
+                      ? 'Uzi can’t use these tools until you reconnect.'
+                      : 'Uzi can’t use these tools until this connects again. Open Net Worth tries again by itself every hour; Reconnect tries now.'}
                 </div>
               ) : null}
             </div>
@@ -666,7 +666,7 @@ export function ConnectorDetail({
           {instructions ? (
             <details className="cn-fold">
               <summary>
-                {restSlug ? 'Instructions for Lucius' : 'The server\u2019s instructions for AI'}
+                {restSlug ? 'Instructions for Uzi' : 'The server\u2019s instructions for AI'}
               </summary>
               <p>{instructions}</p>
             </details>
@@ -718,7 +718,7 @@ export function ConnectorDetail({
             {entry.toolGroups.length > 0 ? (
               <>
                 <div className="rd-help" style={{ marginBottom: 8, fontSize: 12.5 }}>
-                  Choose when Lucius is allowed to use these tools.
+                  Choose when Uzi is allowed to use these tools.
                 </div>
                 <PermissionLadderSwitch
                   groups={entry.toolGroups}
@@ -735,7 +735,7 @@ export function ConnectorDetail({
               </>
             ) : (
               <div className="rd-help" style={{ fontSize: 12.5 }}>
-                This connector gives Lucius no tools yet, so there is nothing to set here.
+                This connector gives Uzi no tools yet, so there is nothing to set here.
                 {entry.mcp ? ' Use Refresh tools list once the server is reachable.' : ''}
               </div>
             )}
@@ -789,7 +789,7 @@ function Identity({
  *  alternative). A data-aggregation connector "syncs"; Telegram, email and webhook do not,
  *  so each gets its own verb rather than a stretched "syncing" that would be wrong for them. */
 function pauseVerb(entry: ConnectorDetailEntry): string {
-  if (entry.mcp) return 'Lucius loses access to its tools'
+  if (entry.mcp) return 'Uzi loses access to its tools'
   switch (entry.id) {
     case 'telegram':
       return 'It stops responding to messages and sending alerts'
@@ -799,7 +799,7 @@ function pauseVerb(entry: ConnectorDetailEntry): string {
       return 'It stops sending notifications'
     default:
       return entry.id.startsWith('web_search:')
-        ? 'Lucius stops being able to search with it'
+        ? 'Uzi stops being able to search with it'
         : 'Scheduled syncing stops'
   }
 }

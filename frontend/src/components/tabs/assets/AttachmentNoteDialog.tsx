@@ -64,8 +64,8 @@ export function AttachmentNoteDialog({ a, doc, onClose, onSaved }: AttachmentNot
           error={errorFor('doc_note')}
           help={
             doc.lucius_readable
-              ? 'Lucius reads your note when you ask about this file.'
-              : 'Lucius can still read this note. The switch keeps only the file itself from Lucius.'
+              ? 'Uzi reads your note when you ask about this file.'
+              : 'Uzi can still read this note. The switch keeps only the file itself from Uzi.'
           }
         >
           <TextArea

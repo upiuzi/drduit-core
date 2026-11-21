@@ -1093,7 +1093,7 @@ export function McpAddFlowBody({ flow }: { flow: McpAddFlow }): JSX.Element {
               Tool permissions
             </div>
             <div className="rd-help" style={{ marginBottom: 8, fontSize: 12.5 }}>
-              Choose when Lucius is allowed to use these tools.
+              Choose when Uzi is allowed to use these tools.
             </div>
             <PermissionLadderSwitch
               groups={flow.toolGroups}

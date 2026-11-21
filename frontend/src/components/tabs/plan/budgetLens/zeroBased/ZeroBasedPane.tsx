@@ -34,7 +34,7 @@ const COPY = {
   unit: 'targets',
   honesty:
     'Drafted from your recent spending — each target is the median of what you actually spent, ' +
-    'not something Lucius reviewed. Check anything that looks off before applying.',
+    'not something Uzi reviewed. Check anything that looks off before applying.',
   lowConfidence: 'check amount',
 }
 

@@ -110,7 +110,7 @@ export function VoiceCallNotice({
         )}
         {problem.kind === 'conversation' && onOpenChat && (
           <button type="button" className="lx-call-notice-action" onClick={onOpenChat}>
-            Open Lucius
+            Open Uzi
           </button>
         )}
         {problem.kind !== 'insecure' && problem.kind !== 'conversation' && (

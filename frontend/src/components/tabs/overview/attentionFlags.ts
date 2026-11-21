@@ -165,7 +165,7 @@ export function useAttentionFlags(): { flags: AttentionFlag[]; loading: boolean 
       sev: 'md',
       icon: 'clock',
       title: `${reviewCount} ${plural(reviewCount, 'transaction', 'transactions')} to review`,
-      desc: 'Imported or added by Lucius. Approve them when you have a minute.',
+      desc: 'Imported or added by Uzi. Approve them when you have a minute.',
       nav: { tab: 'accounts' },
     })
   }

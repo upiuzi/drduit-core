@@ -244,7 +244,7 @@ export function buildProposals(ctx: ProposalCtx): Proposal[] {
           amount: topUp,
           currency: getBaseCurrency(),
           available_date: topUpDate,
-          note: 'Suggested by Lucius',
+          note: 'Suggested by Uzi',
         }),
     })
   }

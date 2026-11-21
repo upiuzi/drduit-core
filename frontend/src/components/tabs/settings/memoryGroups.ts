@@ -11,7 +11,7 @@ export const SECTIONS: readonly { key: string; label: string; flat?: boolean; no
     key: 'open_items',
     label: 'Recent',
     flat: true,
-    note: 'Decided or in flight over the last two weeks, from your chats — every Lucius run, a Capture or an automation included, sees these and acts on them. Each lapses on its date or once it is done.',
+    note: 'Decided or in flight over the last two weeks, from your chats — every Uzi run, a Capture or an automation included, sees these and acts on them. Each lapses on its date or once it is done.',
   },
   { key: 'other', label: 'Other' },
 ]
@@ -20,7 +20,7 @@ export const UNSORTED = {
   key: 'unsorted',
   label: 'Older memories',
   flat: true,
-  note: 'Saved before memory had sections. Lucius is moving them into the new format in the background — filing each under a section and topic, or out of memory if it belongs elsewhere. You can still edit or forget them.',
+  note: 'Saved before memory had sections. Uzi is moving them into the new format in the background — filing each under a section and topic, or out of memory if it belongs elsewhere. You can still edit or forget them.',
 }
 
 // A topic name is stored at most this long (the backend's `TOPIC_MAX_CHARS`).

@@ -22,7 +22,7 @@ export interface GenericEngineReviewProps {
 
 const HONESTY_COPY =
   'Drafted from category names and recent spending — a quick, name-based best guess, not ' +
-  'something Lucius reviewed. Check anything that looks off before applying.'
+  'something Uzi reviewed. Check anything that looks off before applying.'
 
 export function GenericEngineReview({
   rows,

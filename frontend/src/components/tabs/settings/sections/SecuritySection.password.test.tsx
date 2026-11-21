@@ -177,7 +177,7 @@ describe('SecuritySection password panel', () => {
     expect(await screen.findByText("Don't ask for the password on this computer")).toBeTruthy()
     expect(
       screen.getByText(
-        'Requests from the computer running Open Net Worth skip the password. Turn off on a shared computer.',
+        'Requests from the computer running Dr Duit skip the password. Turn off on a shared computer.',
       ),
     ).toBeTruthy()
     expect(screen.queryByText(/trust loopback/i)).toBeNull()

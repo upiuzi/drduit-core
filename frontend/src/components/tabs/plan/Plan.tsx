@@ -681,7 +681,7 @@ export function Plan({
         data-ctx-region="content"
         ref={pageRef}
       >
-        {/* Screen-awareness title for the Lucius snapshot (reuses the existing dock). */}
+        {/* Screen-awareness title for the Uzi snapshot (reuses the existing dock). */}
         <span
           data-ctx-title={
             'Plan — ' + (tab === 'budget' ? 'Budget' : tab === 'cashflow' ? 'Cash Flow' : 'Outlook')

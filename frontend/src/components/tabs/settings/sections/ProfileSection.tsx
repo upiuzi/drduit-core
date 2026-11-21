@@ -694,10 +694,10 @@ export function ProfileSection({
       )}
       draggable
     >
-      <Panel title="About you" sub="Fed directly to Lucius for personalised, goal-aware advice">
+      <Panel title="About you" sub="Fed directly to Uzi for personalised, goal-aware advice">
         <div className="rd-formgrid">
           <Field label="Full name">{input('name')}</Field>
-          <Field label="What should Lucius call you?">{input('nickname')}</Field>
+          <Field label="What should Uzi call you?">{input('nickname')}</Field>
           <Field label="Date of birth">{dateInput('date_of_birth')}</Field>
           <Field label="Marital status">{select('marital_status', MARITAL)}</Field>
           <Field label="Risk tolerance">{select('risk_tolerance', RISK)}</Field>
@@ -778,8 +778,8 @@ export function ProfileSection({
       </Panel>
 
       <Panel
-        title="Instructions for Lucius"
-        sub="Standing rules for how Lucius should work with you. Lucius can add to them too — you’ll see each change before it’s saved."
+        title="Instructions for Uzi"
+        sub="Standing rules for how Uzi should work with you. Uzi can add to them too — you’ll see each change before it’s saved."
       >
         <textarea
           className="rd-textarea"

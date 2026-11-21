@@ -273,7 +273,7 @@ export function OutlookSetupModal({
             iconLeft={<Spark size={15} ariaHidden />}
             onClick={askLucius}
           >
-            Set up with Lucius
+            Set up with Uzi
           </Button>
           <Button size="sm" variant="primary" disabled={!valid} loading={saving} onClick={save}>
             Show my outlook

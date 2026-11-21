@@ -676,8 +676,8 @@ function PendingChip() {
       <Clock size={11} strokeWidth={1.6} aria-hidden="true" />
       <span>
         {stale
-          ? 'Still queued — Lucius hasn’t reached it yet'
-          : 'Queued — Lucius will read this at its next step'}
+          ? 'Still queued — Uzi hasn’t reached it yet'
+          : 'Queued — Uzi will read this at its next step'}
       </span>
     </div>
   )
@@ -688,7 +688,7 @@ function PendingChip() {
 function FailedSendChip({ onRetry }: { onRetry?: () => void }) {
   return (
     <div className="msg-pending-chip msg-pending-chip--failed" role="status" aria-live="polite">
-      <span>Not delivered — Lucius never read this</span>
+      <span>Not delivered — Uzi never read this</span>
       {onRetry && (
         <button className="msg-retry-btn" onClick={onRetry}>
           <RotateCcw size={12} aria-hidden="true" /> Retry

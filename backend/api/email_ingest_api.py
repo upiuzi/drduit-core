@@ -89,5 +89,5 @@ async def test_email_send():
 
     if EmailConfigStore().smtp_credentials(require_enabled=False) is None:
         raise HTTPException(400, "email is not configured")
-    result = await _send("Open Net Worth test notification — your channel is working.")
+    result = await _send("Dr Duit test notification — your channel is working.")
     return {"name": "email", "result": result}

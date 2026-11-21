@@ -66,7 +66,7 @@ function Differences({
           <Grid min={200} gap="--space-3">
             <Text size="sm">
               <Text size="xs" tone="faint">
-                Open Net Worth:{' '}
+                Dr Duit:{' '}
               </Text>
               {gone ? (onw === null ? 'Deleted' : context(onw)) : shown(key, onw)}
             </Text>
@@ -120,7 +120,7 @@ function NameCard(props: { name: string; item: Item; busy: boolean; onKeep: Keep
         <Grid key={f.label} min={200} gap="--space-3">
           <Text size="sm">
             <Text size="xs" tone="faint">
-              Open Net Worth {f.label.toLowerCase()}:{' '}
+              Dr Duit {f.label.toLowerCase()}:{' '}
             </Text>
             {f.onw}
           </Text>
@@ -166,7 +166,7 @@ function NameCard(props: { name: string; item: Item; busy: boolean; onKeep: Keep
         ) : (
           <>
             <Button size="sm" disabled={busy} onClick={() => onKeep('onw')}>
-              Keep Open Net Worth&apos;s
+              Keep Dr Duit&apos;s
             </Button>
             <Button size="sm" disabled={busy} onClick={() => onKeep('ynab')}>
               {`Keep ${name}'s`}
@@ -258,7 +258,7 @@ export function ReviewCard({
       <Cluster gap="--space-2">
         {(item.kind !== 'unsupported' || item.ynab === null) && (
           <Button size="sm" disabled={props.busy} onClick={() => props.onKeep('onw')}>
-            Keep Open Net Worth&apos;s
+            Keep Dr Duit&apos;s
           </Button>
         )}
         <Button size="sm" disabled={props.busy} onClick={() => props.onKeep('ynab')}>

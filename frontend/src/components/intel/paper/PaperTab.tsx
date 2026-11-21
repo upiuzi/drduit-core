@@ -149,7 +149,7 @@ export function PaperTab({ onAskLucius }: { onAskLucius?: (text: string) => void
               ...(onAskLucius
                 ? [
                     {
-                      label: 'Create with Lucius',
+                      label: 'Create with Uzi',
                       icon: (
                         <span className="a3-menu-ic lucius">
                           <LuciusMark size={13} aria-hidden="true" />

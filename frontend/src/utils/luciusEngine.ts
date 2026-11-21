@@ -329,7 +329,7 @@ export function luciusReviewList(
         kind: 'topic',
         sev: 'gap',
         title: `"${t.label}" needs instructions`,
-        text: 'Vague topics produce noisy alerts. Lucius can draft focused instructions.',
+        text: 'Vague topics produce noisy alerts. Uzi can draft focused instructions.',
         cta: 'Draft instructions',
       })
     }

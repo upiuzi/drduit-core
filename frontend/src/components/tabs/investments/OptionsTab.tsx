@@ -239,7 +239,7 @@ export function OptionsTab({ onAskLucius }: Props) {
                 Record option
               </Button>
               <LuciusCta
-                label="Add with Lucius"
+                label="Add with Uzi"
                 message={OPTIONS_MESSAGE}
                 onAskLucius={onAskLucius}
               />
@@ -301,7 +301,7 @@ export function OptionsTab({ onAskLucius }: Props) {
             iconLeft={<Spark size={15} ariaHidden />}
             onClick={() => onAskLucius?.('Tell me about my options positions and assignment risk.')}
           >
-            Ask Lucius about options
+            Ask Uzi about options
           </Button>
         </div>
       </div>

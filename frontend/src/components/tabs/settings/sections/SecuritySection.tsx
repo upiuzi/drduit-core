@@ -149,6 +149,23 @@ export function SecuritySection({ toast, gatewayMode = false }: SectionProps) {
         </div>
       </Panel>
 
+      <Panel title="Session">
+        {row(
+          'Log out',
+          'End your session on this device and return to the sign in screen.',
+          <Btn
+            variant="secondary"
+            onClick={async () => {
+              await authFetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
+              localStorage.removeItem('onw-auth-status-v2')
+              window.location.reload()
+            }}
+          >
+            Log out
+          </Btn>,
+        )}
+      </Panel>
+
       {!gatewayMode && (
         <Panel title="Auth behaviour">
           <div className="rd-formgrid">
@@ -173,7 +190,7 @@ export function SecuritySection({ toast, gatewayMode = false }: SectionProps) {
           </div>
           {row(
             "Don't ask for the password on this computer",
-            'Requests from the computer running Open Net Worth skip the password. Turn off on a shared computer.',
+            'Requests from the computer running Dr Duit skip the password. Turn off on a shared computer.',
             <Toggle
               on={settings?.trust_loopback ?? false}
               disabled={!settings || busy}

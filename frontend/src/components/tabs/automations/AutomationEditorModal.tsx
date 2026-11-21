@@ -128,7 +128,7 @@ export function AutomationEditorModal({
       size="lg"
       className="a3-editor-modal"
       title={
-        automation ? 'Edit automation' : fromLucius ? 'Confirm Lucius’s draft' : 'New automation'
+        automation ? 'Edit automation' : fromLucius ? "Confirm Uzi's draft" : 'New automation'
       }
       onClose={onClose}
       footer={
@@ -194,7 +194,7 @@ export function AutomationEditorModal({
             <textarea
               id="automation-instructions"
               value={form.instructions}
-              placeholder="What Lucius should do each time it runs — “Summarize my spending since the last run and send it to me.” When it runs is set below."
+              placeholder="What Uzi should do each time it runs — “Summarize my spending since the last run and send it to me.” When it runs is set below."
               onChange={(event) => update('instructions', event.target.value)}
             />
             <div className="a3-instr-foot">

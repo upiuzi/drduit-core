@@ -31,7 +31,7 @@ export function PlanEmptyBook({
           <Button variant="primary" size="sm" onClick={onAddAccount}>
             Add account
           </Button>
-          <LuciusCta label="Add with Lucius" message={ACCOUNTS_MESSAGE} onAskLucius={onAskLucius} />
+          <LuciusCta label="Add with Uzi" message={ACCOUNTS_MESSAGE} onAskLucius={onAskLucius} />
         </Cluster>
       }
     />

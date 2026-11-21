@@ -167,7 +167,7 @@ export function MobileTabBar({
             onSelect('lucius')
           }}
           aria-current={luciusOpen ? 'page' : undefined}
-          aria-label="Lucius"
+          aria-label="Uzi"
         >
           <span className="mb-tab-indicator" aria-hidden="true" />
           <span className="mb-tab-icon">
@@ -177,7 +177,7 @@ export function MobileTabBar({
               <LuciusLogo size={20} />
             )}
           </span>
-          <span className="mb-tab-label">Lucius</span>
+          <span className="mb-tab-label">Uzi</span>
           {hasBadge && <span className="mb-tab-badge" aria-hidden="true" />}
         </button>
         {TAB_SLOTS.slice(2).map(renderMoneySlot)}

@@ -27,7 +27,7 @@ import { bankReturnUrl, openBankPageTab, useFinishingBankLink } from './bankPage
 // returns in a new tab (./bankPage — opened on the click, so no popup blocker eats it) and keeps
 // the link on screen as a fallback; there is no code to paste — when the user comes back, Check links (run
 // automatically on open while a link is unfinished) re-reads every requisition. Fetching
-// transactions is Lucius's job (the connector page's Automate button); Save lives in the modal
+// transactions is Uzi's job (the connector page's Automate button); Save lives in the modal
 // footer — see ./formSave.
 
 interface GoCardlessStatus {

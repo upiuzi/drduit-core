@@ -43,20 +43,20 @@ function CodeExecutionV2({ toast }: SectionProps) {
   }
 
   return (
-    <Panel title="Code execution" sub="Lucius can write & run short Python on this server">
+    <Panel title="Code execution" sub="Uzi can write & run short Python on this server">
       <span className="rd-help" style={{ display: 'block', lineHeight: 1.55 }}>
-        When on, Lucius can write a small script during a chat and run it in an isolated subprocess
+        When on, Uzi can write a small script during a chat and run it in an isolated subprocess
         to do a calculation. The sandbox scrubs secrets from the environment, enforces
-        CPU/memory/file limits, and the script sees only the JSON data Lucius passes it — it cannot
+        CPU/memory/file limits, and the script sees only the JSON data Uzi passes it — it cannot
         read or write your ledger or accounts, and has no network. This switch only turns the
-        feature on or off: whether Lucius asks first is the Run code setting in Settings →
+        feature on or off: whether Uzi asks first is the Run code setting in Settings →
         Permissions.
       </span>
       {row(
         'Code execution',
         codeExec
           ? 'On. Run code asks you first by default — change it in Settings → Permissions.'
-          : "Lucius's run_code is blocked. This is the safe default.",
+          : "Uzi's run_code is blocked. This is the safe default.",
         <Toggle
           on={codeExec}
           disabled={!data}

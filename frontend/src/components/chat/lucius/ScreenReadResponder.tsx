@@ -11,7 +11,7 @@ import { useVoiceCall } from './voiceCall'
 // The shell's own label for the page: Lucius opens in place of a screen on routes other than
 // /lucius too (the home route, a route with nothing else to show), so the URL can't say.
 function isLuciusPage(): boolean {
-  return document.querySelector('[data-ctx-screen]')?.getAttribute('data-ctx-screen') === 'Lucius'
+  return document.querySelector('[data-ctx-screen]')?.getAttribute('data-ctx-screen') === 'Uzi'
 }
 
 // The full-screen call itself, not `call.view`: that stays 'stage' when a back gesture leaves the

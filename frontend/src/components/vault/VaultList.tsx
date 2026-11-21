@@ -136,7 +136,7 @@ export function VaultList({
               <span className="vault-row-sub">{vaultSublabel(item)}</span>
             </span>
             {item.private && (
-              <span className="vault-row-lock" title="Private — Lucius can't read it">
+              <span className="vault-row-lock" title="Private — Uzi can't read it">
                 <Lock size={14} strokeWidth={1.7} aria-label="Private" />
               </span>
             )}

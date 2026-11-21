@@ -34,7 +34,7 @@ export function ConnectorRow({ entry, onOpen, onReconnect }: ConnectorRowProps):
   }
 
   // EntityRow is a TRANSPARENT wrapper: it stamps `data-entity-id` + `data-ctx-*` and marks
-  // the host draggable, which is what makes a connector `@`-mentionable in Lucius and
+  // the host draggable, which is what makes a connector `@`-mentionable in Uzi and
   // drag-droppable into the composer. It renders the host element itself, so it IS the
   // `.cn-row` grid rather than an extra layer inside `.cn-list` — wrapping instead would
   // make every row the only child of its own wrapper and silently kill the row separators.
@@ -71,7 +71,7 @@ export function ConnectorRow({ entry, onOpen, onReconnect }: ConnectorRowProps):
           {entry.categories?.length ? <CategoryChips categories={entry.categories} /> : null}
         </div>
         {/* The sub-line's one exception: a connector that is failing says why without a hover.
-            `data-ctx-ignore`: a server's error text reaches Lucius only through
+            `data-ctx-ignore`: a server's error text reaches Uzi only through
             `get_connector_status`, which withholds a local server's. */}
         {entry.lastError ? (
           <div

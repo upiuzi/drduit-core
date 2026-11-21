@@ -203,11 +203,11 @@ function cents(dollars: number): string {
   return `${(dollars * 100).toFixed(1)}¢`
 }
 
-/** What Lucius's voice comes to, in the words a person budgets with. */
+/** What Uzi's voice comes to, in the words a person budgets with. */
 export function voiceCostLine(model: string): string | undefined {
   const perMinute = voiceCostPerMinute(model)
   if (perMinute === undefined) return undefined
-  return `Lucius's voice is about ${cents(perMinute)} a call minute. Longer answers cost more.`
+  return `Uzi's voice is about ${cents(perMinute)} a call minute. Longer answers cost more.`
 }
 
 export const DEFAULT_NOISE_FILTER = 'standard'
@@ -280,7 +280,7 @@ export function freeMinutesEstimate(
     detail:
       `On LiveKit's free plan, with these settings: its $${BUILD_PLAN_CREDIT.toFixed(2)} monthly ` +
       `credit, at about ${cents(perMinute)} a call minute.${isolation} A call that talks more ` +
-      `uses it faster, and LiveKit sets the prices. Lucius's own model isn't counted: your AI ` +
+      `uses it faster, and LiveKit sets the prices. Uzi's own model isn't counted: your AI ` +
       `provider bills that.`,
   }
 }

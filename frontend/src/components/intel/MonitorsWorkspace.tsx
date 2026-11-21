@@ -526,8 +526,8 @@ function ListDetailView({
         <div className="intel-mm-banner">
           {list.muted
             ? system
-              ? 'Muted — Lucius keeps tracking your positions but won’t send alerts for this watchlist.'
-              : 'Muted — Lucius won’t send alerts for anything in this watchlist.'
+              ? 'Muted — Uzi keeps tracking your positions but won’t send alerts for this watchlist.'
+              : 'Muted — Uzi won’t send alerts for anything in this watchlist.'
             : 'Auto-synced from your holdings — every position you own is tracked here. Add price alerts to any of them.'}
         </div>
       )}

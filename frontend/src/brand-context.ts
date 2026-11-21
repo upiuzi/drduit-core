@@ -11,7 +11,7 @@ export interface BrandConfig {
 }
 
 export const DEFAULT_BRAND: BrandConfig = {
-  app_name: 'Open Net Worth',
+  app_name: 'Dr Duit',
   accent_color: '',
   logo_url: '',
 }

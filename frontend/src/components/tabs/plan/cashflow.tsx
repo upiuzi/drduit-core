@@ -752,7 +752,7 @@ export function CashFlowTab(props: CashFlowTabProps) {
         action={
           <Cluster gap="--space-3" justify="center">
             <LuciusCta
-              label="Set up with Lucius"
+              label="Set up with Uzi"
               message={SCREEN_INTROS['plan-cashflow'].lucius}
               onAskLucius={props.onAskLucius}
             />

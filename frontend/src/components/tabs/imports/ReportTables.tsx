@@ -103,7 +103,7 @@ function ChecksTable({ app, checks }: { app: BudgetAppInfo; checks: Check[] }) {
         <tr>
           <th>Check</th>
           <th className="imp-table__num">{app.name}</th>
-          <th className="imp-table__num">Open Net Worth</th>
+          <th className="imp-table__num">Dr Duit</th>
           <th className="imp-table__num">Difference</th>
         </tr>
       </thead>
@@ -121,7 +121,7 @@ function ChecksTable({ app, checks }: { app: BudgetAppInfo; checks: Check[] }) {
             <td data-label={app.name} className="imp-table__num">
               {show(c.ynab_value, c.unit)}
             </td>
-            <td data-label="Open Net Worth" className="imp-table__num">
+            <td data-label="Dr Duit" className="imp-table__num">
               {show(c.onw_value, c.unit)}
             </td>
             <td data-label="Difference" className="imp-table__num">

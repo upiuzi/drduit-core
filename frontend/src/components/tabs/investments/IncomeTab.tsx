@@ -148,7 +148,7 @@ function RecentIncomePanel({
               </div>
               {/* EntityRow renders the host <div> itself and stamps data-entity-id + draggable
                   + data-ctx-*, making an income event @-mentionable, right-clickable
-                  ("Ask Lucius about this") and draggable into the dock. `income` is a
+                  ("Ask Uzi about this") and draggable into the dock. `income` is a
                   registered mention type (descriptors/equity_lots.py, order=19). */}
               {rows.map((row) => (
                 <EntityRow
@@ -248,7 +248,7 @@ export function IncomeTab({ version = 0, onAskLucius }: Props) {
           action={
             <Cluster gap="--space-3" justify="center">
               <LuciusCta
-                label="Add with Lucius"
+                label="Add with Uzi"
                 message={INCOME_MESSAGE}
                 onAskLucius={onAskLucius}
               />

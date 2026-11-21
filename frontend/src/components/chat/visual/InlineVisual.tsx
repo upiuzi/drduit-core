@@ -133,7 +133,7 @@ export function InlineVisual({ visual, draft }: { visual: VisualSpec; draft?: bo
       ))}
       {code && (
         <Guard>
-          {/* While Lucius is still writing it, a band of light sweeps across the drawing; it
+          {/* While Uzi is still writing it, a band of light sweeps across the drawing; it
               fades out once the finished drawing takes over. Always rendered, so the frame
               beside it is never rebuilt when the draft ends. */}
           <div className="ivis-drawing">

@@ -1086,7 +1086,7 @@ def seed_expiry_sweep(*, time: str = "08:00") -> bool:
                 "permission_mode": "auto",
                 "always_allowed": [
                     {
-                        "src": "Open Net Worth",
+                        "src": "Dr Duit",
                         "desc": "Expire elapsed option contracts and send ITM reminders.",
                         "tools": [
                             "update_option",

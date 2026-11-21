@@ -31,7 +31,7 @@ export function AddYourOwnRow({ onMcp, onRest }: AddYourOwnRowProps): JSX.Elemen
           }
         : {
             title: 'Connect any REST API',
-            sub: 'Give its address, a key, and its endpoints or an OpenAPI document. Each endpoint becomes a tool Lucius can call.',
+            sub: 'Give its address, a key, and its endpoints or an OpenAPI document. Each endpoint becomes a tool Uzi can call.',
           }
   return (
     <div className="cn-customrow">

@@ -43,7 +43,7 @@ export function SetupChooser({
             iconLeft={<Spark size={15} ariaHidden />}
             onClick={onAskLucius}
           >
-            Set up with Lucius
+            Set up with Uzi
           </Button>
         )}
         <div className="bgl-setup__actions">

@@ -48,7 +48,7 @@ export interface DirectoryModalProps {
   /** Open straight onto the MCP add form of this NOT-yet-installed entry, preset pre-filled —
    *  the path its card's `+` takes. Seeds the first render only, like `previewId`. */
   addId?: string
-  /** With `addId`: start the sign-in at once — the user already clicked Connect on Lucius's
+  /** With `addId`: start the sign-in at once — the user already clicked Connect on Uzi's
    *  card, which opened the sign-in window on that click (`preopenSignInWindow`). */
   autoConnect?: boolean
   /** Open straight onto the MCP add form for ANOTHER server at this one's address (its id,
@@ -108,7 +108,7 @@ export function DirectoryModal({
       toast?.(
         opts?.dormant
           ? `${name} saved, switched off — turn it on from its settings to test it`
-          : `${name} added — ${toolCount} tool${toolCount === 1 ? '' : 's'} ready for Lucius`,
+          : `${name} added — ${toolCount} tool${toolCount === 1 ? '' : 's'} ready for Uzi`,
       )
       onAdded?.()
       close()
@@ -134,7 +134,7 @@ export function DirectoryModal({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Lucius's Connect: once the preset has filled the form, run the same Connect the footer's
+  // Uzi's Connect: once the preset has filled the form, run the same Connect the footer's
   // button runs — for a sign-in server, that is the sign-in. Once, and only for OAuth presets.
   const autoConnected = useRef(false)
   useEffect(() => {

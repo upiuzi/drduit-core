@@ -77,7 +77,7 @@ export const PLAN_RESET_SPEC: ScreenCommandSpec = {
 export const AUTOMATIONS_REVIEW_DRAFT_SPEC: ScreenCommandSpec = {
   name: 'automations.review_draft',
   description:
-    'Open a validated, unsaved Lucius Automation draft in the review editor. Nothing is created until the user confirms it there.',
+    'Open a validated, unsaved Uzi Automation draft in the review editor. Nothing is created until the user confirms it there.',
   route: 'automations',
   params: [
     {

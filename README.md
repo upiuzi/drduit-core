@@ -1,50 +1,12 @@
-<p align="center">
-  <img src="docs-site/scripts/brand-source/logo.svg" alt="Open Net Worth" width="96">
-</p>
+<h1 align="center">Dr Duit</h1>
 
-<h1 align="center">Open Net Worth</h1>
+<p align="center"><b>Personal Wealth & Finance Management with AI Assistant (Uzi)</b></p>
 
-<p align="center"><b>Agent harness for personal finance</b></p>
+**A self-hosted personal finance platform.** A real multi-currency ledger, budgets, and
+investments — plus an AI assistant (Uzi) that can read and help manage them.
+Self-hosted, on a machine or VPS you control.
 
-<p align="center">
-  <a href="https://opennetworth.ai">Website</a> ·
-  <a href="https://opennetworth.ai/download">Download</a> ·
-  <a href="https://docs.opennetworth.ai">Docs</a> ·
-  <a href="https://demo.opennetworth.ai">Live demo</a> ·
-  <a href="https://discord.gg/gRRsQRgwE8">Discord</a>
-</p>
-
-<p align="center">
-  <a href="https://demo.opennetworth.ai"><img src="https://img.shields.io/badge/Try_the_live_demo-c9a15b?style=for-the-badge" alt="Try the live demo" height="36"></a>
-</p>
-
-<p align="center"><sub>If this is useful, a star helps others find it.</sub></p>
-
-<p align="center">
-  <a href="https://github.com/open-net-worth-ai/open-net-worth-releases/releases/latest"><img src="https://img.shields.io/github/v/release/open-net-worth-ai/open-net-worth-releases?label=release" alt="Latest release"></a>
-  <a href="LICENSE"><img src="https://img.shields.io/badge/license-AGPL--3.0-blue" alt="License: AGPL-3.0"></a>
-  <a href="https://docs.opennetworth.ai"><img src="https://img.shields.io/badge/docs-docs.opennetworth.ai-informational" alt="Documentation"></a>
-  <a href="https://discord.gg/gRRsQRgwE8"><img src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white" alt="Discord"></a>
-</p>
-
-<p align="center">
-  <a href="https://opennetworth.ai/#demo">
-    <img src="https://opennetworth.ai/video/opennetworth-demo-poster.jpg" alt="Watch the three-minute product demo" width="820">
-  </a>
-  <br>
-  <sub><a href="https://opennetworth.ai/#demo">▶ Watch</a></sub>
-</p>
-
-**An open-source agent harness for personal finance.** A real multi-currency ledger, budgets, and
-investments — plus an AI that can actually read and change them, not just talk about them.
-Self-hosted, on a machine you control.
-
-Most personal-finance apps that added AI let it *describe* your data. Open Net Worth is built the
-other way round: the ledger, the budget, and the investment book are the substrate, and the
-assistant (Lucius) is an agent operating them through a registry of real tools — the same guarded
-write paths the UI uses.
-
-|  | Chatbot bolted onto an app | An agent harness |
+|  | Chatbot bolted onto an app | Dr Duit Agent Harness |
 |---|---|---|
 | What the AI touches | a summary of your data | the ledger itself, through real write tools |
 | When it's wrong | you find out later | a confirm card shows the change before it lands |
@@ -393,3 +355,8 @@ Found a vulnerability? See [`SECURITY.md`](SECURITY.md) — please do not open a
 ## License
 
 AGPL-3.0 — see [`LICENSE`](LICENSE). Third-party dependency licenses are in [`NOTICE`](NOTICE).
+# drduit-core
+# drduit-core
+# drduit-core
+# drduit-core
+# drduit-core

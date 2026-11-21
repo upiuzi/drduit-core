@@ -476,7 +476,7 @@ export function LuciusHome({
             type="button"
             className="lucius-home-vault-btn"
             onClick={memory.show}
-            title="What Lucius remembers about you"
+            title="What Uzi remembers about you"
           >
             <Brain size={15} strokeWidth={1.6} />
             Memory

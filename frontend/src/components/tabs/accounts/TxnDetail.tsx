@@ -981,7 +981,7 @@ function ViewBody({
   if (flagEvent) {
     const faName = flagEvent.actorName || (actors ?? {})[flagEvent.actor]?.name || flagEvent.actor
     reviewReason = faName + ' flagged this' + (flagEvent.note ? ' — ' + flagEvent.note : '')
-  } else if (creatorType === 'lucius') reviewReason = "Lucius suggested this — confirm it's right."
+  } else if (creatorType === 'lucius') reviewReason = "Uzi suggested this — confirm it's right."
   else if (creatorType === 'agent')
     reviewReason = creator.name + " added this automatically — confirm it's right."
   else if (creatorType === 'import') reviewReason = "Imported automatically — confirm it's right."

@@ -1,6 +1,6 @@
 // What to do once a connector has a linked account: linking imports nothing, so say so, and offer
 // the one step that brings transactions in — the connector's sync Automation (as a draft the user
-// reviews, on the template's own schedule) — or the sentence to ask Lucius for a one-off fetch.
+// reviews, on the template's own schedule) — or the sentence to ask Uzi for a one-off fetch.
 import { useRouter } from '@tanstack/react-router'
 import { Button, Text } from '../../ui'
 import { useFlag } from '../../../hooks/useFlag'
@@ -34,8 +34,8 @@ export function ConnectorNextStep({
   const router = useRouter({ warn: false }) as ReturnType<typeof useRouter> | undefined
   const templateKey = templateKeyForConnector(provider)
   // A bank with sync without AI gets ONE next step, the connector page's Sync card (Set up sync,
-  // then its status). This card beside it offered a second, Lucius way in, and once the sync was
-  // on it said "linking doesn't import anything yet" while it did. Lucius stays one click away:
+  // then its status). This card beside it offered a second, Uzi way in, and once the sync was
+  // on it said "linking doesn't import anything yet" while it did. Uzi stays one click away:
   // the connector header's Automate.
   const bankSyncs = useBankSyncs(useFlag('bank_data_sync') === true)
   const hasBankSync = (bankSyncs.data ?? []).some((s) => s.provider === provider)
@@ -55,8 +55,8 @@ export function ConnectorNextStep({
       <Text size="xs" tone="muted">
         Linking doesn&apos;t import anything yet.{' '}
         {templateKey
-          ? `Set up an automation and Lucius will add new transactions from ${providerLabel} to ${target}${every ? ` ${every}` : ''}.`
-          : `Ask Lucius to add transactions from ${providerLabel} to ${target}.`}
+          ? `Set up an automation and Uzi will add new transactions from ${providerLabel} to ${target}${every ? ` ${every}` : ''}.`
+          : `Ask Uzi to add transactions from ${providerLabel} to ${target}.`}
         {unlinkedCount > 0 &&
           ` ${unlinkedCount} ${unlinkedCount === 1 ? "account isn't" : "accounts aren't"} linked, so ${unlinkedCount === 1 ? "it'll" : "they'll"} be skipped.`}
       </Text>
@@ -67,7 +67,7 @@ export function ConnectorNextStep({
           </Button>
         )}
         <Text size="xs" tone="faint">
-          Or ask Lucius now: “Fetch my {providerLabel} transactions.”
+          Or ask Uzi now: “Fetch my {providerLabel} transactions.”
         </Text>
       </div>
     </>

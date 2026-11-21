@@ -81,7 +81,7 @@ export function ScreenContextPanel({ snapshot, enabled, onToggle, pinnedIds, onP
           {handles.length > 0 && (
             <>
               <div className="screen-ctx__section">
-                Sources — tap to attach, or Lucius fetches as needed
+                Sources — tap to attach, or Uzi fetches as needed
               </div>
               <div className="screen-ctx__handles">
                 {handles.map((h) => {

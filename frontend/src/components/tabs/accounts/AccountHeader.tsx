@@ -790,7 +790,7 @@ export function AccountHeader({
                 variant="primary"
                 className="fi-lucius"
                 iconLeft={<Spark size={15} ariaHidden />}
-                title="Ask Lucius to set a payment reminder"
+                title="Ask Uzi to set a payment reminder"
                 onClick={() => {
                   const due = dueInfo.dueDate
                     ? ` by ${dueInfo.dueDate}`

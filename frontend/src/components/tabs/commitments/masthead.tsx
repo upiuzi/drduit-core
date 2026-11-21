@@ -123,7 +123,7 @@ export function Masthead({
                   <b>Suggested fix:</b> {topProposal.title}.
                 </>
               ) : (
-                'Lucius can help close this gap.'
+                'Uzi can help close this gap.'
               )}
             </span>
           </>
@@ -143,7 +143,7 @@ export function Masthead({
         )}
         <button className="c2-ribbon-act hot" onClick={onFix}>
           <Spark size={13} />
-          {atRisk ? 'Fix with Lucius' : 'Ask Lucius'}
+          {atRisk ? 'Fix with Uzi' : 'Ask Uzi'}
         </button>
       </span>
     </div>

@@ -10,21 +10,21 @@ const DATA = {
   shortcuts: [
     {
       slug: 'log-apple-pay',
-      name: 'Log Apple Pay to Open Net Worth',
+      name: 'Log Apple Pay to Dr Duit',
       summary: 'Sends an Apple Pay tap.',
       asks: 'setup code',
       install_url: '/api/shortcuts/file?t=abc&slug=log-apple-pay',
     },
     {
       slug: 'log-apple-pay-ios26',
-      name: 'Log Apple Pay to Open Net Worth',
+      name: 'Log Apple Pay to Dr Duit',
       summary: 'iOS 26 and earlier.',
       asks: 'setup code',
       install_url: '/api/shortcuts/file?t=abc&slug=log-apple-pay-ios26',
     },
     {
       slug: 'log-notifications',
-      name: 'Log Finance Notifications to Open Net Worth',
+      name: 'Log Finance Notifications to Dr Duit',
       summary: 'iOS 27+.',
       asks: 'setup code',
       install_url: '/api/shortcuts/file?t=abc&slug=log-notifications',

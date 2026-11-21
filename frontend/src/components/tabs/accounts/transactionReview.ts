@@ -214,7 +214,7 @@ export function sourceLine(txn: Pick<Txn, 'source' | 'via' | 'automationId'>): s
 
 /** How a row entered the ledger, as the review surfaces word it. */
 export const SOURCE_LABEL: Record<string, string> = {
-  ai: 'Added by Lucius',
+  ai: 'Added by Uzi',
   agent: 'Added by an agent',
   automation: 'Added by automation',
   bank: 'Bank sync',

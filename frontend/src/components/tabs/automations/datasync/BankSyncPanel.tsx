@@ -135,8 +135,8 @@ export function FollowupBox({
   return (
     <Checkbox
       id={`bs-${status.provider}-followup`}
-      label="Let Lucius categorise what’s left"
-      description="After a sync, Lucius sorts the rows no rule or payee could categorise. It uses your AI model; booking never waits for it."
+      label="Let Uzi categorise what’s left"
+      description="After a sync, Uzi sorts the rows no rule or payee could categorise. It uses your AI model; booking never waits for it."
       checked={status.lucius_followup}
       disabled={busy !== null}
       onChange={() =>

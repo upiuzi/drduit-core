@@ -184,7 +184,7 @@ def resolve_client(client_id: str, redirect_uri: str) -> Client:
         host = _valid_cimd_url(client_id)
         if host is None:
             raise ClientRefused(
-                "This app isn't one Open Net Worth recognises. Create app credentials for it "
+                "This app isn't one Dr Duit recognises. Create app credentials for it "
                 "in Settings > MCP instead."
             )
         client = _cimd_client(client_id, host)

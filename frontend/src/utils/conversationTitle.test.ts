@@ -60,7 +60,7 @@ describe('conversationTitleFromFirstMessage — the onboarding harness note', ()
     // deriving a title from it literally would put the harness's own trigger string into
     // the conversation list.
     expect(conversationTitleFromFirstMessage('__ONBOARDING_INIT__')).toBe(
-      'Onboarding to Open Net Worth',
+      'Onboarding to Dr Duit',
     )
   })
 
@@ -69,13 +69,13 @@ describe('conversationTitleFromFirstMessage — the onboarding harness note', ()
     // that happens to CONTAIN the sentinel text is still a real message, not the harness
     // note, and must be titled from its own content like anything else.
     expect(conversationTitleFromFirstMessage('is __ONBOARDING_INIT__ a real thing?')).not.toBe(
-      'Onboarding to Open Net Worth',
+      'Onboarding to Dr Duit',
     )
   })
 
   it('tolerates surrounding whitespace, matching how the message actually arrives', () => {
     expect(conversationTitleFromFirstMessage('  __ONBOARDING_INIT__  ')).toBe(
-      'Onboarding to Open Net Worth',
+      'Onboarding to Dr Duit',
     )
   })
 })

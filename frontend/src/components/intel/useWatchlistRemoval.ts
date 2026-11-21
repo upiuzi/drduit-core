@@ -85,7 +85,7 @@ export function useWatchlistRemoval({
     confirmDelete(
       {
         title: 'Stop following this topic?',
-        body: `Lucius will stop scanning news for “${item.label || item.value}”.`,
+        body: `Uzi will stop scanning news for “${item.label || item.value}”.`,
         confirmLabel: 'Stop following',
       },
       `/api/watchlist/items/${item.id}`,

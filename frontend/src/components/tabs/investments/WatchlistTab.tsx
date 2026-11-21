@@ -161,7 +161,7 @@ export function WatchlistTab({ onNavigate, onAskLucius }: Props) {
               </Button>
             )}
             <LuciusCta
-              label="Create with Lucius"
+              label="Create with Uzi"
               message={WATCHLIST_MESSAGE}
               onAskLucius={onAskLucius}
             />

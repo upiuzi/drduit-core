@@ -132,10 +132,10 @@ export function DescribeToLucius({ onAsk }: { onAsk(): void }) {
       </span>
       <span className="as-lucius-cta-text">
         <span id={`${id}-title`} className="as-lucius-cta-title">
-          Describe it to Lucius
+          Describe it to Uzi
         </span>
         <span id={`${id}-sub`} className="as-lucius-cta-sub">
-          Say it in your own words, like “{example}”. Lucius adds it after you confirm.
+          Say it in your own words, like “{example}”. Uzi adds it after you confirm.
         </span>
       </span>
     </button>

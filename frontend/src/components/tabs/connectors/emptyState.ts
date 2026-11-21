@@ -19,11 +19,11 @@ import { FAMILY_SECTIONS, type FamilyKey, type FamilyTab, type StatusFilter } fr
 /** One line on what a family is for — spec §1's lane cards, verbatim in substance. */
 /** What each family is for — one line, shared by the empty state and an empty tab's picks. */
 export const FAMILY_BLURB: Record<FamilyKey, string> = {
-  channels: 'Channels are how Lucius reaches you — notifications, questions, and approvals.',
+  channels: 'Channels are how Uzi reaches you — notifications, questions, and approvals.',
   data: 'Data sources bring balances, transactions, and positions in.',
-  web: 'Web providers give Lucius live search and page reads.',
-  mcp: 'MCP servers are third-party tools you point Lucius at.',
-  apis: 'REST APIs are services you connect yourself, by address and key, for Lucius to call.',
+  web: 'Web providers give Uzi live search and page reads.',
+  mcp: 'MCP servers are third-party tools you point Uzi at.',
+  apis: 'REST APIs are services you connect yourself, by address and key, for Uzi to call.',
 }
 
 /** The family's human-readable title, or null on the All tab. NEVER the raw key. */

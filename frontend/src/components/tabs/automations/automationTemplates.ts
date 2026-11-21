@@ -150,7 +150,7 @@ export const AUTOMATION_TEMPLATES: AutomationTemplate[] = [
     key: 'copy-followed-portfolio',
     name: 'Copy a followed portfolio',
     description:
-      'Lucius checks a portfolio you follow and trades toward it in the account and ' +
+      'Uzi checks a portfolio you follow and trades toward it in the account and ' +
       "amount you set. Whether it asks before each order follows your broker tool's permission.",
     instructions:
       'Copy the followed portfolio [name] in my broker account [account], using at most ' +
@@ -232,7 +232,7 @@ export const CONNECTOR_SYNC_TEMPLATES: AutomationTemplate[] = [
   {
     key: 'sync_ynab',
     name: 'Sync YNAB',
-    description: 'One way: Lucius fetches new YNAB transactions and books them here.',
+    description: 'One way: Uzi fetches new YNAB transactions and books them here.',
     instructions:
       'Fetch new YNAB transactions and book them using the book-transactions ' +
       'skill. Message me only when something was booked or something went wrong.',

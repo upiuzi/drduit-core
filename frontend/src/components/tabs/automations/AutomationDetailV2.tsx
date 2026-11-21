@@ -327,17 +327,17 @@ const PERMISSION_MODE_INFO: Record<
 > = {
   manual: {
     short: 'Manual',
-    description: 'Lucius pauses so you can approve each action.',
+    description: 'Uzi pauses so you can approve each action.',
     Icon: Hand,
   },
   auto: {
     short: 'Auto',
-    description: 'Lucius runs on its own and pauses to ask if anything looks unsafe.',
+    description: 'Uzi runs on its own and pauses to ask if anything looks unsafe.',
     Icon: FastForward,
   },
   skip: {
     short: 'Skip',
-    description: 'Lucius never pauses, even for unsafe actions.',
+    description: 'Uzi never pauses, even for unsafe actions.',
     Icon: TriangleAlert,
   },
 }

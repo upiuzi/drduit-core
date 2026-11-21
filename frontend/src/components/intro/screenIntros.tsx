@@ -73,10 +73,10 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
       screen('Every account, in one ledger', <AccountsPreview />, [
         {
           title: 'Bring transactions in.',
-          body: 'Import a statement, or let Lucius log them from your bank emails as they arrive.',
+          body: 'Import a statement, or let Uzi log them from your bank emails as they arrive.',
         },
         {
-          title: 'Lucius keeps it tidy.',
+          title: 'Uzi keeps it tidy.',
           body: 'It sorts categories, catches duplicates and flags anything odd.',
         },
       ]),
@@ -131,7 +131,7 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
     start: {
       target: 'setup-outlook',
       title: 'Try a what-if',
-      body: 'Drag a lever, or ask Lucius and he moves them for you.',
+      body: 'Drag a lever, or ask Uzi and he moves them for you.',
     },
     steps: [
       screen('Will your money last?', <OutlookPreview />, [
@@ -145,7 +145,7 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
         },
       ]),
     ],
-    luciusLabel: 'Try a what-if with Lucius',
+    luciusLabel: 'Try a what-if with Uzi',
     secondaryLabel: 'Try it myself',
     lucius:
       'On my Outlook, walk me through where I stand, then show me what retiring five years ' +
@@ -165,7 +165,7 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
           body: 'Holdings, returns, dividends and options in one place.',
         },
         {
-          title: 'Lucius watches your mix.',
+          title: 'Uzi watches your mix.',
           body: 'It flags concentration and drift before they cost you.',
         },
       ]),
@@ -180,13 +180,13 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
     start: {
       target: 'setup-intel',
       title: 'Watch a ticker',
-      body: 'Add something to watch. Lucius tells you when it moves.',
+      body: 'Add something to watch. Uzi tells you when it moves.',
     },
     steps: [
       screen('Know when something moves your money', <IntelPreview />, [
         {
           title: 'Watch what matters.',
-          body: 'Tickers and topics, with alerts that tell Lucius what to do.',
+          body: 'Tickers and topics, with alerts that tell Uzi what to do.',
         },
         { title: 'Signals, not noise.', body: 'Only the news that touches what you hold.' },
       ]),
@@ -236,7 +236,7 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
           title: 'Pick what you see.',
           body: 'Net worth, cash flow and spending, as widgets you arrange.',
         },
-        { title: 'Ask about any number.', body: 'Lucius explains what changed and why.' },
+        { title: 'Ask about any number.', body: 'Uzi explains what changed and why.' },
       ]),
     ],
     lucius:
@@ -248,7 +248,7 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
     // Its add button leads the header; pointing at it would only state the obvious.
     secondaryLabel: 'Set up myself',
     steps: [
-      screen('Lucius works while you are away', <AutomationsPreview />, [
+      screen('Uzi works while you are away', <AutomationsPreview />, [
         {
           title: 'On a schedule or a trigger.',
           body: 'Every month, when a price hits, or when a bill email lands.',
@@ -267,18 +267,18 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
     name: 'Skills',
     // Its add button leads the header; pointing at it would only state the obvious.
     steps: [
-      screen('Teach Lucius how you do things', <SkillsPreview />, [
+      screen('Teach Uzi how you do things', <SkillsPreview />, [
         {
           title: 'Your way, every time.',
-          body: 'A skill is a playbook Lucius follows step by step.',
+          body: 'A skill is a playbook Uzi follows step by step.',
         },
         {
           title: 'Type / to run one.',
-          body: 'Or ask Lucius to save what he just did as a skill.',
+          body: 'Or ask Uzi to save what he just did as a skill.',
         },
       ]),
     ],
-    luciusLabel: 'Make one with Lucius',
+    luciusLabel: 'Make one with Uzi',
     secondaryLabel: 'Write one myself',
     lucius:
       'Help me make my first skill: ask what I do often that you should do my way, then write ' +
@@ -289,7 +289,7 @@ export const SCREEN_INTROS: Record<IntroScreen, ScreenIntroConfig> = {
     // Its add button leads the header; pointing at it would only state the obvious.
     secondaryLabel: 'Set up myself',
     steps: [
-      screen('Extend what Lucius can do', <ConnectorsPreview />, [
+      screen('Extend what Uzi can do', <ConnectorsPreview />, [
         {
           title: 'Data, channels and tools.',
           body: 'Bank feeds, Telegram, web search, or any MCP server.',

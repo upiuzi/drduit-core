@@ -155,8 +155,8 @@ describe('one muted trust sentence, and it differs by state', () => {
 
   it('says nothing of the sort about a connector WE publish', () => {
     // We are not a third party to ourselves: attribution, no disclaimer.
-    const { container } = preview({ publisher: 'Open Net Worth', verification: 'unverified' })
-    expect(screen.getByText(/Developed by/).textContent).toContain('Open Net Worth')
+    const { container } = preview({ publisher: 'Dr Duit', verification: 'unverified' })
+    expect(screen.getByText(/Developed by/).textContent).toContain('Dr Duit')
     expect(container.querySelector('.rd-help')).toBeNull()
   })
 })
@@ -178,7 +178,7 @@ describe('the trust sentence is MCP-only (spec §5, CNR-TRUST-NATIVE-ABSENT)', (
     // line entirely (still visible via the card's name/logo/description and the Details
     // footer's "Vendor" field) rather than named alongside ours.
     preview(nativeRow())
-    expect(screen.getByText(/Developed by/).textContent).toContain('Open Net Worth')
+    expect(screen.getByText(/Developed by/).textContent).toContain('Dr Duit')
     expect(screen.getByText(/Developed by/).textContent).not.toContain('Serper')
   })
 

@@ -12,7 +12,7 @@ import { ConnectorAccountsList } from './ConnectorAccountsList'
 // SimpleFIN's machine-minted access URL — it IS revealable through the shared eye
 // (GET /api/connectors/lunch_money/secret/access_token). The GET only ever echoes
 // has_access_token; a blank token field on save leaves the saved one unchanged. This form
-// owns the config fields (token / enable); fetching transactions is now Lucius's job via a
+// owns the config fields (token / enable); fetching transactions is now Uzi's job via a
 // template (see the connector page's Automate button) — the unified /api/connectors PATCH owns the
 // card-header enable toggle. Save lives in the modal footer — see ./formSave.
 
@@ -133,7 +133,7 @@ export function LunchMoneySection() {
           Lunch Money
         </a>
         , paste a personal access token from its Settings → Developers page. Fetching and booking
-        transactions is Lucius's job — automate it with a template below. Pulls transactions only —
+        transactions is Uzi's job — automate it with a template below. Pulls transactions only —
         Lunch Money's own manually-tracked assets are not imported.
       </Text>
 

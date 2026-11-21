@@ -144,7 +144,7 @@ const Attention: ComponentType<WidgetContentProps> = ({
                 </div>
                 <div className="ov-risk-tx">
                   {/* The title itself IS the "Review" action when a nav target exists —
-                      one fewer persistent CTA competing with Ask Lucius/dismiss for a
+                      one fewer persistent CTA competing with Ask Uzi/dismiss for a
                       compact row's limited width. */}
                   {r.nav && onNavigate ? (
                     <button
@@ -169,8 +169,8 @@ const Attention: ComponentType<WidgetContentProps> = ({
                       type="button"
                       className="ov-risk-link ov-risk-link--ask"
                       onClick={() => onAskLucius(`Tell me more about: ${r.title}`)}
-                      aria-label="Ask Lucius"
-                      title="Ask Lucius"
+                      aria-label="Ask Uzi"
+                      title="Ask Uzi"
                     >
                       <Spark size={14} />
                     </button>
@@ -240,7 +240,7 @@ const LuxAsk: ComponentType<WidgetContentProps> = ({ instance, def, onPatch, onA
         <TextArea
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Ask Lucius anything about your money…"
+          placeholder="Ask Uzi anything about your money…"
           rows={3}
         />
         <div className="ov-lux-ask-actions">
@@ -252,7 +252,7 @@ const LuxAsk: ComponentType<WidgetContentProps> = ({ instance, def, onPatch, onA
             onClick={submit}
             disabled={!draft.trim()}
           >
-            Ask Lucius
+            Ask Uzi
           </Button>
         </div>
         <div className="ov-lux-ask-suggestions">

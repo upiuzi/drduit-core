@@ -100,7 +100,7 @@ export function BotStatus({ connection, username }: { connection: Connection; us
   }
   return (
     <StatusLine tone="warn">
-      The bot isn&apos;t running. Check the token, or restart Open Net Worth.
+      The bot isn&apos;t running. Check the token, or restart Dr Duit.
     </StatusLine>
   )
 }
@@ -170,7 +170,7 @@ export function ConnectStep({
     <Stack gap="--space-3">
       {justApproved && (
         <StatusLine tone="good" size="sm">
-          ✓ {justApproved.who} can chat with Lucius now
+          ✓ {justApproved.who} can chat with Uzi now
           {justApproved.welcomed ? ' — the bot just told them.' : '.'}
         </StatusLine>
       )}
@@ -215,7 +215,7 @@ export function SaveTokenNudge({
       <Stack gap="--space-3">
         <Text size="sm">
           {switching
-            ? 'Saving switches Lucius to this new bot. Everyone approved below stays approved — they just open the new bot in Telegram and tap Start once.'
+            ? 'Saving switches Uzi to this new bot. Everyone approved below stays approved — they just open the new bot in Telegram and tap Start once.'
             : 'Next: save to bring your bot online. Then you can choose who chats with it and say hi.'}
         </Text>
         <Button

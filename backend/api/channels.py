@@ -99,5 +99,5 @@ async def test_channel(name: str):
 
     from backend.connectors.webhook.channel import _send
 
-    result = await _send("Open Net Worth test notification — your channel is working.")
+    result = await _send("Dr Duit test notification — your channel is working.")
     return {"name": name, "result": result}

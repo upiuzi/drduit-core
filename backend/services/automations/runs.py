@@ -468,7 +468,7 @@ def grant_automation_tool(
         if not any(tool in (item.get("tools") or []) for item in always_allowed):
             always_allowed.append(
                 {
-                    "src": "Open Net Worth",
+                    "src": "Dr Duit",
                     "desc": f"Allow {tool.replace('_', ' ')}",
                     "tools": [tool],
                 }

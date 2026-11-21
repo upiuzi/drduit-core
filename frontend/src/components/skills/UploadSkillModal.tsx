@@ -197,9 +197,9 @@ export function UploadSkillModal({ onClose, onInstalled }: UploadSkillModalProps
                 {installed.author && (
                   <Badge tone="muted">
                     {installed.author === 'builtin'
-                      ? 'Open Net Worth'
+                      ? 'Dr Duit'
                       : installed.author === 'lucius'
-                        ? 'Lucius'
+                        ? 'Uzi'
                         : 'You'}
                   </Badge>
                 )}

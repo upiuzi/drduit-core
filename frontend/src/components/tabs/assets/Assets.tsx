@@ -239,7 +239,7 @@ export function Assets(props: AssetsProps) {
                       Add asset
                     </Button>
                     <LuciusCta
-                      label="Set up with Lucius"
+                      label="Set up with Uzi"
                       message={LUCIUS_SETUP}
                       onAskLucius={onAskLucius}
                     />

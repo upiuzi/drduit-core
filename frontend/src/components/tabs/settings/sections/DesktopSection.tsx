@@ -61,7 +61,7 @@ function ServerActivitySettings() {
       sub="Your automations and Intelligence keep updating on your server, even when this app is closed."
     >
       {row(
-        'Keep Open Net Worth ready',
+        'Keep Dr Duit ready',
         'Keep it close at hand and ready when you sign in.',
         <Btn disabled={busy} onClick={() => void open()}>
           Background and startup…
@@ -185,7 +185,7 @@ function LocalDesktopSection() {
             )}
             {row(
               'Start at login',
-              'Let Lucius get back to work when you sign in, without remembering to open the app.',
+              'Let Uzi get back to work when you sign in, without remembering to open the app.',
               <Toggle
                 label="Start at login"
                 on={settings.launchAtLogin}
@@ -207,7 +207,7 @@ function LocalDesktopSection() {
           <Panel title="Notifications">
             {row(
               'Show desktop notifications',
-              'Notifications open the relevant review. Financial values and document contents stay out of notification previews. If alerts do not appear, allow Open Net Worth in your computer’s notification settings.',
+              'Notifications open the relevant review. Financial values and document contents stay out of notification previews. If alerts do not appear, allow Dr Duit in your computer’s notification settings.',
               <Toggle
                 label="Show desktop notifications"
                 on={settings.notifications}

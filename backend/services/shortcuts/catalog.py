@@ -44,7 +44,7 @@ from .setup_code import SEPARATOR
 PLACEHOLDER_SETUP_CODE = "Paste your setup code here"
 
 SETUP_CODE_QUESTION = (
-    "Paste your setup code (Open Net Worth → Settings → Phone shortcuts → Setup code → Copy)"
+    "Paste your setup code (Dr Duit → Settings → Phone shortcuts → Setup code → Copy)"
 )
 
 
@@ -237,7 +237,7 @@ def _post_and_report(source: str, ref: Dict[str, Any]) -> List[Dict[str, Any]]:
 
 
 NO_ANSWER_MESSAGE = (
-    "Not logged: no answer from Open Net Worth. It may be offline, or the address in your "
+    "Not logged: no answer from Dr Duit. It may be offline, or the address in your "
     "setup code is wrong."
 )
 
@@ -256,7 +256,7 @@ def _report_failure(request_uuid: str) -> List[Dict[str, Any]]:
         ),
         *if_has_value(
             detail,
-            then=[_notify(tokens("Not logged: Open Net Worth said “", detail, "”."))],
+            then=[_notify(tokens("Not logged: Dr Duit said “", detail, "”."))],
             otherwise=[_notify(tokens(NO_ANSWER_MESSAGE))],
         ),
     ]
@@ -265,17 +265,17 @@ def _report_failure(request_uuid: str) -> List[Dict[str, Any]]:
 def _notify(body: Dict[str, Any]) -> Dict[str, Any]:
     return action(
         "is.workflow.actions.notification",
-        {"WFNotificationActionTitle": tokens("Open Net Worth"), "WFNotificationActionBody": body},
+        {"WFNotificationActionTitle": tokens("Dr Duit"), "WFNotificationActionBody": body},
     )
 
 
 _CAPTURE_INTRO = (
-    "Log Apple Pay to Open Net Worth (iOS 27+)\n\n"
+    "Log Apple Pay to Dr Duit (iOS 27+)\n\n"
     "Runs on its own on every Apple Pay tap. Builds a sentence from the tap — amount, "
-    "merchant, card, time — and sends it to Lucius, who works out the account and category "
+    "merchant, card, time — and sends it to Uzi, who works out the account and category "
     "and books it.\n\n"
     "1. Tap the Text just below (“Paste your setup code here”) and paste your setup code from "
-    "Open Net Worth → Settings → Phone shortcuts.\n"
+    "Dr Duit → Settings → Phone shortcuts.\n"
     "2. Add its trigger — installing doesn't keep one: Search (bottom) → Automation → Wallet "
     "(“When I tap a Wallet Card or Pass”) → pick your cards."
 )
@@ -301,14 +301,14 @@ def build_apple_pay_post() -> Dict[str, Any]:
 
 
 _LEGACY_INTRO = (
-    "Log Apple Pay to Open Net Worth (iOS 26 and earlier)\n\n"
+    "Log Apple Pay to Dr Duit (iOS 26 and earlier)\n\n"
     "Builds a sentence from the Apple Pay transaction — amount, merchant, card, time — and "
-    "sends it to Lucius, who works out the account and category and books it.\n\n"
+    "sends it to Uzi, who works out the account and category and books it.\n\n"
     "Run it on every tap:\n"
     "Automation → + → Wallet → When I tap: your cards → Run Immediately → "
     "Do: this shortcut.\n\n"
     "First: tap the Text just below (“Paste your setup code here”) and paste your setup code "
-    "from Open Net Worth → Settings → Phone shortcuts. New address or token? Paste the new one."
+    "from Dr Duit → Settings → Phone shortcuts. New address or token? Paste the new one."
 )
 
 
@@ -326,15 +326,15 @@ def build_apple_pay_legacy_post() -> Dict[str, Any]:
 
 
 _NOTIFICATION_INTRO = (
-    "Log Finance Notifications to Open Net Worth (iOS 27+)\n\n"
+    "Log Finance Notifications to Dr Duit (iOS 27+)\n\n"
     "Runs on its own when one of your bank, wallet, broker or crypto apps sends a "
-    "notification, and sends its text to Lucius — who books payments, refunds, money received "
+    "notification, and sends its text to Uzi — who books payments, refunds, money received "
     "and trades, and logs nothing for codes, promotions or statements.\n\n"
     "1. Tap the Text just below (“Paste your setup code here”) and paste your setup code from "
-    "Open Net Worth → Settings → Phone shortcuts.\n"
+    "Dr Duit → Settings → Phone shortcuts.\n"
     "2. Add its trigger — installing doesn't keep one: Search (bottom) → Automation → "
     "Notification (“When I receive a notification from”) → tap App → pick your apps.\n\n"
-    "A bank whose card also runs the Apple Pay shortcut reports each purchase twice. Lucius "
+    "A bank whose card also runs the Apple Pay shortcut reports each purchase twice. Uzi "
     "checks the ledger before booking, but a purchase it can't match is logged twice — pick "
     "only one of the two if you can."
 )
@@ -414,9 +414,9 @@ class ShortcutSpec:
 SPECS = (
     ShortcutSpec(
         slug="log-apple-pay",
-        name="Log Apple Pay to Open Net Worth",
+        name="Log Apple Pay to Dr Duit",
         summary=(
-            "iOS 27+. Runs on its own on every Apple Pay tap. Lucius works out the account, "
+            "iOS 27+. Runs on its own on every Apple Pay tap. Uzi works out the account, "
             "amount and category and books it."
         ),
         asks="setup code",
@@ -424,9 +424,9 @@ SPECS = (
     ),
     ShortcutSpec(
         slug="log-apple-pay-ios26",
-        name="Log Apple Pay to Open Net Worth",
+        name="Log Apple Pay to Dr Duit",
         summary=(
-            "iOS 26 and earlier. A Wallet automation runs it on every Apple Pay tap. Lucius "
+            "iOS 26 and earlier. A Wallet automation runs it on every Apple Pay tap. Uzi "
             "works out the account, amount and category and books it."
         ),
         asks="setup code",
@@ -435,10 +435,10 @@ SPECS = (
     ),
     ShortcutSpec(
         slug="log-notifications",
-        name="Log Finance Notifications to Open Net Worth",
+        name="Log Finance Notifications to Dr Duit",
         summary=(
             "iOS 27+. Runs on its own when your bank, wallet, broker or crypto apps send a "
-            "notification. Lucius books payments, refunds, money received and trades."
+            "notification. Uzi books payments, refunds, money received and trades."
         ),
         asks="setup code",
         build=build_notification_post,

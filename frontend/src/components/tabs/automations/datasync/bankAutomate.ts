@@ -35,6 +35,6 @@ export function useBankAutomateChoices(
         void navigate({ to: '/automations', search: bankSyncSearch(provider) as never } as never),
     },
   ]
-  if (openLuciusTemplate) choices.push({ label: 'Lucius Automation', onSelect: openLuciusTemplate })
+  if (openLuciusTemplate) choices.push({ label: 'Uzi Automation', onSelect: openLuciusTemplate })
   return choices
 }

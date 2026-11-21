@@ -92,7 +92,7 @@ export function ConnectorAccountsList({
   const { data: appAccountsData, refresh: refreshAppAccounts } = useAccounts<AppAccountRow>()
   const appAccounts = appAccountsData ?? []
 
-  // Re-read whenever data changes anywhere (a sync, Lucius, another tab). The old list stays
+  // Re-read whenever data changes anywhere (a sync, Uzi, another tab). The old list stays
   // on screen until the new one arrives, so a re-read never flickers the Link dialog.
   const dataVersion = useDataVersion('*')
   const load = useCallback(() => {
@@ -289,8 +289,8 @@ export function ConnectorAccountsList({
         <Text size="xs" tone="muted">
           Add each account you want to track, or link it to one you already have.{' '}
           {hasSync
-            ? 'Nothing is imported until you set up sync below, or a Lucius Automation fetches it.'
-            : 'Nothing is imported until Lucius fetches transactions.'}
+            ? 'Nothing is imported until you set up sync below, or a Uzi Automation fetches it.'
+            : 'Nothing is imported until Uzi fetches transactions.'}
         </Text>
       )}
       {!data && !loadErr && <Loading label="Loading accounts…" />}

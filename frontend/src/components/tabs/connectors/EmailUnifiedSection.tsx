@@ -25,7 +25,7 @@ import { revealConnectorSecret } from './secrets'
 // 2026-08-18, owner decision): connection health belongs on the connector's own detail
 // page, not duplicated inside its config form, and testing a connector is a generic action
 // every connector needs — not something worth custom-building per form. A real
-// cross-connector test flow is a future addition; until then, asking Lucius to read/send a
+// cross-connector test flow is a future addition; until then, asking Uzi to read/send a
 // message is the test.
 
 interface EmailConfig {
@@ -395,7 +395,7 @@ export function EmailUnifiedSection() {
         <FormField
           label="Mail folder"
           htmlFor="email-imap-folder"
-          info="INBOX works for almost every provider and reads all your email. Want to limit what Lucius sees? Point this at a specific folder instead — for example, one you filter relevant emails into."
+          info="INBOX works for almost every provider and reads all your email. Want to limit what Uzi sees? Point this at a specific folder instead — for example, one you filter relevant emails into."
         >
           <TextField
             id="email-imap-folder"

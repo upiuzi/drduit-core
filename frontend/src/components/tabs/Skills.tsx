@@ -216,7 +216,7 @@ export function Skills({ onRunSkill }: Props) {
   const header = (
     <PageHeader
       title="Skills"
-      subtitle="Reusable playbooks Lucius can run for you — one-click routines"
+      subtitle="Reusable playbooks Uzi can run for you — one-click routines"
       actions={
         <CreateSkillMenu
           onCreateWithLucius={onCreateWithLucius}
@@ -358,7 +358,7 @@ export function Skills({ onRunSkill }: Props) {
           }
         >
           <Text tone="muted">
-            This removes the skill permanently. Lucius will no longer be able to run it.
+            This removes the skill permanently. Uzi will no longer be able to run it.
           </Text>
         </Modal>
       )}
@@ -413,7 +413,7 @@ function SkillEditor({
     }
     if (!description.trim()) {
       setSection('instructions')
-      setFormError('A skill needs a description so Lucius knows when to use it.')
+      setFormError('A skill needs a description so Uzi knows when to use it.')
       return
     }
     setSaving(true)

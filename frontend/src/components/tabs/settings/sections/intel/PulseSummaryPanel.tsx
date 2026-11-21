@@ -10,7 +10,7 @@ const VERBOSITY_LABELS: Record<BriefVerbosity, string> = {
   2: '2 · Short',
   3: '3 · Standard',
   4: '4 · Detailed',
-  5: '5 · Written by Lucius',
+  5: '5 · Written by Uzi',
 }
 
 const HOLDINGS_SAMPLES: Record<BriefVerbosity, string> = {
@@ -18,7 +18,7 @@ const HOLDINGS_SAMPLES: Record<BriefVerbosity, string> = {
   2: '“Your book is +S$120 (+0.4%) today — NVDA led (+S$95), AAPL dragged (−S$30).”',
   3: '“… You’re 1.9 pts ahead of SPY 1M.”',
   4: '“… Top movers NVDA, AAPL, VWRA. The month’s biggest driver: NVDA (+S$410).”',
-  5: 'Three to five sentences Lucius writes from the same figures, fact-checked. Uses a model call about every 30 minutes while you have the tab open.',
+  5: 'Three to five sentences Uzi writes from the same figures, fact-checked. Uses a model call about every 30 minutes while you have the tab open.',
 }
 
 const WATCHLIST_SAMPLES: Record<BriefVerbosity, string> = {
@@ -26,7 +26,7 @@ const WATCHLIST_SAMPLES: Record<BriefVerbosity, string> = {
   2: '“… NVDA reports earnings in 3 days.”',
   3: '“… Over the past month, AVGO did best against its comparison, INTC worst.”',
   4: '“… Also this week: TSM (ex-dividend). 4 up, 2 down, 1 flagged.”',
-  5: 'Three to five sentences Lucius writes from the list’s rows, fact-checked. Uses a model call about every 30 minutes per list.',
+  5: 'Three to five sentences Uzi writes from the list’s rows, fact-checked. Uses a model call about every 30 minutes per list.',
 }
 
 function VerbositySelect({
@@ -59,7 +59,7 @@ export function PulseSummaryPanel({ cfg, save }: PanelProps) {
   return (
     <Panel
       title="Pulse summaries"
-      sub="How much the brief at the top of each Intel tab says. Levels 1–4 are instant; level 5 is written by Lucius."
+      sub="How much the brief at the top of each Intel tab says. Levels 1–4 are instant; level 5 is written by Uzi."
     >
       <div className="rd-formgrid">
         <Field label="Holdings brief" help={HOLDINGS_SAMPLES[holdings]}>

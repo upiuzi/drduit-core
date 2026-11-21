@@ -59,16 +59,16 @@ export function callStatus(call: CallState, now: number, busy: boolean): CallSta
           // from a speech service's hiccup, and "Lucius's connection dropped" read as the product
           // breaking (owner, 2026-11-05).
           text: 'Poor connection',
-          line: 'Poor connection. Lucius may not hear you.',
+          line: 'Poor connection. Uzi may not hear you.',
           stripLine: 'Poor connection',
           short: 'Poor connection',
           time: clock(secs),
         }
       }
       // Muted needs no words: the pressed Unmute button already says it (owner, 2026-11-03).
-      const line = busy ? 'Lucius is working…' : ''
+      const line = busy ? 'Uzi is working…' : ''
       return {
-        text: busy ? 'Lucius is working…' : `Connected · ${clock(secs)}`,
+        text: busy ? 'Uzi is working…' : `Connected · ${clock(secs)}`,
         line,
         short: busy ? 'Working…' : clock(secs),
         time: clock(secs),

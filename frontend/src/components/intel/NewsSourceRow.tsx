@@ -106,7 +106,7 @@ export function classifySourceHealth(row: NewsSource): SourceHealth {
     return {
       tone: 'neg',
       label: 'Failing',
-      detail: 'Recent fetches are failing — Lucius is backing off.',
+      detail: 'Recent fetches are failing — Uzi is backing off.',
     }
   }
 
@@ -146,8 +146,8 @@ interface Props {
 export function NewsSourceRow({ row, onToggle, onCadenceChange, onDeleteRequest }: Props) {
   const health = classifySourceHealth(row)
   const switchTitle = row.enabled
-    ? 'Turn off — Lucius stops fetching this source right away.'
-    : 'Turn on — Lucius starts fetching this source on its next check.'
+    ? 'Turn off — Uzi stops fetching this source right away.'
+    : 'Turn on — Uzi starts fetching this source on its next check.'
 
   return (
     <EntityRow

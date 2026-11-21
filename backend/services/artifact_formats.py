@@ -161,7 +161,7 @@ def render_xlsx(spec: dict, *, title: str) -> bytes:
     wb = Workbook()
     wb.remove(wb.active)
     wb.properties.title = title
-    wb.properties.creator = "Open Net Worth"
+    wb.properties.creator = "Dr Duit"
     for sheet in spec["sheets"]:
         ws = wb.create_sheet(sheet["name"])
         cols, row_no = sheet["columns"], 1

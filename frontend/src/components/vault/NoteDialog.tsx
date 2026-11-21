@@ -84,8 +84,8 @@ export function NoteDialog({ item, onClose }: { item: VaultItem; onClose: () => 
         />
         <p className="vault-rename-help">
           {item.private
-            ? 'Lucius can read this note. Private hides only what’s in the file.'
-            : 'Lucius reads your note when you ask about this file.'}
+            ? 'Uzi can read this note. Private hides only what’s in the file.'
+            : 'Uzi reads your note when you ask about this file.'}
         </p>
         {error && <p className="vault-error">{error}</p>}
       </div>

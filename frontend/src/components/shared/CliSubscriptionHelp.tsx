@@ -167,7 +167,7 @@ function SignInSteps({
       <Text as="p" size="sm">
         {inContainer
           ? `${details.label} runs inside the container. Sign it in from the machine running Docker:`
-          : 'Run this on the computer running Open Net Worth.'}
+          : 'Run this on the computer running Dr Duit.'}
       </Text>
       <CopyCommand command={command} label={`Copy ${details.label} sign-in command`} />
       <Text as="p" size="sm" tone="muted">
@@ -290,7 +290,7 @@ export function CliSubscriptionHelp({
     >
       {justSignedIn ? (
         <Text as="p" size="sm">
-          Signed in. Lucius can use it now.
+          Signed in. Uzi can use it now.
         </Text>
       ) : terminal ? (
         <TerminalSteps provider={provider} onOpen={terminal.onOpen} />
@@ -299,7 +299,7 @@ export function CliSubscriptionHelp({
       ) : (
         <Stack gap="--space-5">
           <Text as="p" size="sm" tone="muted">
-            Run these on the computer running Open Net Worth. This updates on its own once
+            Run these on the computer running Dr Duit. This updates on its own once
             it&rsquo;s installed.
           </Text>
           <InstallationSteps provider={provider} platform={platform} />

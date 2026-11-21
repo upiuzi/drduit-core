@@ -35,7 +35,7 @@ PROBE_TOOL = {
 # bare "you are a test assistant" is not a regression, it is an unrealistic prompt — gpt-6 models
 # answer it with "that tool isn't available" even on a healthy install.
 PROBE_SYSTEM = (
-    "You are Lucius, the assistant inside a personal finance app. Your only way to read the "
+    "You are Uzi, the assistant inside a personal finance app. Your only way to read the "
     "user's book is the tools listed below."
 )
 PROBE_QUESTION = "What is my secret number?"
@@ -136,8 +136,8 @@ def _notify_broken(transport: str, version: str, detail: str) -> None:
             "severity": "warning",
             "title": f"{label} {version} changed how tools work",
             "summary": (
-                f"{label} {version} changed how tools work — Lucius can't use your book's tools "
-                "with it. Switch model in Settings or update Open Net Worth."
+                f"{label} {version} changed how tools work — Uzi can't use your book's tools "
+                "with it. Switch model in Settings or update Dr Duit."
             ),
             "trigger": "cli_self_check",
         }

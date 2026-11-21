@@ -291,7 +291,7 @@ export const LuciusComposer = forwardRef<LuciusComposerHandle, LuciusComposerPro
       // Multi-turn off + busy: useChat.sendMessage no-ops too, so say so here.
       if (sendBlocked) {
         return refuse(
-          'Lucius is still replying. Stop the reply to send this now, or wait for it.',
+          'Uzi is still replying. Stop the reply to send this now, or wait for it.',
           true,
         )
       }
@@ -655,7 +655,7 @@ export const LuciusComposer = forwardRef<LuciusComposerHandle, LuciusComposerPro
               </>
             ) : (
               <>
-                {noVisionModel} can’t see images, and no model is set to read them — Lucius won’t
+                {noVisionModel} can’t see images, and no model is set to read them — Uzi won’t
                 see this attachment. Pick a vision model above, or set one under Settings → AI Model
                 → Task models → Image reading.
               </>
@@ -803,7 +803,7 @@ export const LuciusComposer = forwardRef<LuciusComposerHandle, LuciusComposerPro
         <div className="lx-editrow">
           <MentionComposer
             ref={mentionRef}
-            placeholder={placeholder ?? 'Ask Lucius…'}
+            placeholder={placeholder ?? 'Ask Uzi…'}
             // Editor stays editable while streaming so the user can compose the next message;
             // doSend gates the actual send until `busy` clears.
             disabled={false}

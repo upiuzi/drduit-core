@@ -564,7 +564,7 @@ export function Register({
                     </Button>
                   )}
                   <LuciusCta
-                    label="Add with Lucius"
+                    label="Add with Uzi"
                     message={transactionsMessage(
                       selectedId ? acctMap[selectedId]?.name : undefined,
                     )}

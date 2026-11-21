@@ -55,7 +55,7 @@ export function VoiceCallStage({
   }, [screen])
 
   const dialog = screen
-    ? { role: 'dialog', 'aria-modal': true, 'aria-label': 'Voice call with Lucius', tabIndex: -1 }
+    ? { role: 'dialog', 'aria-modal': true, 'aria-label': 'Voice call with Uzi', tabIndex: -1 }
     : { role: 'group', 'aria-label': 'Voice call' }
   return (
     <div
@@ -119,7 +119,7 @@ export function VoiceCallStage({
           {/* The wide strip's own heading: who, then what — the line or, while connected,
               the clock. Hidden in the stacked layouts, which show line and clock in place. */}
           <span className="lx-callstage-name" aria-hidden="true">
-            Lucius
+            Uzi
           </span>
           <span
             className="lx-callstage-sub"

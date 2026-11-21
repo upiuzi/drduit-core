@@ -192,7 +192,7 @@ export function ChatSection({ toast }: SectionProps) {
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 12.5, fontWeight: 600 }}>Screen awareness by default</div>
           <div className="rd-help" style={{ marginTop: 3, display: 'block', lineHeight: 1.5 }}>
-            On: the screen you're on goes along with each message. Off: it doesn't, but Lucius can
+            On: the screen you're on goes along with each message. Off: it doesn't, but Uzi can
             still look if you ask. The switch above the message box changes it on that device.
           </div>
         </div>
@@ -238,7 +238,7 @@ export function ChatSection({ toast }: SectionProps) {
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 12.5, fontWeight: 600 }}>Response detail</div>
           <div className="rd-help" style={{ marginTop: 3, display: 'block', lineHeight: 1.5 }}>
-            How much detail Lucius puts in an answer. Brief: the answer and the key figures.
+            How much detail Uzi puts in an answer. Brief: the answer and the key figures.
             Detailed: the reasoning too.
           </div>
         </div>
@@ -253,7 +253,7 @@ export function ChatSection({ toast }: SectionProps) {
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 12.5, fontWeight: 600 }}>Multi-turn chat</div>
           <div className="rd-help" style={{ marginTop: 3, display: 'block', lineHeight: 1.5 }}>
-            Off: Send is disabled until Lucius finishes answering. On: you can send while Lucius is
+            Off: Send is disabled until Uzi finishes answering. On: you can send while Uzi is
             still answering, and it's woven into that same reply.
           </div>
         </div>

@@ -152,7 +152,7 @@ def not_signed_in_error(label: str) -> CliNotSignedInError:
     """The error for a turn the CLI refused for want of a login. Also drops any cached "yes"."""
     invalidate()
     return CliNotSignedInError(
-        f"Lucius couldn't connect — {label} isn't signed in where Open Net Worth runs, or its "
+        f"Uzi couldn't connect — {label} isn't signed in where Dr Duit runs, or its "
         "sign-in has expired. Sign in again; Settings → AI shows how."
     )
 

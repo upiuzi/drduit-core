@@ -29,7 +29,7 @@ interface ModeOption {
   description: string
 }
 
-const SKIP_WARNING = 'Lucius never pauses, even for unsafe actions.'
+const SKIP_WARNING = 'Uzi never pauses, even for unsafe actions.'
 
 const APPROVAL_OPTIONS: readonly ModeOption[] = [
   {
@@ -37,14 +37,14 @@ const APPROVAL_OPTIONS: readonly ModeOption[] = [
     label: 'Manually approve',
     shortLabel: 'Manual',
     Icon: Hand,
-    description: 'Lucius pauses so you can approve each action.',
+    description: 'Uzi pauses so you can approve each action.',
   },
   {
     value: 'auto',
     label: 'Automatically approve',
     shortLabel: 'Auto',
     Icon: FastForward,
-    description: 'Lucius runs on its own and pauses to ask if anything looks unsafe.',
+    description: 'Uzi runs on its own and pauses to ask if anything looks unsafe.',
   },
   {
     value: 'skip',

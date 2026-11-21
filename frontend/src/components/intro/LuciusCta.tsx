@@ -19,7 +19,7 @@ export interface LuciusCtaProps {
 }
 
 export function LuciusCta({
-  label = 'Ask Lucius',
+  label = 'Ask Uzi',
   message,
   onAskLucius,
   size = 'sm',

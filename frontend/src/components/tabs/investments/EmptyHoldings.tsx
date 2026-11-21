@@ -33,7 +33,7 @@ export function EmptyHoldings({ onAddHolding, onAskLucius, untracked }: Props) {
             and risk.
           </>
         ) : (
-          'Connect a brokerage or add a position to start tracking your investments. Lucius will build your allocation, drift, and risk views automatically.'
+          'Connect a brokerage or add a position to start tracking your investments. Uzi will build your allocation, drift, and risk views automatically.'
         )
       }
       action={
@@ -41,7 +41,7 @@ export function EmptyHoldings({ onAddHolding, onAskLucius, untracked }: Props) {
           <Button variant="primary" size="sm" onClick={onAddHolding} data-tour="setup-investments">
             Add holding
           </Button>
-          <LuciusCta label="Add with Lucius" message={HOLDINGS_MESSAGE} onAskLucius={onAskLucius} />
+          <LuciusCta label="Add with Uzi" message={HOLDINGS_MESSAGE} onAskLucius={onAskLucius} />
         </Cluster>
       }
     />

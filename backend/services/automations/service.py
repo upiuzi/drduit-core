@@ -550,7 +550,7 @@ def seed_coupon_reminder(*, time: str = "09:00") -> bool:
 
 def _notify_permission(description: str) -> dict:
     return {
-        "src": "Open Net Worth",
+        "src": "Dr Duit",
         "desc": description,
         "capability": "notify",
         "tools": ["telegram_send_message", "webhook_send_message"],
@@ -559,7 +559,7 @@ def _notify_permission(description: str) -> dict:
 
 def _categorize_permission(description: str) -> dict:
     return {
-        "src": "Open Net Worth",
+        "src": "Dr Duit",
         "desc": description,
         "capability": "categorize",
         "tools": ["update_transactions"],

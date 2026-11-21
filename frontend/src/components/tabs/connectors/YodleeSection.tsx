@@ -191,7 +191,7 @@ export function YodleeSection() {
           Yodlee
         </a>{' '}
         cobrand API credentials and the Yodlee user account that holds the bank logins. Fetching and
-        booking transactions is Lucius's job.
+        booking transactions is Uzi's job.
       </Text>
 
       {cfg.configured && !cfg.enabled && (

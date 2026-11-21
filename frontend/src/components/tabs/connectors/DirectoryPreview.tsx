@@ -337,7 +337,7 @@ export function DirectoryPreview({
         label="Prompt suggestions"
         items={(prompts ?? []).map((p) => ({
           ...plainChip(p),
-          // Same as on a connector's own page: the prompt lands in Lucius's composer, unsent.
+          // Same as on a connector's own page: the prompt lands in Uzi's composer, unsent.
           onClick: composer
             ? () => {
                 composer.setPendingText(p)

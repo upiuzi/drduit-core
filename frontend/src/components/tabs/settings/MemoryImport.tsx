@@ -27,7 +27,7 @@ const FIELD_LABELS: Record<string, string> = {
 
 const GROUP_TITLES: Record<string, string> = {
   profile: 'Profile',
-  instructions: 'Instructions for Lucius',
+  instructions: 'Instructions for Uzi',
   skip: 'Skipped',
 }
 
@@ -62,7 +62,7 @@ function groupItems(items: ImportItem[]): { title: string; entries: [ImportItem,
   })
   const order = (title: string) => {
     if (title === 'Skipped') return 3
-    const fixed = ['Profile', 'Instructions for Lucius'].indexOf(title)
+    const fixed = ['Profile', 'Instructions for Uzi'].indexOf(title)
     return fixed >= 0 ? fixed : 2
   }
   return [...groups]
@@ -213,7 +213,7 @@ export function MemoryImport({ onClose, toast }: { onClose: () => void; toast: T
         {step === 'paste' && (
           <>
             <p className="rd-mi-lead">
-              Paste the answer here. Lucius sorts it, and you review every line before anything is
+              Paste the answer here. Uzi sorts it, and you review every line before anything is
               saved.
             </p>
             <textarea

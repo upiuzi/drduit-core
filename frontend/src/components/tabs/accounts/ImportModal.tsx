@@ -2255,7 +2255,7 @@ export function ImportModal({
               ...(Object.keys(edits).length ? { edits } : null),
             })
           else if (d.pair?.role === 'in') decisions.push({ row: d.rowIndex, action: 'skip' })
-          return // server default-skips a Lucius-pass skip op without an explicit decision
+          return // server default-skips a Uzi-pass skip op without an explicit decision
         }
         if (d.pair?.role === 'in') {
           decisions.push({
@@ -3064,9 +3064,9 @@ export function ImportModal({
       row: label,
       from: '',
       to: '',
-      title: 'Undo Lucius’s call?',
+      title: "Undo Uzi's call?",
       confirmLabel: 'Undo and link',
-      body: `Lucius ${call}. Linking it here undoes that for this row first.`,
+      body: `Uzi ${call}. Linking it here undoes that for this row first.`,
       run: () => void undoLucius(row).then((ok) => ok && apply()),
     })
   }
@@ -3870,7 +3870,7 @@ export function ImportModal({
                   layout), and carrying it would mean allowlisting a generic global token. */}
                 <div className="imp3-cfg-row">
                   <span className="imp3-cfg-l">
-                    Tell Lucius
+                    Tell Uzi
                     <em>
                       bank quirks, context, corrections — these make the read noticeably better
                     </em>
@@ -3880,7 +3880,7 @@ export function ImportModal({
                       ref={instrTextareaRef}
                       rows={3}
                       maxLength={1000}
-                      aria-label="Tell Lucius"
+                      aria-label="Tell Uzi"
                       placeholder={
                         'e.g. Rows with MOMO.0352 are transfers to my wallet, never expenses.\nDates are DD/MM. Amounts in the ‘Foreign’ column are the original currency, not SGD.'
                       }
@@ -3900,7 +3900,7 @@ export function ImportModal({
                       instructions.trim() !== savedInstructions.trim() &&
                       !fresh && (
                         <div className="imp3-cache-hint">
-                          <Spark /> Instructions changed — Lucius processes the file again with
+                          <Spark /> Instructions changed — Uzi processes the file again with
                           these.
                         </div>
                       )}
@@ -4005,7 +4005,7 @@ export function ImportModal({
                 <Spark />
               </div>
               <div className="imp3-reading-t">
-                {openingReview ? 'Opening' : 'Lucius is reading'}{' '}
+                {openingReview ? 'Opening' : 'Uzi is reading'}{' '}
                 <b>{file ? file.name : resuming ? resumeFilename || 'your file' : 'your file'}</b>
               </div>
               <div
@@ -4089,7 +4089,7 @@ export function ImportModal({
                       disabled={!accountId}
                       onClick={() => runLucius()}
                     >
-                      Let Lucius do it instead
+                      Let Uzi do it instead
                     </Button>
                   </div>
                   <div className="imp-map">
@@ -4196,7 +4196,7 @@ export function ImportModal({
                       disabled={!accountId}
                       onClick={() => runLucius()}
                     >
-                      Import with Lucius instead
+                      Import with Uzi instead
                     </Button>
                   </div>
                 </div>
@@ -5336,7 +5336,7 @@ export function ImportModal({
                             <button
                               type="button"
                               className="imp3-actbtn"
-                              aria-label="Back to Lucius's pick"
+                              aria-label="Back to Uzi's pick"
                               onClick={() =>
                                 setMatchOverride((current) => {
                                   const next = { ...current }
@@ -5345,7 +5345,7 @@ export function ImportModal({
                                 })
                               }
                             >
-                              Back to Lucius’s pick
+                              Back to Uzi's pick
                             </button>
                           )}
                         </div>
@@ -5440,7 +5440,7 @@ export function ImportModal({
                   ? 'Already imported — protected by its external reference.'
                   : pairLeftOutWithPartner
                     ? 'Left out because its paired transfer row is not represented in the ledger.'
-                    : // Lucius's `reason` only explains an EXCLUSION when its op actually excluded the
+                    : // Uzi's `reason` only explains an EXCLUSION when its op actually excluded the
                       // row (skip) — a set_category/route_transfer op's reason justifies what it did to
                       // the row, not why it's left out, and showing it here as if it were "why excluded"
                       // was misleading (owner repro: a set_category reason like "Example Ride payment -
@@ -5923,8 +5923,8 @@ export function ImportModal({
                         )
                       })()}
                     {/* No AI-provenance chrome — the row's category pill already shows the final
-                    category (Lucius set_category and skip both just land in the normal
-                    `category`/excluded state, nothing extra to show). A row Lucius routed as a
+                    category (Uzi set_category and skip both just land in the normal
+                    `category`/excluded state, nothing extra to show). A row Uzi routed as a
                     transfer is the one case with no other way back to plain — that lives as
                     ONE line alongside "Books as transfer" below, inside the same expanded
                     detail box rather than a separate standalone block. */}
@@ -6485,7 +6485,7 @@ export function ImportModal({
                           <button
                             type="button"
                             className="imp3-lpick-btn"
-                            aria-label="Back to Lucius's pick"
+                            aria-label="Back to Uzi's pick"
                             onClick={() => {
                               if (d.rowIndex == null) return
                               setMatchOverride((current) => {
@@ -6497,7 +6497,7 @@ export function ImportModal({
                               setQueueDecided((current) => ({ ...current, [d.rowIndex!]: true }))
                             }}
                           >
-                            Back to Lucius’s pick
+                            Back to Uzi's pick
                           </button>
                         )}
                       </div>
@@ -6513,7 +6513,7 @@ export function ImportModal({
                           aria-pressed={action === 'merge'}
                           className={action === 'merge' ? 'on' : ''}
                           title={
-                            (!decided && action === 'merge' ? 'Lucius’s call • ' : '') +
+                            (!decided && action === 'merge' ? "Uzi's call • " : '') +
                             (mergeAdopts
                               ? `${existingAmount} → ${statementAmount} • cleared ✓`
                               : 'Stays as booked • cleared ✓')
@@ -6530,7 +6530,7 @@ export function ImportModal({
                         aria-pressed={action === 'new'}
                         className={action === 'new' ? 'on' : ''}
                         title={
-                          (!decided && resolved && action === 'new' ? 'Lucius’s call • ' : '') +
+                          (!decided && resolved && action === 'new' ? "Uzi's call • " : '') +
                           (resolved ? '2 entries' : 'flagged for review')
                         }
                         onClick={() => setQueueChoice('new')}
@@ -6551,7 +6551,7 @@ export function ImportModal({
                         aria-pressed={action === 'skip'}
                         className={action === 'skip' ? 'on' : ''}
                         title={
-                          (!decided && resolved && action === 'skip' ? 'Lucius’s call • ' : '') +
+                          (!decided && resolved && action === 'skip' ? "Uzi's call • " : '') +
                           (resolved
                             ? `Yours stays ${existingAmount}`
                             : 'Nothing from this statement row will be booked.')
@@ -6671,7 +6671,7 @@ export function ImportModal({
                   {preview.drafts.length === 0 ? (
                     <EmptyState
                       title="No transactions found in this statement"
-                      body="Lucius couldn't find any rows to import — try a different file, or map columns yourself."
+                      body="Uzi couldn't find any rows to import — try a different file, or map columns yourself."
                       action={
                         <Button variant="secondary" size="sm" onClick={reset}>
                           Try another file
@@ -6832,7 +6832,7 @@ export function ImportModal({
                         </div>
                       )}
                       {/* The instructions-applied note, the format-profile provenance, the flagged-row
-                heads-up and the multi-currency routing note are all "what Lucius wants you to
+                heads-up and the multi-currency routing note are all "what Uzi wants you to
                 know about this read" — they render together in the design's own <LuciusNote>
                 panel below the verdict, ONE box (owner, 2026-07-27: two adjacent violet boxes
                 read as duplicated, not two distinct pieces of information). */}
@@ -7245,7 +7245,7 @@ export function ImportModal({
                         })()}
                       {/* HIDDEN 2026-07-27 (owner: "AI still needed for categorization and stuff" — the
                 fp.learned copy overclaims "no AI needed" when category suggestions etc. can
-                still call Lucius after the format is learned; "I will work on it later, for
+                still call Uzi after the format is learned; "I will work on it later, for
                 now, not show it"). LuciusNote itself is kept intact for when the copy is
                 revisited — the `false &&` keeps this a normal (checked, not dead-code-elided)
                 expression rather than an unreachable statement, so it still type-checks. */}

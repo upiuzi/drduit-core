@@ -34,7 +34,7 @@ export function OutlookWhatIfAsk({
     <div className="pl-whatif-ask" data-tour="setup-outlook">
       <div className="pl-whatif-ask-title">
         <Spark size={13} ariaHidden />
-        Ask Lucius to move these for you
+        Ask Uzi to move these for you
       </div>
       <div className="pl-whatif-chips">
         {WHAT_IFS.map((w) => (

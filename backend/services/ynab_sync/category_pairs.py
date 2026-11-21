@@ -135,7 +135,7 @@ class Pairs(Base):
             app = current().name
             reason = (
                 f"{app} changed {old}, but this book could not take the change. "
-                f"Keep Open Net Worth's version to send it to {app} instead."
+                f"Keep Dr Duit's version to send it to {app} instead."
             )
             self.file(
                 conflicts.FAILED, f"cat:{ycid}", old, reason, entity="category",

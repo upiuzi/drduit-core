@@ -67,7 +67,7 @@ function LuciusLabel({ size = 14 }: { size?: number }) {
   return (
     <span className="lx-dock-head-t">
       <Spark size={size} />
-      <span className="lx-label-txt">Lucius</span>
+      <span className="lx-label-txt">Uzi</span>
     </span>
   )
 }
@@ -345,7 +345,7 @@ export function LuciusDock({ onExpand, onSetUpAi }: Props) {
       className={'lx-dock' + (open ? '' : ' lx-collapsed')}
       data-dropzone="dock"
       role="complementary"
-      aria-label="Ask Lucius"
+      aria-label="Ask Uzi"
     >
       {/* Collapsed pill — with voice calls on, Call sits in it and the call happens there. */}
       {voiceOn && !needsSetup ? (
@@ -376,9 +376,9 @@ export function LuciusDock({ onExpand, onSetUpAi }: Props) {
             setOpen(true)
             requestAnimationFrame(() => composerRef.current?.focus())
           }}
-          aria-label={needsSetup ? 'Set up Lucius' : 'Ask Lucius'}
+          aria-label={needsSetup ? 'Set up Uzi' : 'Ask Uzi'}
         >
-          {needsSetup ? 'Set up Lucius' : 'Ask Lucius'}
+          {needsSetup ? 'Set up Uzi' : 'Ask Uzi'}
         </button>
       )}
 
@@ -562,7 +562,7 @@ export function LuciusDock({ onExpand, onSetUpAi }: Props) {
               sendBlocked={((streaming && !following) || sending) && !multiTurnEnabled}
               onStop={stopStreaming}
               onSend={handleSend}
-              placeholder="Ask Lucius — type @ to mention, / for skills…"
+              placeholder="Ask Uzi — type @ to mention, / for skills…"
               visibleIds={visibleIds}
               screenBar="compact"
               screenId="lucius-dock"

@@ -63,9 +63,9 @@ export function MemoryDialog({ onClose, toast }: { onClose: () => void; toast: T
             <div className="rd-mem-head">
               <span className="rd-help">
                 {off
-                  ? 'Memory is off — Lucius is not learning new facts or using these. Turn it on in ' +
+                  ? 'Memory is off — Uzi is not learning new facts or using these. Turn it on in ' +
                     'Settings → Memory.'
-                  : 'Durable facts Lucius carries between conversations. Editing or forgetting one takes ' +
+                  : 'Durable facts Uzi carries between conversations. Editing or forgetting one takes ' +
                     'effect on the next turn.'}
               </span>
               <input

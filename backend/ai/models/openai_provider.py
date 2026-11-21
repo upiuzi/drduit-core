@@ -114,7 +114,7 @@ class OpenAIProvider(AIProvider):
         if self._is_openrouter:
             return {
                 "HTTP-Referer": "https://github.com/open-net-worth",
-                "X-Title": "Open Net Worth",
+                "X-Title": "Dr Duit",
             }
         return None
 

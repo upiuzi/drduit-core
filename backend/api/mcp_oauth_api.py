@@ -35,7 +35,7 @@ router = APIRouter(tags=["mcp-oauth"])
 # interpolation is needed to get an explicit, correct target.
 _CALLBACK_HTML = """<!doctype html>
 <html>
-<head><meta charset="utf-8"><title>Open Net Worth</title></head>
+<head><meta charset="utf-8"><title>Dr Duit</title></head>
 <body>
 <script>
 (function () {

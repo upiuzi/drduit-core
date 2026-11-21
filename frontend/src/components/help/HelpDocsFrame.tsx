@@ -293,7 +293,7 @@ export function HelpDocsFrame({ pathname, hash, onNavigate, onOpenApp }: HelpDoc
     <iframe
       ref={frameRef}
       className="help-docs-frame"
-      title="Open Net Worth documentation"
+      title="Dr Duit documentation"
       // No `src` attribute and no `onLoad`: the effects above own both, so React never
       // re-renders a src that would reload the frame and discard its own history.
     />

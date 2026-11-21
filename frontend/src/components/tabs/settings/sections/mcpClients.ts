@@ -134,7 +134,7 @@ export const MCP_CLIENTS: McpClientGuide[] = [
     label: 'Claude Desktop',
     transport: 'local',
     where:
-      'In Claude Desktop: Settings → Developer → Edit Config opens claude_desktop_config.json. Paste this in, then restart Claude Desktop. Open Net Worth must be running.',
+      'In Claude Desktop: Settings → Developer → Edit Config opens claude_desktop_config.json. Paste this in, then restart Claude Desktop. Dr Duit must be running.',
     snippet: (ctx) => json({ mcpServers: { [NAME]: stdioServer(ctx) } }),
   },
   {
@@ -184,12 +184,12 @@ export function launchNote(launch: McpLaunch, variant: StdioVariant, npx = false
     return (
       'The command is the Python bundled inside this app — nothing else to install. This app ' +
       'picks a new address each time it starts, so the bridge finds it through ONW_ROOT (your ' +
-      'book folder); Open Net Worth must be running. If you move the app, copy the config again.'
+      'book folder); Dr Duit must be running. If you move the app, copy the config again.'
     )
   }
   if (variant === 'remote' && npx && !launch.desktop) {
     return (
-      'Runs mcp-remote, a generic MCP bridge with no Open Net Worth code, through npx — needs ' +
+      'Runs mcp-remote, a generic MCP bridge with no Dr Duit code, through npx — needs ' +
       'Node.js on the computer running the AI app, and nothing else. Copy this config from that ' +
       'computer, so the address is one it can reach. If your AI app can\'t find "npx", use the ' +
       'full path printed by `which npx` (Windows: `where npx`).'
@@ -211,12 +211,12 @@ export function launchNote(launch: McpLaunch, variant: StdioVariant, npx = false
   }
   if (launch.command_found) {
     return (
-      'The command is the full path to onw on the computer running Open Net Worth — AI apps ' +
+      'The command is the full path to onw on the computer running Dr Duit — AI apps ' +
       "often don't search your shell's PATH. Use this config on that same computer."
     )
   }
   return (
-    'Needs the onw command on the computer running Open Net Worth (uv tool install ' +
+    'Needs the onw command on the computer running Dr Duit (uv tool install ' +
     'open-net-worth). If your AI app reports it can\'t find "onw", replace it with the full path ' +
     'printed by `which onw` (Windows: `where onw`).'
   )

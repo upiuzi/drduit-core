@@ -11,7 +11,7 @@ import { READ_GROUP, WRITE_GROUP, type GroupPermissionLevel, type PermissionLeve
 import { editedEndpoint, isReadEndpoint, shownLevel } from './restApi'
 import type { RestEndpoint } from './restApi'
 
-// The endpoint list of one REST API. Each endpoint becomes a tool of its own for Lucius, so the
+// The endpoint list of one REST API. Each endpoint becomes a tool of its own for Uzi, so the
 // list is laid out as an MCP server's tools are: the ones that only read, then the ones that
 // write or delete, each with its permission on its own row and a "set them all" on the group.
 // Filled by reading an OpenAPI document, typed by hand, or both — every row is editable either
@@ -224,7 +224,7 @@ export function RestEndpointsEditor({ endpoints, onChange }: RestEndpointsEditor
                     <code className="rest-path">
                       {leaving.method} {leaving.path}
                     </code>{' '}
-                    will stop being a tool Lucius can call once you save. An Automation that uses it
+                    will stop being a tool Uzi can call once you save. An Automation that uses it
                     will report an unknown tool.
                   </>
                 ),

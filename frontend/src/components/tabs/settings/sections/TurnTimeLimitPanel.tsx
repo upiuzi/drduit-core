@@ -40,7 +40,7 @@ export function TurnTimeLimitPanel({ toast }: Pick<SectionProps, 'toast'>) {
   return (
     <Panel
       title="Turn time limit"
-      sub="How long Lucius may work on one reply or Automation run before it is stopped"
+      sub="How long Uzi may work on one reply or Automation run before it is stopped"
     >
       <div className="rd-formgrid">
         <Field

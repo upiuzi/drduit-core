@@ -28,7 +28,7 @@ type PaletteTab =
   | 'settings'
 
 const TAB_DESTINATIONS: { tab: PaletteTab; label: string; hint: string }[] = [
-  { tab: 'lucius', label: 'Lucius', hint: 'Chat, history, and everything Lucius can do' },
+  { tab: 'lucius', label: 'Uzi', hint: 'Chat, history, and everything Uzi can do' },
   { tab: 'dashboard', label: 'Dashboard', hint: 'Net worth, allocation, briefing' },
   { tab: 'investments', label: 'Investments', hint: 'Stocks, ETFs, crypto, commodities' },
   { tab: 'accounts', label: 'Accounts', hint: 'Balances, liabilities, register' },
@@ -36,7 +36,7 @@ const TAB_DESTINATIONS: { tab: PaletteTab; label: string; hint: string }[] = [
   { tab: 'plan', label: 'Planning', hint: 'Budgets, goals, envelopes' },
   { tab: 'commitments', label: 'Commitments', hint: 'Dated obligations and funding' },
   { tab: 'intel', label: 'Intelligence', hint: 'Living signals and watchlist' },
-  { tab: 'skills', label: 'Skills', hint: 'Reusable Lucius playbooks' },
+  { tab: 'skills', label: 'Skills', hint: 'Reusable Uzi playbooks' },
   { tab: 'automations', label: 'Automations', hint: 'Scheduled and event-driven conversations' },
   { tab: 'profile', label: 'Profile', hint: 'Personal, income, FIRE' },
   { tab: 'connectors', label: 'Connectors', hint: 'Channels, data sources, tools' },
@@ -75,7 +75,7 @@ interface Command {
     | 'Holdings'
     | 'Categories'
     | 'Markets'
-    | 'Ask Lucius'
+    | 'Ask Uzi'
   label: string
   hint?: string
   keywords: string
@@ -93,7 +93,7 @@ const GROUP_ORDER: Command['group'][] = [
   'Holdings',
   'Categories',
   'Markets',
-  'Ask Lucius',
+  'Ask Uzi',
 ]
 
 // Sentinel id for the synthetic Ask Lucius row (never a real Command.id — those are all
@@ -327,9 +327,9 @@ export function CommandPalette({
     out.push({
       id: 'qa-chat',
       group: 'Quick actions',
-      label: 'Open Lucius chat',
+      label: 'Open Uzi chat',
       hint: 'Ask the assistant',
-      keywords: 'open lucius chat assistant ai ask',
+      keywords: 'open uzi lucius chat assistant ai ask',
       run: () => {
         onOpenChat()
         onClose()
@@ -644,12 +644,12 @@ export function CommandPalette({
             autoFocus
             data-autofocus
             className="cmdk-input"
-            placeholder="Search or ask Lucius…"
+            placeholder="Search or ask Uzi…"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value)
             }}
-            aria-label="Search or ask Lucius"
+            aria-label="Search or ask Uzi"
           />
           <button
             type="button"
@@ -743,7 +743,7 @@ export function CommandPalette({
                     <LuciusMark size="1em" aria-hidden="true" />
                   </span>
                   <span className="cmdk-item-label">
-                    <span className="cmdk-item-ask-prefix">Ask Lucius: </span>
+                    <span className="cmdk-item-ask-prefix">Ask Uzi: </span>
                     <span className="cmdk-item-ask-query">
                       &ldquo;
                       {trimmedQuery.length > 60 ? trimmedQuery.slice(0, 60) + '…' : trimmedQuery}
@@ -761,7 +761,7 @@ export function CommandPalette({
             <kbd>↓</kbd> to navigate
           </span>
           <span>
-            <kbd>↵</kbd> {isAskLuciusActive ? 'Ask Lucius' : 'to open'}
+            <kbd>↵</kbd> {isAskLuciusActive ? 'Ask Uzi' : 'to open'}
           </span>
           <span>
             <kbd>esc</kbd> to close

@@ -40,7 +40,7 @@ const STARTERS = [
   {
     label: 'Change how it looks',
     prompt:
-      'Refresh the visual style of this screen while keeping it consistent with the rest of Open Net Worth.',
+      'Refresh the visual style of this screen while keeping it consistent with the rest of Dr Duit.',
   },
   {
     label: 'Improve a workflow',
@@ -234,7 +234,7 @@ export function Builder({ pollIntervalMs = 1000 }: { pollIntervalMs?: number }) 
       </Container>
     )
 
-  const appName = brand.app_name || 'Open Net Worth'
+  const appName = brand.app_name || 'Dr Duit'
   const progressEvents =
     run?.events.filter((event) => event.kind !== 'tool' && event.kind !== 'output') ?? []
   const technicalEvents =
@@ -293,7 +293,7 @@ export function Builder({ pollIntervalMs = 1000 }: { pollIntervalMs?: number }) 
                       Set up a coding engine
                     </Text>
                     <Text as="p" size="sm" tone="muted">
-                      Install one engine, sign in locally, then come back here. Open Net Worth uses
+                      Install one engine, sign in locally, then come back here. Dr Duit uses
                       that engine&apos;s existing login.
                     </Text>
                   </div>
@@ -314,7 +314,7 @@ export function Builder({ pollIntervalMs = 1000 }: { pollIntervalMs?: number }) 
                   </div>
                   <Cluster justify="between" align="center" className="builder-submit">
                     <Text size="xs" tone="faint">
-                      Open Net Worth never receives your engine credentials.
+                      Dr Duit never receives your engine credentials.
                     </Text>
                     <Button variant="primary" onClick={() => void load()}>
                       Check again
@@ -588,7 +588,7 @@ export function Builder({ pollIntervalMs = 1000 }: { pollIntervalMs?: number }) 
         >
           <Stack gap="--space-4">
             <Text as="p" size="sm" tone="muted">
-              Build can edit files and run local commands inside the fixed Open Net Worth workspace.
+              Build can edit files and run local commands inside the fixed Dr Duit workspace.
             </Text>
             <div className="builder-confirm-boundary">
               <Text as="div" size="xs" tone="faint" weight={600}>

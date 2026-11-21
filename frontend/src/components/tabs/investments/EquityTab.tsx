@@ -355,7 +355,7 @@ function VestHistoryPanel({
               </div>
               {/* EntityRow renders the host <div> itself and stamps data-entity-id + draggable
                   + data-ctx-*, making a recorded vest @-mentionable, right-clickable
-                  ("Ask Lucius about this") and draggable into the dock. `vest` is a registered
+                  ("Ask Uzi about this") and draggable into the dock. `vest` is a registered
                   mention type (descriptors/equity_lots.py, order=22) keyed on the vest EVENT id
                   — the upcoming-tranche rows have no event id yet, so they stay unwired. */}
               {shown.map((row) => (
@@ -469,13 +469,13 @@ function EquityEmpty({
       fill
       icon={<Building2 size={28} strokeWidth={1.5} aria-hidden="true" />}
       title="No equity grants yet"
-      body="Add an RSU, ESOW or LTIP grant and Lucius tracks your vesting schedule, upcoming tranches, and the gain at each vest."
+      body="Add an RSU, ESOW or LTIP grant and Uzi tracks your vesting schedule, upcoming tranches, and the gain at each vest."
       action={
         <Cluster gap="--space-3" justify="center">
           <Button variant="primary" size="sm" onClick={onAdd}>
             Add grant
           </Button>
-          <LuciusCta label="Add with Lucius" message={GRANTS_MESSAGE} onAskLucius={onAskLucius} />
+          <LuciusCta label="Add with Uzi" message={GRANTS_MESSAGE} onAskLucius={onAskLucius} />
         </Cluster>
       }
     />

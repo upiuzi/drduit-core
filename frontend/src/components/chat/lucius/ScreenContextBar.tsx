@@ -30,10 +30,10 @@ const PEEK_MAX_HEIGHT = 244
 const NOTICE_MS = 4500
 const NOTICE_ON = 'Screen awareness on. Your screen is sent with each message.'
 const NOTICE_OFF =
-  "Screen awareness off. Your screen won't be sent with messages, but Lucius can still look if you ask."
+  "Screen awareness off. Your screen won't be sent with messages, but Uzi can still look if you ask."
 const OFF_SUB = 'Attach screen content as context'
 const OFF_TOOLTIP =
-  "Screen awareness off — your screen isn't sent with messages. Lucius can still look if you ask."
+  "Screen awareness off — your screen isn't sent with messages. Uzi can still look if you ask."
 
 export interface ScreenContextBarProps {
   visibleIds: Set<string>
@@ -252,7 +252,7 @@ export function ScreenContextBar({
     : OFF_TOOLTIP
   const peekTitle = enabled
     ? "Preview exactly what's shared this turn"
-    : 'Preview what Lucius would read if he looks'
+    : 'Preview what Uzi would read if he looks'
 
   const onPeekTriggerKeyDown = (e: ReactKeyboardEvent<HTMLButtonElement>) => {
     if (e.key !== 'Tab' || e.shiftKey || !showPeek) return
@@ -300,7 +300,7 @@ export function ScreenContextBar({
                 className={'lx-aw-peek' + (peek ? ' open' : '')}
                 aria-expanded={peek}
                 aria-controls={peekId}
-                aria-label="Preview what's shared with Lucius"
+                aria-label="Preview what's shared with Uzi"
                 title={peekTitle}
                 onMouseDown={(e) => e.preventDefault()}
                 onClick={() => setPeek((p) => !p)}
@@ -351,7 +351,7 @@ export function ScreenContextBar({
               className={'lx-scope-peek' + (peek ? ' open' : '')}
               aria-expanded={peek}
               aria-controls={peekId}
-              aria-label="Preview what's shared with Lucius"
+              aria-label="Preview what's shared with Uzi"
               title={peekTitle}
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => setPeek((p) => !p)}
@@ -459,7 +459,7 @@ export function ScreenContextBar({
             }
           >
             <div className="lx-scope-peek-h" id={peekHeadingId}>
-              {enabled ? 'Visible now — passed to Lucius' : 'Visible now — read only if he looks'}
+              {enabled ? 'Visible now — passed to Uzi' : 'Visible now — read only if he looks'}
             </div>
             {snap.facts.map(([k, v], i) => (
               <div className="lx-scope-fact" key={i}>
@@ -477,7 +477,7 @@ export function ScreenContextBar({
                   Also on this screen — fetched only if needed
                 </div>
                 <div className="lx-scope-raw" style={{ marginTop: 0, marginBottom: 4 }}>
-                  Lucius knows these exist but hasn't read them. Pin to keep across the chat,
+                  Uzi knows these exist but hasn't read them. Pin to keep across the chat,
                   @-mention for one message, or leave it to fetch on demand.
                 </div>
                 <div className="lx-handle-list">

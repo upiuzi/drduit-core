@@ -152,7 +152,7 @@ export function ModelTelemetryPanel() {
       ) : showEmpty ? (
         <Empty
           title="No telemetry yet"
-          body="Performance data appears here after Lucius completes its first AI turn."
+          body="Performance data appears here after Uzi completes its first AI turn."
         />
       ) : (
         <div className="rd-telemetry-table-wrap">

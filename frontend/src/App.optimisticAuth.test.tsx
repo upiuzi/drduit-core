@@ -29,7 +29,7 @@ vi.mock('@tanstack/react-router', () => ({
 }))
 vi.mock('./components/Login', () => ({ Login: () => <div data-testid="login">LOGIN</div> }))
 vi.mock('./registerSW.tsx', () => ({ useServiceWorkerUpdate: () => {} }))
-vi.mock('./brand-context', () => ({ useBrand: () => ({ app_name: 'Open Net Worth' }) }))
+vi.mock('./brand-context', () => ({ useBrand: () => ({ app_name: 'Dr Duit' }) }))
 
 const AUTH_CACHE_KEY = 'onw-auth-status-v2'
 
@@ -81,7 +81,7 @@ describe('App optimistic auth', () => {
 
     render(<App />)
     // Nothing better to show yet — the splash is correct here.
-    expect(screen.getByText('OPEN NET WORTH')).toBeTruthy()
+    expect(screen.getByText('DR DUIT')).toBeTruthy()
     expect(screen.queryByTestId('app-shell')).toBeNull()
 
     resolve({ ok: true, json: () => Promise.resolve({ required: false, authenticated: true }) })
@@ -96,7 +96,7 @@ describe('App optimistic auth', () => {
     render(<App />)
 
     expect(screen.getByTestId('app-shell')).toBeTruthy()
-    expect(screen.queryByText('OPEN NET WORTH')).toBeNull()
+    expect(screen.queryByText('DR DUIT')).toBeNull()
   })
 
   it('persists the resolved status so the next mount can skip the splash', async () => {
@@ -149,7 +149,7 @@ describe('App optimistic auth', () => {
 
     render(<App />)
 
-    expect(screen.getByText('OPEN NET WORTH')).toBeTruthy()
+    expect(screen.getByText('DR DUIT')).toBeTruthy()
   })
 
   it('a network failure never downgrades or persists over a cached status', async () => {
@@ -214,7 +214,7 @@ describe('App optimistic auth', () => {
     render(<App />)
 
     expect(screen.queryByTestId('login')).toBeNull()
-    expect(screen.getByText('OPEN NET WORTH')).toBeTruthy()
+    expect(screen.getByText('DR DUIT')).toBeTruthy()
   })
 
   it('gateway mode answers a 401 by signing back in through the proxy, never the logged-out state', async () => {
@@ -262,7 +262,7 @@ describe('App optimistic auth', () => {
     authFetch.mockRejectedValueOnce(new DOMException('signal timed out', 'TimeoutError'))
 
     render(<App />)
-    await screen.findByText(/can.t reach open net worth/i)
+    await screen.findByText(/can.t reach dr duit/i)
     expect(screen.queryByTestId('app-shell')).toBeNull()
 
     authFetch.mockReturnValue(jsonResponse({ required: false, authenticated: true }))

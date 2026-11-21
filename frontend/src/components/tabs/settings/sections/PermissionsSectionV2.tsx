@@ -145,7 +145,7 @@ export function PermissionsSectionV2({ toast }: SectionProps) {
   return (
     <Panel
       title={<span>Tool permissions {all.length ? <Badge>{all.length}</Badge> : null}</span>}
-      sub="Lucius's built-in tools, and whether each runs, asks you first, or is blocked. In Auto mode a tool set to Ask is judged by the Auto judge; in Skip mode it runs. A connector's tools are set on its page in Connectors."
+      sub="Uzi's built-in tools, and whether each runs, asks you first, or is blocked. In Auto mode a tool set to Ask is judged by the Auto judge; in Skip mode it runs. A connector's tools are set on its page in Connectors."
       actions={
         <Btn
           size="xs"

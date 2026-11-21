@@ -1,6 +1,6 @@
 // The backend's copy of the Browse & add directory — DERIVED from `catalog.ts`, never edited.
 //
-// Lucius answers "what can I connect?" on the backend, which cannot import the frontend, so
+// Uzi answers "what can I connect?" on the backend, which cannot import the frontend, so
 // this projects `CATALOG` + `MCP_INSTALL_PRESETS` into `backend/services/connector_directory.json`.
 // `npm run sync:connector-directory` writes it; `directorySnapshot.test.ts` fails when the
 // checked-in file differs from what this would produce. ADR
@@ -15,7 +15,7 @@
 import { CATALOG, MCP_INSTALL_PRESETS } from './catalog'
 import type { CatalogEntry, McpInstallPreset } from './catalog'
 
-/** How the user finishes setting one up — what Lucius tells them to have ready. */
+/** How the user finishes setting one up — what Uzi tells them to have ready. */
 export type SnapshotConnect =
   | { kind: 'in_app_form' }
   | { kind: 'sign_in' }
@@ -44,7 +44,7 @@ export interface DirectorySnapshot {
 }
 
 /** What a local server's command needs installed. An unlisted command fails the build, so a new
- *  runtime is a deliberate line here rather than a blank in what Lucius tells the user. */
+ *  runtime is a deliberate line here rather than a blank in what Uzi tells the user. */
 const RUNTIMES: Record<string, string> = {
   npx: 'Node.js (npx)',
   uvx: 'uv (uvx)',

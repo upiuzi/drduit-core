@@ -237,7 +237,7 @@ export function MemoryBrowser({
         </div>
         <MemoryAskBox
           disabled={disabled}
-          placeholder={`Tell Lucius what to change about ${topic.name}`}
+          placeholder={`Tell Uzi what to change about ${topic.name}`}
           onSubmit={(text) =>
             instruct(text, { section: open.section, topic: topic.named ? topic.name : undefined })
           }
@@ -267,7 +267,7 @@ export function MemoryBrowser({
         <div className="rd-mem-empty">
           {needle
             ? `No memories match “${filter.trim()}”.`
-            : 'Nothing remembered yet. Tell Lucius something below, or he’ll pick things up as you talk.'}
+            : 'Nothing remembered yet. Tell Uzi something below, or he’ll pick things up as you talk.'}
         </div>
       ) : (
         <>

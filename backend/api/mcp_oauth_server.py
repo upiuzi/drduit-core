@@ -63,7 +63,7 @@ _ERROR_PAGE = """<!doctype html><html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Can't connect this app</title></head>
 <body style="font-family: system-ui, sans-serif; max-width: 32rem; margin: 4rem auto; padding: 0 1rem">
-<h1 style="font-size: 1.25rem">Open Net Worth can't connect this app</h1><p>{message}</p>
+<h1 style="font-size: 1.25rem">Dr Duit can't connect this app</h1><p>{message}</p>
 <p>Nothing was shared. You can close this page.</p></body></html>"""
 
 _FRAME_DENY = {"X-Frame-Options": "DENY", "Content-Security-Policy": "frame-ancestors 'none'"}

@@ -212,7 +212,7 @@ export function ManageAlerts(p: ManageAlertsProps) {
       {mine.length === 0 ? (
         <EmptyState
           title={`No alerts on ${sym} yet`}
-          body="Lucius tracks the price either way — it just won't tell you until there's a level worth hearing about."
+          body="Uzi tracks the price either way — it just won't tell you until there's a level worth hearing about."
           action={
             <div className="asd-alerts-start asd-alerts-start--center">
               <BuildWithLucius sym={sym} prompt={alertsBuildPrompt(sym)} />

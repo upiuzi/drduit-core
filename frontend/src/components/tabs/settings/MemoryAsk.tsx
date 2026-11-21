@@ -94,7 +94,7 @@ const MAX_HEIGHT_PX = 160
 
 export function MemoryAskBox({
   disabled,
-  placeholder = 'Tell Lucius what to remember or change',
+  placeholder = 'Tell Uzi what to remember or change',
   onSubmit,
 }: {
   disabled?: boolean
@@ -130,7 +130,7 @@ export function MemoryAskBox({
 
   return (
     <div className="rd-mem-dock">
-      {/* The chat's own working line while Lucius thinks: a spinner on the send button alone
+      {/* The chat's own working line while Uzi thinks: a spinner on the send button alone
           did not say anything was happening (owner, 2026-10-31). */}
       {busy ? <TurnActivity /> : outcome && <MemoryOutcome key={outcome.n} outcome={outcome.out} />}
       <form
@@ -151,7 +151,7 @@ export function MemoryAskBox({
           readOnly={busy}
           maxLength={1000}
           placeholder={disabled ? 'Turn memory on to make changes' : placeholder}
-          aria-label="Tell Lucius what to remember or change"
+          aria-label="Tell Uzi what to remember or change"
           onChange={(e) => setText(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) {

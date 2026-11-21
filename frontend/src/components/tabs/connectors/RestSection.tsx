@@ -11,7 +11,7 @@ import type { RestApi, RestApiDraft } from './restApi'
 //     connector of its own (`rest:<slug>`), which then has its own page, Pause and Remove;
 //   - an API the user added (`rest:<slug>`) — that API's saved settings, to edit.
 //
-// Calling an API is Lucius's job, through that API's own three tools; its connector's Tool
+// Calling an API is Uzi's job, through that API's own three tools; its connector's Tool
 // permissions decide what runs without asking. Save lives in the modal footer — ./formSave.
 
 function AddedNotice({ api, onAddAnother }: { api: RestApi; onAddAnother: () => void }) {
@@ -24,7 +24,7 @@ function AddedNotice({ api, onAddAnother }: { api: RestApi; onAddAnother: () => 
         it, pause it, and choose which of its tools run without asking.
       </Text>
       <Text size="sm" tone="faint">
-        Try it: ask Lucius what {api.name} can do.
+        Try it: ask Uzi what {api.name} can do.
       </Text>
       <div>
         <Button size="sm" onClick={onAddAnother}>

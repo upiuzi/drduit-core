@@ -159,7 +159,7 @@ export function BookedScreen(p: BookedScreenProps) {
         {p.taught && (
           <div className="imp3-booked-line lucius">
             <Spark size={14} />
-            <span>Lucius saved your instruction — the next import applies it automatically.</span>
+            <span>Uzi saved your instruction — the next import applies it automatically.</span>
           </div>
         )}
         {p.reviewMarkError && <div className="imp3-done-err">{p.reviewMarkError}</div>}

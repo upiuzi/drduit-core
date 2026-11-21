@@ -138,13 +138,13 @@ export function CommitmentDetail({
   const loan = loanIntel(c)
 
   let insight: React.ReactNode
-  let insightBtnLabel = 'Lucius'
-  // " with Lucius" is dropped from the button on phone (kept in the DOM via
-  // .c2-ribbon-btn-rest, same idiom as the list masthead's "Fix with Lucius" → "Fix") — the
-  // Spark icon beside the button and the ribbon's own Lucius-tinted border already say whose
+  let insightBtnLabel = 'Uzi'
+  // " with Uzi" is dropped from the button on phone (kept in the DOM via
+  // .c2-ribbon-btn-rest, same idiom as the list masthead's "Fix with Uzi" → "Fix") — the
+  // Spark icon beside the button and the ribbon's own Uzi-tinted border already say whose
   // suggestion this is, so spelling it out again in the button itself is the one truly
   // redundant word here. Only set for the two branches whose CORE label needs it restored on
-  // desktop ("Fix", "Draft early payoff"); the bare 'Lucius' default has nothing to append.
+  // desktop ("Fix", "Draft early payoff"); the bare 'Uzi' default has nothing to append.
   let insightBtnSuffix: string | null = null
   let insightHot = true
   let insightPrompt: string
@@ -194,7 +194,7 @@ export function CommitmentDetail({
       </>
     )
     insightBtnLabel = 'Fix'
-    insightBtnSuffix = ' with Lucius'
+    insightBtnSuffix = ' with Uzi'
     insightPrompt = `The "${c.name}" commitment's funding runs ${fBase(c.coverage.shortfall_base)} short of its payments by ${c.coverage.earliest_shortfall_date ? fmtDate(c.coverage.earliest_shortfall_date) : 'an upcoming date'}${lateDraw && weeks != null ? `. The "${lateDraw.label}" funding does not arrive until about ${weeks} weeks after the payment` : ''}. This counts only the funding sources on this commitment, not my account balances. Help me close this gap.`
   } else if (loan && c.status === 'active') {
     insight = (
@@ -213,7 +213,7 @@ export function CommitmentDetail({
       </>
     )
     insightBtnLabel = 'Draft early payoff'
-    insightBtnSuffix = ' with Lucius'
+    insightBtnSuffix = ' with Uzi'
     insightHot = false
     insightPrompt = `Help me draft an early-payoff plan for my "${c.name}" loan — paying an extra ${fBase(loan.extra)}/mo would clear it about ${loan.monthsSaved} months early and save roughly ${fBase(loan.interestSaved)} in interest.`
   } else {
@@ -364,7 +364,7 @@ export function CommitmentDetail({
     <Container size="wide" data-ctx-region="content" data-ctx-title={'Commitment: ' + c.name}>
       <Stack>
         {/* The open commitment is itself mentionable: data-entity-id makes it right-clickable
-            ("Ask Lucius about this") and draggable into the dock, and data-ctx-* puts it in the
+            ("Ask Uzi about this") and draggable into the dock, and data-ctx-* puts it in the
             screen snapshot so "this commitment" resolves while the detail is open. */}
         <section className="c2-det c3-flat" data-screen-label={'Commitment: ' + c.name}>
           <div className="c2-det-pad">

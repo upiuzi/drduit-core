@@ -93,7 +93,7 @@ describe('MobileTabBar', () => {
   it('MB1.1 — renders exactly five slots in the designed order', () => {
     const { container } = setup()
     const labels = Array.from(container.querySelectorAll('.mb-tab-label')).map((n) => n.textContent)
-    expect(labels).toEqual(['Accounts', 'Investments', 'Lucius', 'Dashboard', 'More'])
+    expect(labels).toEqual(['Accounts', 'Investments', 'Uzi', 'Dashboard', 'More'])
   })
 
   it('MB1.2 — tapping a slot navigates and the active slot carries .active', () => {
@@ -422,7 +422,7 @@ describe('MobileTabBar', () => {
       (slot) => slot.getAttribute('aria-current') === 'page',
     )
     expect(current).toHaveLength(1)
-    expect(current[0]!.textContent).toContain('Lucius')
+    expect(current[0]!.textContent).toContain('Uzi')
   })
 
   it('MB3 — a streaming turn shows the spinner in place of the spark icon', () => {

@@ -21,9 +21,9 @@ import { revealConnectorSecret } from './secrets'
 // non-secret extra config (e.g. Google PSE's `cx`).
 //
 // THE SETTING IS "DEFAULT PROVIDER", NOT "USE FOR LUCIUS". It used to be labelled "Use for
-// Lucius" / "Active for Lucius", which was FALSE: since the per-provider tools shipped,
+// Uzi" / "Active for Uzi", which was FALSE: since the per-provider tools shipped,
 // `<id>_search` / `<id>_fetch_page` resolve their own provider directly and never consult
-// the active selection, so a non-default provider is perfectly usable by Lucius. What the
+// the active selection, so a non-default provider is perfectly usable by Uzi. What the
 // selection actually picks is the fallback for searches that name NO provider — the generic
 // `web_search`/`fetch_page` tools, and the background jobs that have no way to name one
 // (`monitoring/collect.py`'s news scans, `monitoring/asset_brief.py`'s briefs). The background
@@ -285,9 +285,9 @@ export function WebSearchSection({ providerId }: { providerId: string }) {
 
       {/* The one sentence that says what the setting DOES. Naming the background jobs is the
           substantive half — they are the bigger consumer of the default and the old copy never
-          mentioned them, while claiming the setting decided what Lucius could use at all. */}
+          mentioned them, while claiming the setting decided what Uzi could use at all. */}
       <Text size="xs" tone="faint">
-        Searches that don’t name a provider use the default — Lucius’s general web lookups, plus
+        Searches that don’t name a provider use the default — Uzi's general web lookups, plus
         background news scans and asset briefs.
       </Text>
     </Stack>

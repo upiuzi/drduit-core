@@ -52,13 +52,13 @@ export function BriefingFocusControl({
         className="ov-fs-prompt"
         value={value ?? ''}
         disabled={value == null}
-        placeholder="What should Lucius focus on, and how long should it be?"
+        placeholder="What should Uzi focus on, and how long should it be?"
         onChange={(e) => setValue(e.target.value)}
       />
       <Text as="p" size="xs" tone={status === 'error' ? 'bad' : 'faint'}>
         {status === 'error'
           ? "Couldn't save — try again."
-          : 'Lucius follows this every time it writes your briefing.'}
+          : 'Uzi follows this every time it writes your briefing.'}
       </Text>
       <button
         type="button"

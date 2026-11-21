@@ -95,7 +95,7 @@ export function AddNewsSourceForm({ userCount, onAdded }: Props) {
         help={
           urlError
             ? undefined
-            : 'Must be a public http(s) RSS/Atom feed — Lucius checks it before saving.'
+            : 'Must be a public http(s) RSS/Atom feed — Uzi checks it before saving.'
         }
       >
         <TextField

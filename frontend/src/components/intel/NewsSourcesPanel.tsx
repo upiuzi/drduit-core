@@ -13,7 +13,7 @@ type LoadState = 'loading' | 'ready' | 'error'
 // Exported so MonitorsWorkspace's "News sources" sub-view (the one real caller, embedded=true)
 // renders the SAME subtitle text instead of a second hand-copied literal drifting from this one.
 export const NEWS_SOURCES_SUBTITLE =
-  'Every feed Lucius checks for headlines, filings, and breaking news — see how fast each one arrives, turn any of them off, or add your own.'
+  'Every feed Uzi checks for headlines, filings, and breaking news — see how fast each one arrives, turn any of them off, or add your own.'
 
 const COL_COUNT = 6
 
@@ -89,7 +89,7 @@ export function NewsSourcesPanel({ embedded = false }: Props) {
   function requestDelete(row: NewsSource) {
     setConfirm({
       title: `Delete "${row.label}"?`,
-      body: "Lucius stops fetching this feed immediately. This can't be undone — you'll need to re-add the URL to bring it back.",
+      body: "Uzi stops fetching this feed immediately. This can't be undone — you'll need to re-add the URL to bring it back.",
       confirmLabel: 'Delete feed',
       onConfirm: async () => {
         setConfirm(null)
@@ -114,7 +114,7 @@ export function NewsSourcesPanel({ embedded = false }: Props) {
     return (
       <EmptyState
         title="No sources found"
-        body="Lucius couldn't find its source registry — this usually means the built-in seed didn't run. Try reloading, or check the server logs."
+        body="Uzi couldn't find its source registry — this usually means the built-in seed didn't run. Try reloading, or check the server logs."
         action={
           <Button variant="secondary" size="sm" onClick={() => load()}>
             Retry

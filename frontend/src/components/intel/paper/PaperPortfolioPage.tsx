@@ -490,7 +490,7 @@ function orderColumns(cancel: (id: string) => void): Column<PaperOrder>[] {
             {o.side === 'buy' ? 'Buy' : 'Sell'} {o.quantity ?? ''} {o.symbol ?? o.name}
           </b>{' '}
           <span className="fol-by">
-            {o.origin === 'owner' ? 'You' : o.origin === 'autopilot' ? 'Autopilot' : 'Lucius'}
+            {o.origin === 'owner' ? 'You' : o.origin === 'autopilot' ? 'Autopilot' : 'Uzi'}
           </span>
         </span>
       ),

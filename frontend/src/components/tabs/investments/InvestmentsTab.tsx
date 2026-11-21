@@ -469,7 +469,7 @@ export function InvestmentsTab({
     ) : loadFailed ? (
       <ErrorState
         title="Your holdings couldn’t load"
-        message="Nothing is missing from your book. It couldn’t be read just now, so try again or ask Lucius what went wrong."
+        message="Nothing is missing from your book. It couldn’t be read just now, so try again or ask Uzi what went wrong."
         onRetry={refresh}
       />
     ) : (
@@ -515,7 +515,7 @@ export function InvestmentsTab({
                 onBlur={() => setSearchFocus(false)}
               />
             </label>
-            {/* Phone and narrow Lucius panes: asset class + account collapse into one filter. */}
+            {/* Phone and narrow Uzi panes: asset class + account collapse into one filter. */}
             <HoldingsFilterSheet
               className="mk-pane-filter"
               presentation={isMobile ? 'sheet' : 'popover'}

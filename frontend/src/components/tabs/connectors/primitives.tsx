@@ -17,7 +17,7 @@
 //             this one's geometry (flex:none header/footer, only `.rd-modal-body`
 //             scrolls, the lone-footer-button rule).
 //
-// NOT ported, by design: AppNav and the Lucius side panel — the real RouterShell and
+// NOT ported, by design: AppNav and the Uzi side panel — the real RouterShell and
 // LuciusDock host this tab. Dot / Toggle / Panel are unused by the Connectors prototype.
 
 import {
@@ -280,7 +280,7 @@ export function Empty({
 
 // ── Modal ───────────────────────────────────────────────────────────────────
 
-// The scrim insets itself away from the docked Lucius side panel exactly like ui/Modal's
+// The scrim insets itself away from the docked Uzi side panel exactly like ui/Modal's
 // own `.modal-overlay` (index.css) does — `--chat-width` is `.lx-side`'s live width while
 // open, `0px` while closed/collapsed (ChatPanel.tsx sets it). Without this the scrim (full
 // viewport, `--z-modal` — HIGHER than `.lx-side`'s `--z-overlay`) visually and functionally
@@ -291,7 +291,7 @@ export function Empty({
 // scrim sitting on top of it. This is a real, different mechanism from ui/Modal's
 // isOutsideExempt: that guard defends a DOM-ancestry "outside click" test (Radix's
 // DismissableLayer, which sees the real click target regardless of z-index) against
-// wrongly firing on a *reachable* Lucius surface; this modal's own dismiss check
+// wrongly firing on a *reachable* Uzi surface; this modal's own dismiss check
 // (onMouseDown below) is occlusion-based instead — `e.target` can only ever be this scrim
 // or something inside `.rd-modal`, so the exempt selector list would never match here even
 // if reused verbatim. Preventing the occlusion in the first place is what actually keeps

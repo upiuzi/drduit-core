@@ -155,11 +155,11 @@ export function SourceIcon({
 }) {
   if (source === 'ai')
     return variant === 'mono' ? (
-      <span className="acct-src-ic" title="Added by Lucius">
+      <span className="acct-src-ic" title="Added by Uzi">
         <LuciusMark size={13} aria-hidden="true" />
       </span>
     ) : (
-      <span className="acct-src-ic lucius" title="Added by Lucius">
+      <span className="acct-src-ic lucius" title="Added by Uzi">
         <LuciusMark size="1em" aria-hidden="true" />
       </span>
     )

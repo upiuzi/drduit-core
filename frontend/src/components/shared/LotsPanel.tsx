@@ -541,7 +541,7 @@ function RealizedSection({
               const isOpen = expanded.has(ev.id)
               return (
                 <Fragment key={ev.id}>
-                  {/* Lucius mention entity: a draggable disposal the user can @-mention / drag into the dock. */}
+                  {/* Uzi mention entity: a draggable disposal the user can @-mention / drag into the dock. */}
                   <EntityRow
                     as="tr"
                     type="disposal"

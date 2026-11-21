@@ -63,7 +63,7 @@ export function WatchPulseCard({
       title="Watchlist pulse"
       ask={
         onChatSuggest && {
-          label: 'Ask Lucius about this watchlist',
+          label: 'Ask Uzi about this watchlist',
           onAsk: () => onChatSuggest(ASK_WATCHLIST),
         }
       }
@@ -103,7 +103,7 @@ export function WatchPulseCard({
                 </Button>
               )}
               <LuciusCta
-                label="Add with Lucius"
+                label="Add with Uzi"
                 message={`Help me add tickers to my “${scope.name}” watchlist. Ask which companies, funds or coins I want to follow.`}
                 onAskLucius={onChatSuggest}
               />

@@ -127,7 +127,7 @@ export function PermissionsSection({ toast }: SectionProps) {
   return (
     <Panel
       title={<span>Tool permissions {rows.length ? <Badge>{rows.length}</Badge> : null}</span>}
-      sub="What Lucius’s built-in tools can do without asking you first"
+      sub="What Uzi's built-in tools can do without asking you first"
       actions={
         <Btn
           size="xs"

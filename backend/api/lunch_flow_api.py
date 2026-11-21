@@ -46,7 +46,7 @@ router = APIRouter()
 # supplied value) is the explicit postMessage target origin.
 _CALLBACK_HTML = """<!doctype html>
 <html>
-<head><meta charset="utf-8"><title>Open Net Worth</title></head>
+<head><meta charset="utf-8"><title>Dr Duit</title></head>
 <body>
 <script>
 (function () {

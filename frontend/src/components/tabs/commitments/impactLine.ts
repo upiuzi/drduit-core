@@ -54,7 +54,7 @@ export function buildDidntHint(action: CommitmentAction, fundingAmountBase: numb
   if (role === 'inflow' && fundingAmountBase != null) {
     return `pulls ${fBase(fundingAmountBase)} — re-runs the outlook & suggests a fix`
   }
-  if (role === 'inflow') return 'this inflow drops — Lucius helps you rebuild it'
-  if (role === 'outflow') return 'flags the payment at-risk — Lucius helps you re-plan'
-  return 'flags the step at-risk — Lucius helps you re-sequence'
+  if (role === 'inflow') return 'this inflow drops — Uzi helps you rebuild it'
+  if (role === 'outflow') return 'flags the payment at-risk — Uzi helps you re-plan'
+  return 'flags the step at-risk — Uzi helps you re-sequence'
 }

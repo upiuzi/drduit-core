@@ -23,14 +23,14 @@ const LUCIUS_HOME_TOUR: TourStep[] = [
   {
     target: 'lucius-documents',
     title: 'Documents',
-    body: 'Your files and saved reports in one place. Mark one Private and Lucius never reads it.',
+    body: 'Your files and saved reports in one place. Mark one Private and Uzi never reads it.',
   },
 ]
 
 const LUCIUS_SCREEN_TIP: TourStep[] = [
   {
     target: 'lucius-screen',
-    title: 'Lucius sees this screen',
+    title: 'Uzi sees this screen',
     body: 'He knows what you are looking at and can act on it for you. Switch it off here any time.',
   },
 ]
@@ -42,8 +42,8 @@ const LUCIUS_DRAG_TIP: TourStep[] = [
   {
     // Never the account's Starting Balance row: it can't be recategorized, split or edited.
     target: '[data-entity-id^="transaction:"][draggable="true"]:not([data-opening])',
-    title: 'Hand Lucius any transaction',
-    body: 'Drag it onto Lucius. He can explain it, recategorize it, split it or fix it.',
+    title: 'Hand Uzi any transaction',
+    body: 'Drag it onto Uzi. He can explain it, recategorize it, split it or fix it.',
   },
 ]
 
@@ -123,7 +123,7 @@ export function LuciusDragTip() {
 const LUCIUS_RESTORE_TIP: TourStep[] = [
   {
     target: 'lucius-restore',
-    title: 'Undo anything Lucius changes',
+    title: 'Undo anything Uzi changes',
     body: 'Restore puts your data back as it was before this message. The restore can be undone too.',
   },
 ]
@@ -136,7 +136,7 @@ const LUCIUS_ATTACH_TIP: TourStep[] = [
   {
     target: 'lucius-attach',
     title: 'Send it here',
-    body: 'Attach a statement, screenshot or photo, or drag the file in. Lucius reads it for you.',
+    body: 'Attach a statement, screenshot or photo, or drag the file in. Uzi reads it for you.',
   },
 ]
 

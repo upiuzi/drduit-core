@@ -37,7 +37,7 @@ import { SetupStep, type SetupStepState } from './SetupStep'
 // The bank LINK flow opens an Enable-Banking-returned consent URL in a new tab where the user
 // authenticates at their bank; the post-consent authorization code is then pasted back here to
 // complete the session. This form owns the config fields (creds / bank / enable) + Link +
-// Complete; fetching transactions is now Lucius's job via a template (see
+// Complete; fetching transactions is now Uzi's job via a template (see
 // the connector page's Automate button) — the unified /api/connectors PATCH owns the card-header enable
 // toggle. Save lives in the modal footer — see ./formSave.
 

@@ -596,7 +596,7 @@ Content-Type: application/json
         sub="Forward finance notifications here with Tasker or MacroDroid."
       >
         <div className="rd-block">
-          {/* data-ctx-secret: a revealed token here must never reach the Lucius screen snapshot. */}
+          {/* data-ctx-secret: a revealed token here must never reach the Uzi screen snapshot. */}
           <div className="rd-code" data-ctx-secret="">
             {request(reveal && token ? token : MASK)}
           </div>

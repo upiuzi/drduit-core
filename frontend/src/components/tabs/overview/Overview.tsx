@@ -147,7 +147,7 @@ export function Overview({
         <Container size="wide">
           <ErrorState
             title="Your dashboard couldn’t load"
-            message="Nothing is missing from your book. It couldn’t be read just now, so try again or ask Lucius what went wrong."
+            message="Nothing is missing from your book. It couldn’t be read just now, so try again or ask Uzi what went wrong."
             onRetry={onRetry}
           />
         </Container>
@@ -264,7 +264,7 @@ export function Overview({
                 Build this view
               </Text>
               <Text as="p" size="base" tone="muted">
-                Add the widgets you want to see, or let Lucius assemble a view for you.
+                Add the widgets you want to see, or let Uzi assemble a view for you.
               </Text>
               <div className="overview-empty__actions">
                 <Button variant="primary" size="md" onClick={() => setPickerOpen(true)}>
@@ -282,7 +282,7 @@ export function Overview({
                       )
                     }
                   >
-                    Build with Lucius
+                    Build with Uzi
                   </Button>
                 )}
               </div>

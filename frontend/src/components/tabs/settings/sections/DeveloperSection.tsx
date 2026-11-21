@@ -113,19 +113,19 @@ function CodeExecution({ toast }: SectionProps) {
   }
 
   return (
-    <Panel title="Code execution" sub="Lucius can write & run short Python on this server">
+    <Panel title="Code execution" sub="Uzi can write & run short Python on this server">
       <span className="rd-help" style={{ display: 'block', lineHeight: 1.55 }}>
-        When on, Lucius can write a small script during a chat and run it in an isolated subprocess
+        When on, Uzi can write a small script during a chat and run it in an isolated subprocess
         to do a calculation. The sandbox scrubs secrets from the environment, enforces
-        CPU/memory/file limits, and the script sees only the JSON data Lucius passes it — it cannot
+        CPU/memory/file limits, and the script sees only the JSON data Uzi passes it — it cannot
         read or write your ledger or accounts, and has no network. Ad-hoc code runs only in
         interactive chat, never from a scheduled task or an MCP client.
       </span>
       {row(
         'Code execution',
         codeExec
-          ? "You'll be asked for permission the first time Lucius runs code in each conversation."
-          : "Lucius's run_code is blocked. This is the safe default.",
+          ? "You'll be asked for permission the first time Uzi runs code in each conversation."
+          : "Uzi's run_code is blocked. This is the safe default.",
         <Toggle
           on={codeExec}
           disabled={!data}
@@ -144,8 +144,8 @@ function CodeExecution({ toast }: SectionProps) {
         ? row(
             'Always allow (skip the per-run prompt)',
             autoRun
-              ? 'Lucius runs code without asking, in every conversation. Turn this off to be prompted — and shown the code — each conversation.'
-              : "You'll be asked for permission and shown the code the first time Lucius runs it in a conversation.",
+              ? 'Uzi runs code without asking, in every conversation. Turn this off to be prompted — and shown the code — each conversation.'
+              : "You'll be asked for permission and shown the code the first time Uzi runs it in a conversation.",
             <Toggle
               on={autoRun}
               onChange={(v) =>

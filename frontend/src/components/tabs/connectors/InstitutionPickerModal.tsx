@@ -208,7 +208,7 @@ export function InstitutionPickerModal({
               {result.providers.length === 0 ? (
                 <Text size="sm" tone="faint">
                   No auto-sync provider covers this country yet — but Email is a real option here,
-                  not just a fallback. Point Lucius at your bank or broker's own notification emails
+                  not just a fallback. Point Uzi at your bank or broker's own notification emails
                   and it logs the same activity; for some institutions that's actually richer than a
                   sync feed, not a lesser substitute for one.
                 </Text>

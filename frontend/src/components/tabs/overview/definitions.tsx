@@ -168,8 +168,8 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     dsize: 6,
     dh: 196,
     prose: true,
-    desc: "Lucius' morning note and suggested questions.",
-    title: "Lucius's daily briefing",
+    desc: "Uzi' morning note and suggested questions.",
+    title: "Uzi's daily briefing",
     source: { tab: 'dashboard', label: 'Dashboard' },
     // The real Lucius brand mark (identity.tsx's `Spark`, also used by
     // `lux-ask` below) — this widget was using a generic 4-point diamond
@@ -180,13 +180,13 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
   },
   {
     defId: 'lux-ask',
-    label: 'Ask Lucius',
+    label: 'Ask Uzi',
     group: 'Overview',
     dsize: 6,
     dh: 196,
     prose: true,
-    desc: 'Ask Lucius anything about your money — opens the real assistant panel with your question.',
-    title: 'Ask Lucius',
+    desc: 'Ask Uzi anything about your money — opens the real assistant panel with your question.',
+    title: 'Ask Uzi',
     icon: icon(
       '<path d="M9.94 14.06A2 2 0 0 0 8.5 12.6l-5.4-1.4a.4.4 0 0 1 0-.78l5.4-1.4A2 2 0 0 0 9.94 7.6l1.4-5.4a.4.4 0 0 1 .78 0l1.4 5.4A2 2 0 0 0 14.96 9l5.4 1.4a.4.4 0 0 1 0 .78l-5.4 1.4a2 2 0 0 0-1.44 1.44l-1.4 5.4a.4.4 0 0 1-.78 0z" />',
     ),
@@ -678,18 +678,18 @@ export const WIDGET_DEFINITIONS: WidgetDefinition[] = [
     dh: 168,
     prose: true,
     lucius: true,
-    desc: 'Custom widget built by Lucius.',
+    desc: 'Custom widget built by Uzi.',
     title: 'Coffee • weekly spend',
   },
   {
     defId: 'lux-html',
-    label: 'Lucius custom',
+    label: 'Uzi custom',
     group: 'Content',
     dsize: 6,
     dh: 240,
     lucius: true,
-    desc: 'Free-form widget — a Lucius-generated artifact pinned to your dashboard.',
-    title: 'Lucius custom',
+    desc: 'Free-form widget — a Uzi-generated artifact pinned to your dashboard.',
+    title: 'Uzi custom',
   },
   // ── Tracking / Budgeting (hidden from the picker — the public demo layout places them) ──
   {

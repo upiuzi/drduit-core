@@ -120,13 +120,13 @@ function AddSheet({
       open
       onClose={onClose}
       title="New commitment"
-      subtitle="What are you planning to fund? Pick a type and Lucius will draft the schedule and funding plan with you."
+      subtitle="What are you planning to fund? Pick a type and Uzi will draft the schedule and funding plan with you."
       size="lg"
       className="c2-sheet"
       footer={
         <div className="c2-sheet-foot">
           <span className="c2-sheet-lucius">
-            <Spark size={13} /> Lucius drafts it — you confirm every number.
+            <Spark size={13} /> Uzi drafts it — you confirm every number.
           </span>
           <Button variant="secondary" size="sm" onClick={onClose}>
             Cancel
@@ -171,7 +171,7 @@ function EmptyStateHero({ onAdd }: { onAdd: () => void }) {
             iconLeft={<Spark size={15} />}
             onClick={onAdd}
           >
-            Draft a commitment with Lucius
+            Draft a commitment with Uzi
           </Button>
         </Cluster>
       }

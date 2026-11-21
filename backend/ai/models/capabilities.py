@@ -110,8 +110,15 @@ def effort_levels(
         return effort_levels_for(model_id) or ["low", "medium", "high"]
 
     if transport == "antigravity_cli":
-        # The Antigravity CLI takes --effort low|medium|high.
-        return ["low", "medium", "high"]
+        # Models in Antigravity CLI already embed their effort tier in their ID
+        # (e.g. gemini-3.8-flash-high, gemini-3.8-flash-medium, gemini-3.8-flash-low, gpt-oss-120b-medium),
+        # while Claude models do not support --effort at all.
+        lc = (model_id or "").lower()
+        if any(lc.endswith(sfx) for sfx in ("-high", "-medium", "-low")) or "claude" in lc:
+            return []
+        if "gemini" in lc:
+            return ["low", "medium", "high"]
+        return []
 
     base = (base_url or "").lower()
     lc = (model_id or "").lower()

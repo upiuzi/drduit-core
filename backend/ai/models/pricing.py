@@ -179,12 +179,16 @@ _OPENAI_PRICING: list[tuple[str, float, float]] = [
     ("gpt-3.5-turbo", 0.50, 1.50),  # gpt-3.5-turbo
     # ── Google Gemini via OpenAI-compatible endpoint ───────────────────────
     # "gemini-2.5-flash" must come before "gemini-2.5" (more specific)
+    ("gemini-3.8-flash", 0.15, 0.60),  # Gemini 3.8 Flash
     ("gemini-2.5-flash", 0.15, 0.60),  # Gemini 2.5 Flash
     ("gemini-2.5-pro", 1.25, 10.00),  # Gemini 2.5 Pro
     ("gemini-2.5", 1.25, 10.00),  # Gemini 2.5 (generic)
     ("gemini-2.0-flash", 0.10, 0.40),  # Gemini 2.0 Flash
     ("gemini-1.5-flash", 0.075, 0.30),  # Gemini 1.5 Flash
     ("gemini-1.5-pro", 1.25, 5.00),  # Gemini 1.5 Pro
+    ("claude-opus-4-6", 15.00, 75.00),  # Claude Opus 4.6
+    ("claude-sonnet-4-6", 3.00, 15.00),  # Claude Sonnet 4.6
+    ("gpt-oss-120b", 0.50, 2.00),  # GPT-OSS 120B
     # ── xAI Grok via its OpenAI-compatible endpoint (api.x.ai) ──────────────
     # Verified against https://docs.x.ai/developers/models (2026-07); refresh on change.
     # Order: more-specific "grok-4.X" ids before any shorter "grok-4" prefix.

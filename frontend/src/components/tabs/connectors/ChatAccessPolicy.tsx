@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { authFetch } from '../../../api/client'
 import { Stack, Cluster, Text, Button, FormField, Select } from '../../ui'
 
-// Shared chat-pairing UI: the access-policy <Select> (WHO may reach Lucius) + a Pending-approvals
+// Shared chat-pairing UI: the access-policy <Select> (WHO may reach Uzi) + a Pending-approvals
 // list, used by every chat connector section (today: Telegram) so a future channel shares ONE
 // pairing surface — no per-channel fork. This setting decides who gets through; what they can
 // then do is the tool-permission question, decided separately.

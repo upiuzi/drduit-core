@@ -1214,7 +1214,7 @@ export function ModelSection({ toast, gatewayMode = false, openSection }: Sectio
     <>
       <Panel
         title="AI providers"
-        sub="Credentials and endpoints, and the model Lucius runs by default"
+        sub="Credentials and endpoints, and the model Uzi runs by default"
         actions={
           <Btn size="xs" onClick={() => setEditor({ mode: 'add' })}>
             <Plus size={12} aria-hidden="true" /> Add provider
@@ -1292,7 +1292,7 @@ export function ModelSection({ toast, gatewayMode = false, openSection }: Sectio
             })()}
           </div>
         ) : (
-          <Empty title="No providers yet" body="Add one to give Lucius a model to think with." />
+          <Empty title="No providers yet" body="Add one to give Uzi a model to think with." />
         )}
         {subscriptions.length > 0 && (
           <div role="group" aria-label="Connect a subscription">
@@ -1335,7 +1335,7 @@ export function ModelSection({ toast, gatewayMode = false, openSection }: Sectio
         )}
         <Field
           label="Default model"
-          help="What Lucius runs unless a chat or automation picks something else"
+          help="What Uzi runs unless a chat or automation picks something else"
         >
           <ModelPicker
             label="Default model"

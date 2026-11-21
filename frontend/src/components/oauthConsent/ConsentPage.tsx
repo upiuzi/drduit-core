@@ -24,7 +24,7 @@ const ERRORS = {
   expired: 'This request has expired. Start again from the app.',
   // The request is still good: the call didn't get a normal answer (a dropped connection, a
   // tunnel or server hiccup), so trying again on this page is the fix.
-  failed: "Couldn't reach Open Net Worth. Try again.",
+  failed: "Couldn't reach Dr Duit. Try again.",
 } as const
 
 export function ConsentPage() {

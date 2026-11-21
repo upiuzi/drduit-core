@@ -139,7 +139,7 @@ function SkillDetailContent({
 
   // Author label
   const authorLabel =
-    skill.author === 'builtin' ? 'Open Net Worth' : skill.author === 'lucius' ? 'Lucius' : 'You'
+    skill.author === 'builtin' ? 'Dr Duit' : skill.author === 'lucius' ? 'Uzi' : 'You'
 
   const triggerLabel = userInvocable
     ? modelInvocable
@@ -235,8 +235,8 @@ function SkillDetailContent({
               Description{' '}
               <span
                 className="skill-description-block__info"
-                title="The description is how Lucius decides when to use this skill"
-                aria-label="The description is how Lucius decides when to use this skill"
+                title="The description is how Uzi decides when to use this skill"
+                aria-label="The description is how Uzi decides when to use this skill"
               >
                 ⓘ
               </span>
@@ -280,14 +280,14 @@ function SkillDetailContent({
               ? 'Enable the skill to run it'
               : !userInvocable
                 ? 'This skill can only be selected automatically'
-                : 'Runs the skill in chat — Lucius executes it and results appear there.'
+                : 'Runs the skill in chat — Uzi executes it and results appear there.'
           }
           onClick={() => onRun(skill)}
         >
           Run
         </Button>
         <Text tone="faint" size="xs">
-          Runs the skill in chat — Lucius executes it and results appear there.
+          Runs the skill in chat — Uzi executes it and results appear there.
         </Text>
       </div>
     </>

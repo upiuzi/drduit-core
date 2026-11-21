@@ -12,7 +12,7 @@ import { ConnectorStatusLine } from './ConnectorStatusLine'
 // has_access_token; a blank token field on save leaves the saved one unchanged.
 //
 // The token is ALL this form holds. A token can see several YNAB plans, but which one to read is
-// decided where it is used, never here: Lucius names a plan per call (ynab_list_plans →
+// decided where it is used, never here: Uzi names a plan per call (ynab_list_plans →
 // plan_id), and the YNAB data sync (Automations) picks its own. Save lives in the modal
 // footer — see ./formSave; the card-header enable toggle is the unified /api/connectors PATCH.
 
@@ -129,7 +129,7 @@ export function YnabSection() {
         <a href="https://www.ynab.com" target="_blank" rel="noreferrer">
           YNAB
         </a>
-        , paste a personal access token from its Account Settings → Developer Settings page. Lucius
+        , paste a personal access token from its Account Settings → Developer Settings page. Uzi
         can then read any of your plans.
       </Text>
 

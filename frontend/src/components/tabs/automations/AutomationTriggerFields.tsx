@@ -317,7 +317,7 @@ export function AutomationTriggerFields({
                   onClick={onAskForCadence}
                 >
                   <LuciusMark size={12} aria-hidden="true" />
-                  Create via Lucius for a custom cadence
+                  Create via Uzi for a custom cadence
                 </button>
               ) : undefined
             }

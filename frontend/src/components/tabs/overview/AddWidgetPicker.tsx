@@ -93,7 +93,7 @@ export function AddWidgetPicker({
     if (!p) return
     onPickWithConfig?.('lux-html', { prompt: p })
     onAskLucius?.(`Build a widget for my Overview dashboard: ${p}`)
-    onAdded?.('Lucius custom added — Lucius is building it now')
+    onAdded?.('Uzi custom added — Uzi is building it now')
     resetAndClose()
   }
 
@@ -101,7 +101,7 @@ export function AddWidgetPicker({
     <Modal
       open={open}
       onClose={resetAndClose}
-      title={buildMode ? 'Build a widget with Lucius' : 'Add widgets'}
+      title={buildMode ? 'Build a widget with Uzi' : 'Add widgets'}
       size="lg"
     >
       <div className="ov-picker">
@@ -144,7 +144,7 @@ export function AddWidgetPicker({
               </span>
             </div>
             <div className="ov-picker-build-hint">
-              Lucius reads your accounts, holdings, budget, and commitments — the widget stays live
+              Uzi reads your accounts, holdings, budget, and commitments — the widget stays live
               and refreshes with your data.
             </div>
           </div>
@@ -180,7 +180,7 @@ export function AddWidgetPicker({
             </div>
 
             <div className="ov-picker-grid">
-              {/* Hidden for now: nothing pins what Lucius makes into the widget, and the widget
+              {/* Hidden for now: nothing pins what Uzi makes into the widget, and the widget
                   is a snapshot, not live. Back when both are true (owner, 2026-11-20). */}
               {BUILD_WITH_LUCIUS && onAskLucius && (
                 <button
@@ -192,9 +192,9 @@ export function AddWidgetPicker({
                     <Spark size={15} />
                   </span>
                   <span>
-                    <strong>Build with Lucius</strong>
+                    <strong>Build with Uzi</strong>
                     <span className="ov-picker-lucius-desc">
-                      Describe any view of your money — Lucius builds it as a live widget.
+                      Describe any view of your money — Uzi builds it as a live widget.
                     </span>
                   </span>
                 </button>

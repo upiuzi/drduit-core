@@ -179,7 +179,7 @@ export function PropHero({
                 )
               }
             >
-              {d.hasTargets ? 'Let Lucius suggest caps' : 'Let Lucius suggest shares'}
+              {d.hasTargets ? 'Let Uzi suggest caps' : 'Let Uzi suggest shares'}
             </Button>
           )}
         </div>

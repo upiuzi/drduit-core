@@ -14,11 +14,11 @@ export function AiAnalysisPanel({ cfg, save }: PanelProps) {
   return (
     <Panel
       title="AI analysis on watched tickers"
-      sub="What Lucius writes on top of the price signals. Every figure is checked against the data before it's shown."
+      sub="What Uzi writes on top of the price signals. Every figure is checked against the data before it's shown."
     >
       {row(
         'Explained alerts',
-        'On a material move, Lucius writes a sourced explanation and sends it to the channels you chose for watch alerts (at most 8 a day).',
+        'On a material move, Uzi writes a sourced explanation and sends it to the channels you chose for watch alerts (at most 8 a day).',
         <Toggle
           on={cfg.explained_alerts_enabled ?? true}
           label="Explained alerts"
@@ -31,11 +31,11 @@ export function AiAnalysisPanel({ cfg, save }: PanelProps) {
         />,
       )}
       {row(
-        'Lucius’s read on every watch story',
+        "Uzi's read on every watch story",
         'A short in-app read on each watch story — what it means for you and what to watch next. Never pushed.',
         <Toggle
           on={reads}
-          label="Lucius's read on watch stories"
+          label="Uzi's read on watch stories"
           onChange={(v) =>
             save({ watch_reads_enabled: v }, v ? 'Watch-story reads on' : 'Watch-story reads off')
           }
@@ -52,9 +52,9 @@ export function AiAnalysisPanel({ cfg, save }: PanelProps) {
             onCommit={(n) => save({ watch_reads_per_day: n }, 'Reads per day updated')}
           />
         </Field>
-        <Field label="How far Lucius’s opinion goes" help={`${chosen.help} ${NOT_ADVICE}`}>
+        <Field label="How far Uzi's opinion goes" help={`${chosen.help} ${NOT_ADVICE}`}>
           <Select
-            aria-label="How far Lucius's opinion goes"
+            aria-label="How far Uzi's opinion goes"
             value={level}
             onChange={(e) =>
               save({ ai_opinion_level: e.target.value as OpinionLevel }, 'Opinion level updated')

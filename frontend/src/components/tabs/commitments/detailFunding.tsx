@@ -370,7 +370,7 @@ export function Funding({ commitment: c, fx, envelope, positions, m }: FundingPr
                 m.onAskLucius(`Help me add a funding source to my "${c.name}" commitment's plan.`)
               }
             >
-              Manage with Lucius <ArrowRight size={13} aria-hidden="true" />
+              Manage with Uzi <ArrowRight size={13} aria-hidden="true" />
             </button>
           </span>
         )}
@@ -443,7 +443,7 @@ export function Funding({ commitment: c, fx, envelope, positions, m }: FundingPr
         </>
       ) : (
         <div className="c2-fund-empty">
-          No funding sources yet — ask Lucius how you'll cover these installments (cash, an asset
+          No funding sources yet — ask Uzi how you'll cover these installments (cash, an asset
           sale, or a loan).
         </div>
       )}

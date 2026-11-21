@@ -23,7 +23,7 @@ import { FirstRunMark } from './Mark'
 import { defaultCurrencyFromLocale } from './currencies'
 import { ArrowLeft } from '../../ui/icons'
 
-const TITLES = ['Your wealth, kept privately.', 'Lucius, your wealth manager.', 'Secure the vault.']
+const TITLES = ['Your wealth, kept privately.', 'Uzi, your wealth manager.', 'Secure the vault.']
 
 // The greeting is NOT a step either — it is the pitch shown before anything is asked, routing
 // to "Set up" (step 0) or straight to restore. Only the three screens after it are numbered.

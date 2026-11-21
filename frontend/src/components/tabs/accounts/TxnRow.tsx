@@ -552,7 +552,7 @@ export function TxnRow({
             {t.needsReview ? (
               <span
                 className="acct-review-pill"
-                title="Added by an import, Lucius or an automation, and not confirmed by you yet. Approving only clears this flag."
+                title="Added by an import, Uzi or an automation, and not confirmed by you yet. Approving only clears this flag."
               >
                 Review
               </span>

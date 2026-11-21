@@ -45,7 +45,7 @@ export function IntelBriefCard({ onChatSuggest, children, verbosity = 3 }: Props
         icon={<LuciusMark size={13} />}
         title="Holdings brief"
         ask={{
-          label: 'Ask Lucius about this brief',
+          label: 'Ask Uzi about this brief',
           onAsk: () =>
             onChatSuggest(
               'Walk me through my portfolio brief today — what moved, how I sit versus the market, and what needs a decision.',

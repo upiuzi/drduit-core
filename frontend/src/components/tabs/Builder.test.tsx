@@ -70,7 +70,7 @@ describe('Builder', () => {
   it('renders engine readiness and setup guidance without pretending a missing engine works', async () => {
     render(<Builder />)
 
-    await waitFor(() => expect(screen.getByText('Build Open Net Worth')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Build Dr Duit')).toBeTruthy())
     expect(screen.getByText('codex-cli 0.145.0')).toBeTruthy()
     expect(screen.getByText('Not installed')).toBeTruthy()
     expect(screen.getByText(/Install Claude Code and run claude login/)).toBeTruthy()
@@ -112,16 +112,16 @@ describe('Builder', () => {
   it('confirms the fixed local boundary immediately before Build starts', async () => {
     mockStart.mockResolvedValue(RUNNING)
     render(<Builder />)
-    await waitFor(() => screen.getByLabelText('What should Open Net Worth change?'))
+    await waitFor(() => screen.getByLabelText('What should Dr Duit change?'))
 
-    fireEvent.change(screen.getByLabelText('What should Open Net Worth change?'), {
+    fireEvent.change(screen.getByLabelText('What should Dr Duit change?'), {
       target: { value: 'Add a dashboard card' },
     })
     fireEvent.click(screen.getByRole('tab', { name: 'Build' }))
     fireEvent.click(screen.getByRole('button', { name: 'Build this change' }))
 
     expect(mockStart).not.toHaveBeenCalled()
-    expect(screen.getByRole('dialog', { name: 'Let Codex edit Open Net Worth?' })).toBeTruthy()
+    expect(screen.getByRole('dialog', { name: 'Let Codex edit Dr Duit?' })).toBeTruthy()
     expect(
       screen.getByText(/is instructed not to commit, push, open a pull request, or deploy/i),
     ).toBeTruthy()
@@ -143,7 +143,7 @@ describe('Builder', () => {
     fireEvent.click(screen.getByRole('button', { name: /Add something new/i }))
 
     const request = screen.getByLabelText(
-      'What should Open Net Worth change?',
+      'What should Dr Duit change?',
     ) as HTMLTextAreaElement
     expect(request.value).toMatch(/Add a new dashboard card/)
   })
@@ -165,9 +165,9 @@ describe('Builder', () => {
       workspace_changes: ['M frontend/src/dashboard.tsx'],
     })
     render(<Builder pollIntervalMs={5} />)
-    await waitFor(() => screen.getByLabelText('What should Open Net Worth change?'))
+    await waitFor(() => screen.getByLabelText('What should Dr Duit change?'))
 
-    fireEvent.change(screen.getByLabelText('What should Open Net Worth change?'), {
+    fireEvent.change(screen.getByLabelText('What should Dr Duit change?'), {
       target: { value: 'Add a dashboard card' },
     })
     fireEvent.click(screen.getByRole('tab', { name: 'Build' }))
@@ -210,9 +210,9 @@ describe('Builder', () => {
       ],
     })
     render(<Builder />)
-    await waitFor(() => screen.getByLabelText('What should Open Net Worth change?'))
+    await waitFor(() => screen.getByLabelText('What should Dr Duit change?'))
 
-    fireEvent.change(screen.getByLabelText('What should Open Net Worth change?'), {
+    fireEvent.change(screen.getByLabelText('What should Dr Duit change?'), {
       target: { value: 'Plan a dashboard card' },
     })
     fireEvent.click(screen.getByRole('button', { name: 'Plan this change' }))
@@ -234,9 +234,9 @@ describe('Builder', () => {
     )
     mockStop.mockResolvedValue({ ...RUNNING, status: 'cancelled', events: [] })
     render(<Builder pollIntervalMs={5} />)
-    await waitFor(() => screen.getByLabelText('What should Open Net Worth change?'))
+    await waitFor(() => screen.getByLabelText('What should Dr Duit change?'))
 
-    fireEvent.change(screen.getByLabelText('What should Open Net Worth change?'), {
+    fireEvent.change(screen.getByLabelText('What should Dr Duit change?'), {
       target: { value: 'Change the theme' },
     })
     fireEvent.click(screen.getByRole('tab', { name: 'Build' }))
@@ -256,7 +256,7 @@ describe('Builder', () => {
     await waitFor(() => screen.getByText('Could not check coding engines.'))
     fireEvent.click(screen.getByRole('button', { name: 'Retry' }))
 
-    await waitFor(() => expect(screen.getByText('Build Open Net Worth')).toBeTruthy())
+    await waitFor(() => expect(screen.getByText('Build Dr Duit')).toBeTruthy())
     expect(mockStatus).toHaveBeenCalledTimes(2)
   })
 })

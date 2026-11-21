@@ -97,7 +97,7 @@ export function VoiceCallButton({
   if (on !== true || call.phase !== 'idle') return null
 
   const needsSetup = !!readiness && !readiness.ready
-  const label = needsSetup ? 'Set up voice calls' : 'Call Lucius'
+  const label = needsSetup ? 'Set up voice calls' : 'Call Uzi'
   // In a phone's chat the call is what you came for; the pill and the round button keep your place
   // on whatever screen you're on (owner, 2026-11-06).
   const view = tone === 'composer' && mobile ? 'stage' : 'bar'

@@ -1,6 +1,7 @@
 import { useState, useEffect, useSyncExternalStore } from 'react'
 import { RouterProvider } from '@tanstack/react-router'
 import { Login } from './components/Login'
+import { Register } from './components/Register'
 import { NoPasswordYet } from './components/NoPasswordYet'
 import { useBrand } from './brand-context'
 import { authFetch, setUnauthorizedHandler } from './api/client'
@@ -85,6 +86,7 @@ function writeCachedAuth(status: AuthStatus | null): void {
 
 export default function App() {
   const [auth, setAuth] = useState<AuthStatus | null>(readCachedAuth)
+  const [authMode, setAuthMode] = useState<'login' | 'register' | null>(null)
   const [unreachable, setUnreachable] = useState(false)
   const brand = useBrand()
   const reauthing = useSyncExternalStore(subscribeReauthing, isReauthing)
@@ -172,9 +174,25 @@ export default function App() {
     )
   }
   if (auth.required && !auth.authenticated) {
-    return <Login onAuthenticated={checkAuthStatus} />
+    if (authMode === 'register') {
+      return <NoPasswordYet onRetry={checkAuthStatus} />
+    }
+    return (
+      <Login
+        onAuthenticated={checkAuthStatus}
+        onGoToRegister={() => setAuthMode('register')}
+      />
+    )
   }
   if (!auth.required && !auth.authenticated) {
+    if (authMode === 'login') {
+      return (
+        <Login
+          onAuthenticated={checkAuthStatus}
+          onGoToRegister={() => setAuthMode('register')}
+        />
+      )
+    }
     return <NoPasswordYet onRetry={checkAuthStatus} />
   }
 

@@ -64,7 +64,7 @@ export const SOURCE_OPTS = [
   { value: 'manual', label: 'Manual entry' },
   { value: 'bank', label: 'Bank sync' },
   { value: 'import', label: 'Imported (file)' },
-  { value: 'ai', label: 'Lucius (AI)' },
+  { value: 'ai', label: 'Uzi (AI)' },
   { value: 'agent', label: 'Agent' },
   { value: 'automation', label: 'Automation' },
   { value: 'reconcile', label: 'Reconcile adjustment' },

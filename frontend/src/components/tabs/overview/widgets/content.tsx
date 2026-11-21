@@ -204,7 +204,7 @@ const EmbedWidget: ComponentType<WidgetContentProps> = ({ instance, def, onPatch
 
   return (
     <WidgetShell title={instance.title} base={def.title} fill bodyClass="ov-embed-body">
-      {/* This is a USER-SUPPLIED external URL, not Lucius-authored content — a
+      {/* This is a USER-SUPPLIED external URL, not Uzi-authored content — a
           different trust boundary than the artifact sandbox below, so it gets its
           own (still conservative) sandbox policy rather than reusing artifactFrame's.
           `allow-same-origin` is DELIBERATELY OMITTED: paired with `allow-scripts`,
@@ -315,7 +315,7 @@ const LuxHtml: ComponentType<WidgetContentProps> = ({ instance, def, onPatch, on
     <WidgetShell title={instance.title} base={def.title} lead={spark}>
       <div className="ov-luxhtml-setup">
         <Text as="p" size="xs" tone="faint">
-          Pin a Lucius-generated artifact — a chart, a card, a mini dashboard — to this widget.
+          Pin a Uzi-generated artifact — a chart, a card, a mini dashboard — to this widget.
         </Text>
         {recent && recent.length > 0 && (
           <div className="ov-luxhtml-pick-row">
@@ -332,7 +332,7 @@ const LuxHtml: ComponentType<WidgetContentProps> = ({ instance, def, onPatch, on
         )}
         {recent && recent.length === 0 && !listError && (
           <Text as="p" size="xs" tone="faint">
-            No artifacts yet — ask Lucius to build one below.
+            No artifacts yet — ask Uzi to build one below.
           </Text>
         )}
         {listError && (
@@ -344,7 +344,7 @@ const LuxHtml: ComponentType<WidgetContentProps> = ({ instance, def, onPatch, on
           rows={2}
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Describe the widget Lucius should build…"
+          placeholder="Describe the widget Uzi should build…"
         />
         <div className="ov-lux-ask-actions">
           <Button
@@ -354,7 +354,7 @@ const LuxHtml: ComponentType<WidgetContentProps> = ({ instance, def, onPatch, on
             iconLeft={<Spark size={15} ariaHidden />}
             onClick={askLucius}
           >
-            Create with Lucius
+            Create with Uzi
           </Button>
         </div>
       </div>

@@ -462,7 +462,7 @@ def build_report(report_type: str, period: str = "1Y") -> dict:
         p = "1Y"
 
     data = _BUILDERS[report_type](p, base)
-    app_name = (AppConfigStore().get() or {}).get("app_name") or "Open Net Worth"
+    app_name = (AppConfigStore().get() or {}).get("app_name") or "Dr Duit"
 
     return {
         "type": report_type,

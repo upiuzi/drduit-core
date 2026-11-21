@@ -47,7 +47,7 @@ from backend.core.config import get_settings
 from backend.db.payload_store import NamespacedSettingsStore
 from backend.db.tables import runtime_state
 
-DEFAULT_APP_NAME = "Open Net Worth"
+DEFAULT_APP_NAME = "Dr Duit"
 
 DEFAULTS: dict = {
     "app_name": DEFAULT_APP_NAME,
@@ -169,8 +169,9 @@ class AppConfigStore(NamespacedSettingsStore):
         only ever exposes branding."""
         data = self._read_raw()
         merged = {**DEFAULTS, **{k: data[k] for k in _FIELDS if k in data}}
-        # An empty stored app_name is meaningless — fall back to the default name.
-        if not (merged.get("app_name") or "").strip():
+        # An empty stored app_name or legacy "Open Net Worth" falls back to Dr Duit.
+        curr_name = (merged.get("app_name") or "").strip()
+        if not curr_name or curr_name == "Open Net Worth":
             merged["app_name"] = DEFAULT_APP_NAME
         return merged
 
@@ -183,7 +184,8 @@ class AppConfigStore(NamespacedSettingsStore):
             for k in _FIELDS:
                 if k in changes and changes[k] is not None:
                     raw[k] = str(changes[k]).strip()
-            if not (raw.get("app_name") or "").strip():
+            curr_name = (raw.get("app_name") or "").strip()
+            if not curr_name or curr_name == "Open Net Worth":
                 raw["app_name"] = DEFAULT_APP_NAME
             self.save(raw, conn=conn)
         return self.get()

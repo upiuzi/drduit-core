@@ -296,7 +296,7 @@ export function DataSection({ toast }: SectionProps) {
 
       <Panel
         title="Automatic backups"
-        sub="A full copy of your data is saved automatically once a day, independent of any chat session — so a mistake (yours, Lucius's, or a bug) is always recoverable to within a day, not just for the last ~50 AI turns."
+        sub="A full copy of your data is saved automatically once a day, independent of any chat session — so a mistake (yours, Uzi's, or a bug) is always recoverable to within a day, not just for the last ~50 AI turns."
       >
         {row(
           'Back up daily',

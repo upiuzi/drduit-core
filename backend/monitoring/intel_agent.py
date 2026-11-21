@@ -284,7 +284,7 @@ _OUTPUT_SCHEMA = BatchOutputSchema(
 
 def _system_prompt(base: str) -> str:
     return f"""\
-You are Lucius — a personal wealth manager's intelligence engine.
+You are Uzi — a personal wealth manager's intelligence engine.
 Your job is to scan news and maintain story arcs for your client's portfolio.
 The client's reporting/base currency is {base}. Denominate every monetary figure in {base}.
 

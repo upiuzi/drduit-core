@@ -648,7 +648,7 @@ export function StatementsModal({
                 </Button>
               )}
               <LuciusCta
-                label="Add with Lucius"
+                label="Add with Uzi"
                 message={`Help me add statements for my ${accountName ?? 'account'}. I can send a PDF or screenshot instead of importing it myself.`}
                 onAskLucius={onAskLucius}
               />

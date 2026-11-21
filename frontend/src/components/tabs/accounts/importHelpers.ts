@@ -765,7 +765,7 @@ export const FLAG_LABEL: Record<string, string> = {
  * (csv_import/qif_import/api/bank syncs/reconcile/...) has already collapsed onto the handful
  * this switches on. */
 export function existingSourcePhrase(source?: string | null): string {
-  if (source === 'ai') return 'via Lucius'
+  if (source === 'ai') return 'via Uzi'
   if (source === 'agent') return 'via agent'
   if (source === 'import') return 'from an earlier import'
   return 'added by you'
@@ -1627,7 +1627,7 @@ export function progressPhaseLabel(
     case 'match':
       return 'Checking every row against your ledger'
     case 'lucius':
-      return 'Lucius is reviewing the read'
+      return 'Uzi is reviewing the read'
     case 'categorise':
       return 'Sorting rows into categories'
     case 'ledger_check':

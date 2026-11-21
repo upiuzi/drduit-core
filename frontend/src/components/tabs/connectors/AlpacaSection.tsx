@@ -20,7 +20,7 @@ import { ConnectorAccountsList } from './ConnectorAccountsList'
 // PlaidSection. The API key id + secret are read back through their own eyes (GET
 // /api/connectors/alpaca/secret/api_key_id, .../secret_key) — the GET echoes only `has_keys`;
 // blank fields leave the saved creds unchanged. This panel owns the READ config (creds /
-// paper-vs-live / enable); fetching positions is now Lucius's job via a template (see
+// paper-vs-live / enable); fetching positions is now Uzi's job via a template (see
 // the connector page's Automate button). This connector is READ-ONLY: the trading sub-panel and its
 // `trading_enabled` kill switch were REMOVED 2026-07-19 — see
 // docs/adr/2026-07-19-remove-alpaca-trading-half.md. `environment` stays because it selects

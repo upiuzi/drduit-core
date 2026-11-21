@@ -1204,7 +1204,7 @@ export function ChatPanel({
             sendBlocked={(streaming || sending) && !multiTurnEnabled}
             onStop={stopStreaming}
             onSend={handleSend}
-            placeholder="Ask Lucius anything — @ to mention, / for skills…"
+            placeholder="Ask Uzi anything — @ to mention, / for skills…"
             autoFocus={open && shouldAutoFocusComposer}
             visibleIds={visibleIds}
             screenId="lucius-side"
@@ -1306,7 +1306,7 @@ export function ChatPanel({
             <Spark size={17} />
             <span className="lx-side-t">
               <span className="lx-side-t-inner">
-                <span className="lx-label-txt">Lucius</span>
+                <span className="lx-label-txt">Uzi</span>
               </span>
             </span>
 
@@ -1428,7 +1428,7 @@ export function ChatPanel({
               the same scrollable/centered region the composer's own layout already accounts
               for — a footer-relative placement would have had to fight the composer's two
               different positioning strategies (unpinned+static on desktop's home tab vs.
-              pinned+absolute on the phone's Lucius tab, lucius-home.css/lucius.css). Mobile
+              pinned+absolute on the phone's Uzi tab, lucius-home.css/lucius.css). Mobile
               keeps the established automation sections hidden, but still exposes urgent
               ledger review work. */}
               {homeMode && (
@@ -1571,7 +1571,7 @@ export function ChatPanel({
             </>
           )}
           {/* The activity line is the BOUNDARY, not just an indicator: everything above it
-            Lucius has read, everything below it is still waiting. Last item in the
+            Uzi has read, everything below it is still waiting. Last item in the
             transcript rather than a fixed bar, so on a long conversation it lands at the
             bottom of the scroll area, where the eye already is. `compacting` preempts this
             boundary entirely — nothing has been read into a new turn yet while a fold is

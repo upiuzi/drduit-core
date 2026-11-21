@@ -125,12 +125,12 @@ export function Rebalance({ alloc, thresholdPp, untracked }: Props) {
                   composer.requestOpen()
                 }}
               >
-                Place with Lucius
+                Place with Uzi
               </Button>
             </div>
           )}
           <div className="mk-rb-note">
-            Lucius can place these through a connected brokerage, asking you to confirm each order —
+            Uzi can place these through a connected brokerage, asking you to confirm each order —
             or place them yourself.
           </div>
         </div>

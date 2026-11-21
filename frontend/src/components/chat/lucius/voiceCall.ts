@@ -303,9 +303,9 @@ function closeLevels(): void {
 // is the system's switch for the app — there is no address bar (owner, 2026-11-03).
 function micBlockedMessage(): string {
   if (desktopClientBridge()?.openMicrophoneSettings)
-    return "Open Net Worth isn't allowed to use the microphone. Turn it on in System Settings → Privacy & Security → Microphone, then try again."
+    return "Dr Duit isn't allowed to use the microphone. Turn it on in System Settings → Privacy & Security → Microphone, then try again."
   if (desktopBridge() || desktopClientBridge())
-    return "Open Net Worth isn't allowed to use the microphone. Turn it on in your system's privacy settings, then try again."
+    return "Dr Duit isn't allowed to use the microphone. Turn it on in your system's privacy settings, then try again."
   return "The microphone is blocked. Allow it for this site (the browser's address bar, or your system's privacy settings), then try again."
 }
 
@@ -777,14 +777,14 @@ export async function startCall(sessionId: string, view: CallState['view'] = 'ba
       window.clearTimeout(leftTimer)
       leftTimer = window.setTimeout(() => {
         if (room !== next) return
-        endProblem = { kind: 'dropped', message: 'Lucius left the call. Call again to keep going.' }
+        endProblem = { kind: 'dropped', message: 'Uzi left the call. Call again to keep going.' }
         void next.disconnect()
       }, LEFT_GRACE_MS)
     })
     next.on(RoomEvent.Reconnecting, () => set({ phase: 'reconnecting' }))
     next.on(RoomEvent.Reconnected, () => set({ phase: state.connectedAt ? 'live' : 'ringing' }))
     next.on(RoomEvent.Disconnected, (reason?: DisconnectReason) => {
-      // Lucius hangs up after a goodbye by closing the room — an ordinary end, like the
+      // Uzi hangs up after a goodbye by closing the room — an ordinary end, like the
       // owner's own hang-up. Any other disconnect is a dropped call, said as such.
       const ended = !endProblem && (localHangUp || reason === DisconnectReason.ROOM_DELETED)
       const byUs = localHangUp
@@ -796,7 +796,7 @@ export async function startCall(sessionId: string, view: CallState['view'] = 'ba
     set({ sessionId: grant.session_id, phase: 'ringing' })
     pickupTimer = window.setTimeout(() => {
       if (room !== next || state.phase !== 'ringing') return
-      endProblem = { kind: 'setup', message: "Lucius didn't pick up." }
+      endProblem = { kind: 'setup', message: "Uzi didn't pick up." }
       void next.disconnect()
     }, PICKUP_TIMEOUT_MS)
     // The call's small talk is recorded in a few ms — gone before the 4s live poll looks — so

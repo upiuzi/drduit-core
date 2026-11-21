@@ -54,6 +54,7 @@ from backend.services.shortcuts.catalog import SPECS
 #
 _EXEMPT: set = {
     ("POST", "/api/auth/login"),
+    ("POST", "/api/auth/register"),
     ("POST", "/api/auth/logout"),  # clearing a cookie must never itself require auth
     ("GET", "/api/auth/status"),
     ("GET", "/api/health"),

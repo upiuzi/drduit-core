@@ -191,7 +191,14 @@ PROVIDER_HINTS: dict = {
         "label": "Antigravity CLI (uses your Google Antigravity account)",
         "needs_base_url": False,
         "base_url_hints": [],
-        "model_hints": ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-3.7-flash"],
+        "model_hints": [
+            "gemini-3.8-flash-high",
+            "gemini-3.8-flash-medium",
+            "gemini-3.8-flash-low",
+            "claude-opus-4-6-thinking",
+            "claude-sonnet-4-6",
+            "gpt-oss-120b-medium",
+        ],
     },
 }
 
@@ -299,7 +306,14 @@ PROVIDER_CATALOG: list = [
         "needs_api_key": False,
         "editable_base_url": True,
         "cli_binary": "agy",
-        "model_hints": ["gemini-2.5-flash", "gemini-2.5-pro", "gemini-3.7-flash"],
+        "model_hints": [
+            "gemini-3.8-flash-high",
+            "gemini-3.8-flash-medium",
+            "gemini-3.8-flash-low",
+            "claude-opus-4-6-thinking",
+            "claude-sonnet-4-6",
+            "gpt-oss-120b-medium",
+        ],
     },
     {
         # Google Gemini via its OpenAI-compatibility endpoint — no native adapter needed.
@@ -502,27 +516,74 @@ def _refuse_on_demo() -> None:
         raise ConfigurationError("AI provider settings are locked on the public demo.")
 
 
+# Retired models remapped to current active models on load.
+_RETIRED_MODEL_MAP: dict[str, str] = {
+    "antigravity_cli:gemini-2.5-flash": "antigravity_cli:gemini-3.8-flash-medium",
+    "antigravity_cli:gemini-2.5-flash-lite": "antigravity_cli:gemini-3.8-flash-low",
+    "antigravity_cli:gemini-2.5-pro": "antigravity_cli:gemini-3.8-flash-high",
+    "antigravity_cli:gemini-3.7-flash": "antigravity_cli:gemini-3.8-flash-medium",
+}
+
+
 class ModelConfigStore(NamespacedSettingsStore):
     def __init__(self, engine: Optional[object] = None):
         super().__init__("model_config", table=secret_config, engine=engine)
 
     def _read_raw(self) -> dict:
-        """The stored object, with both migrations applied. No row → ``{}``: the model is
+        """The stored object, with all migrations applied. No row → ``{}``: the model is
         chosen in Settings → AI Model, never seeded from the environment (2026-10-10)."""
-        data = super().get()
-        if data:
-            data = self._migrate_legacy_api_key(data)
+        original = super().get()
+        if original:
+            data = self._migrate_legacy_api_key(original)
+            data = self._migrate_retired_models(data)
             migrated = self._migrate_default_model(data)
             # PERSIST the composition. Recomposing on every read would leave the old trio
             # stored indefinitely — a second, stale copy of the default that anything
             # writing the raw row could contradict. Migrate once, then the row IS the truth.
-            if migrated is not data:
+            if migrated != original:
                 self._write_raw(migrated)
             return migrated
         return {}
 
     def _write_raw(self, raw: dict) -> None:
         self.save(raw)
+
+    def _migrate_retired_models(self, data: dict) -> dict:
+        """Remap retired model refs to active successors."""
+        migrated = dict(data)
+        changed = False
+
+        default_model = (migrated.get("default_model") or "").strip()
+        if default_model in _RETIRED_MODEL_MAP:
+            migrated["default_model"] = _RETIRED_MODEL_MAP[default_model]
+            changed = True
+
+        task_models = migrated.get("task_models")
+        if isinstance(task_models, dict):
+            new_task_models = dict(task_models)
+            for task, ref in task_models.items():
+                if ref in _RETIRED_MODEL_MAP:
+                    new_task_models[task] = _RETIRED_MODEL_MAP[ref]
+                    changed = True
+            if changed:
+                migrated["task_models"] = new_task_models
+
+        providers = migrated.get("providers")
+        if isinstance(providers, dict):
+            new_providers = dict(providers)
+            for prov_key, creds in providers.items():
+                if isinstance(creds, dict) and "model" in creds:
+                    full_ref = f"{prov_key}:{creds['model']}"
+                    if full_ref in _RETIRED_MODEL_MAP:
+                        target = _RETIRED_MODEL_MAP[full_ref].split(":", 1)[1]
+                        new_creds = dict(creds)
+                        new_creds["model"] = target
+                        new_providers[prov_key] = new_creds
+                        changed = True
+            if changed:
+                migrated["providers"] = new_providers
+
+        return migrated if changed else data
 
     def _migrate_default_model(self, data: dict) -> dict:
         """Compose the legacy {provider, base_url, model} trio into ONE pinned ref.

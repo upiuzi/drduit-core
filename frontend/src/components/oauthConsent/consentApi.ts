@@ -40,7 +40,7 @@ export async function signIn(request: string, password: string): Promise<SignInR
     if (r.status === 429) return { ok: false, message: tooManyAttemptsMessage(r) }
     return { ok: false, message: `Sign-in failed (HTTP ${r.status}).` }
   } catch {
-    return { ok: false, message: 'Could not reach Open Net Worth. Try again.' }
+    return { ok: false, message: 'Could not reach Dr Duit. Try again.' }
   }
 }
 

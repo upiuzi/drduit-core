@@ -45,7 +45,7 @@ const STEP: IntroStep = {
       body: 'Accounts, home, car, watch, or a kind you make up.',
     },
     {
-      title: 'Better advice from Lucius.',
+      title: 'Better advice from Uzi.',
       body: 'It sees the full picture, so its advice fits you.',
     },
   ],
@@ -101,7 +101,7 @@ export function useAssetsIntro(
         open={open}
         steps={[STEP]}
         lucius={{
-          label: filled ? 'Walk me through it' : 'Set up with Lucius',
+          label: filled ? 'Walk me through it' : 'Set up with Uzi',
           onClick: () => {
             close()
             sendNextPrefill()

@@ -23,7 +23,7 @@ import {
 import { FieldSelect, VoicePicker } from './VoicePicker'
 
 // Voice calls over /api/voice/config (the `voice_calls` flag). Two layers on a call: a fast
-// FRONT voice holds the conversation, Lucius does the work behind it (ADR
+// FRONT voice holds the conversation, Uzi does the work behind it (ADR
 // 2026-11-03-voice-calls-are-a-fast-front-voice-over-lucius). The LiveKit key and secret are
 // write-only like every connector secret: blank keeps the saved one, the eye reads it back.
 // Like Telegram's form, this one passes `enabled` through — Pause/Resume on the card owns it.
@@ -106,18 +106,18 @@ function formOf(c: VoiceConfig): VoiceForm {
 /** A filter chosen but missing from this install: calls still run, without it, and you're told. */
 export function noiseMissing(c: VoiceConfig, choice: string): string {
   if (choice === 'off' || c.worker.noise_installed?.[choice] !== false) return ''
-  return 'Krisp isn’t installed on this computer, so calls run without noise cancelling. Reinstall Open Net Worth to add it.'
+  return 'Krisp isn’t installed on this computer, so calls run without noise cancelling. Reinstall Dr Duit to add it.'
 }
 
 function workerLine(c: VoiceConfig): { tone: 'faint' | 'warn' | 'good'; text: string } {
   if (c.worker.running)
-    return { tone: 'good', text: 'Ready for calls. Press Call in Lucius’s chat.' }
+    return { tone: 'good', text: 'Ready for calls. Press Call in Uzi’s chat.' }
   if (!c.worker.libraries_installed)
     return {
       tone: 'warn',
       text:
         c.worker.libraries_problem ||
-        'The voice libraries are missing from this install. Reinstall Open Net Worth, then restart.',
+        'The voice libraries are missing from this install. Reinstall Dr Duit, then restart.',
     }
   if (c.worker.error) return { tone: 'warn', text: c.worker.error }
   if (!c.ready)
@@ -265,7 +265,7 @@ export function VoiceSection() {
   return (
     <Stack gap="--space-4">
       <Text size="sm" tone="faint">
-        Talk to Lucius out loud. A fast voice keeps the conversation going while Lucius does the
+        Talk to Uzi out loud. A fast voice keeps the conversation going while Uzi does the
         real work, with the same tools, permissions and approval cards as the chat. Calls run on
         your own{' '}
         <a href="https://cloud.livekit.io" target="_blank" rel="noreferrer">
@@ -330,7 +330,7 @@ export function VoiceSection() {
       <FormField
         label="Front voice"
         htmlFor="conn-voice-front"
-        help="Holds the conversation and answers in about a second. It never sees your data and never states a number: Lucius's answers are read out word for word."
+        help="Holds the conversation and answers in about a second. It never sees your data and never states a number: Uzi's answers are read out word for word."
       >
         <FieldSelect
           id="conn-voice-front"
@@ -346,7 +346,7 @@ export function VoiceSection() {
           </span>
         }
         htmlFor="conn-voice-language"
-        help="What you'll speak on calls. Lucius hears it, answers in it, and his voice speaks it."
+        help="What you'll speak on calls. Uzi hears it, answers in it, and his voice speaks it."
       >
         <FieldSelect
           id="conn-voice-language"

@@ -45,6 +45,7 @@ import {
   Info,
   Eye,
   EyeOff,
+  LogOut,
   NAV_ICON_PROPS,
 } from './ui/icons'
 import { LuciusLogo } from './ui/LuciusLogo'
@@ -1382,6 +1383,19 @@ function RouterShellInner() {
             </button>,
             'Send feedback',
           )}
+          {railTip(
+            <button
+              className="sidebar-item"
+              onClick={() => void onLogout()}
+              aria-label="Log out"
+            >
+              <span className="sidebar-icon">
+                <LogOut size={16} strokeWidth={1.6} aria-hidden="true" />
+              </span>
+              <span className="sidebar-label">Log out</span>
+            </button>,
+            'Log out',
+          )}
         </div>
       )}
     </>
@@ -1470,7 +1484,7 @@ function RouterShellInner() {
                 <div
                   {...behindFirstRun}
                   className="app-main"
-                  data-ctx-screen={phoneLucius ? 'Lucius' : TAB_LABELS[tabToRender]}
+                  data-ctx-screen={phoneLucius ? 'Uzi' : TAB_LABELS[tabToRender]}
                 >
                   <div
                     className="topbar"
@@ -1513,9 +1527,9 @@ function RouterShellInner() {
                           onClick={() => {
                             openLucius()
                           }}
-                          title="Lucius — ⌘/"
+                          title="Uzi — ⌘/"
                         >
-                          Lucius <LuciusMark size="1em" aria-hidden="true" />
+                          Uzi <LuciusMark size="1em" aria-hidden="true" />
                           <kbd className="cmdk-btn-kbd">⌘/</kbd>
                         </button>
                       )}
@@ -1548,7 +1562,7 @@ function RouterShellInner() {
                     )}
 
                     {phoneLucius ? (
-                      <ErrorBoundary key="lucius" label="Lucius">
+                      <ErrorBoundary key="lucius" label="Uzi">
                         <LuciusMobile
                           prefill={chatPrefill}
                           onPrefillConsumed={() => setChatPrefill('')}

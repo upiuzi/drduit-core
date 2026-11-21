@@ -353,7 +353,7 @@ function IntelFeed({
                           action={
                             <Cluster gap="--space-3" justify="center">
                               <LuciusCta
-                                label="Add with Lucius"
+                                label="Add with Uzi"
                                 message={HOLDINGS_MESSAGE}
                                 onAskLucius={onChatSuggest}
                               />

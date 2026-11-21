@@ -62,7 +62,7 @@ export function stampGroup(
 // ── families ────────────────────────────────────────────────────────────────
 
 /** Five lanes — a trust and ownership boundary, not a cosmetic split (spec §1). `API` is a
- *  REST API the owner points Lucius at: like an MCP server it is theirs, reads AND sends, and
+ *  REST API the owner points Uzi at: like an MCP server it is theirs, reads AND sends, and
  *  is nothing we built, so it is not a data source (owner, 2026-11-10). */
 export type ConnectorFamily = 'Channel' | 'Data source' | 'Web' | 'MCP' | 'API'
 
@@ -275,7 +275,7 @@ export interface ConnectorEntry {
   /** The wire id — `email` | `telegram` | `web_search:tavily` | `mcp:<server_id>` … */
   id: string
   name: string
-  /** Wire `kind`. Never rendered — carried so the row can feed the Lucius `connector` entity
+  /** Wire `kind`. Never rendered — carried so the row can feed the Uzi `connector` entity
    *  descriptor, whose field schema names it. Dropping it silently degrades the
    *  `@`-mention popover and the screen snapshot. */
   kind: string

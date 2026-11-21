@@ -47,6 +47,10 @@ class LoginBody(BaseModel):
     password: str
 
 
+class RegisterBody(BaseModel):
+    password: str
+
+
 class ChangePasswordBody(BaseModel):
     new_password: str
     old_password: Optional[str] = None
@@ -111,6 +115,54 @@ def login(body: LoginBody, request: Request, response: Response):
     return {"ok": True}
 
 
+@router.post("/api/auth/register")
+def register(body: RegisterBody, request: Request, response: Response):
+    """Initial instance registration / master password creation.
+
+    Only available when no password has been configured yet. Once set, returns 409
+    so the instance cannot be claimed again.
+    """
+    _require_xhr(request)
+    store = AuthStore()
+    if store.is_password_set():
+        raise HTTPException(
+            status_code=409,
+            detail="Instance is already configured with a password. Please sign in.",
+        )
+
+    key = _client_key(request)
+    allowed, retry_after = ratelimit.login_limiter.check(key)
+    if not allowed:
+        return Response(
+            content='{"detail":"too many attempts, try again later"}',
+            media_type="application/json",
+            status_code=429,
+            headers={"Retry-After": str(retry_after)},
+        )
+
+    pw = body.password or ""
+    if not pw.strip():
+        ratelimit.login_limiter.record(key)
+        return Response(
+            content='{"detail":"password required"}',
+            media_type="application/json",
+            status_code=422,
+        )
+    if len(pw) < MIN_PASSWORD_LENGTH:
+        ratelimit.login_limiter.record(key)
+        raise HTTPException(
+            status_code=422,
+            detail=f"password must be at least {MIN_PASSWORD_LENGTH} characters",
+        )
+
+    ratelimit.login_limiter.reset(key)
+    store.replace_password(hash_password(pw))
+    store.rotate_api_token()
+    shortcut_tickets.revoke_all()
+    _set_session_cookie(request, response)
+    return {"ok": True}
+
+
 @router.post("/api/auth/logout")
 def logout(response: Response):
     """Clear the session cookie."""
@@ -163,11 +215,11 @@ def status(request: Request):
     if passthrough:
         return {"required": True, "authenticated": has_creds}
 
-    # Dormant (unconfigured): no login required; loopback is open, remote is gated
-    # by the dependency — status itself reports "not required" so the SPA loads.
+    # Dormant (unconfigured): loopback is open only if trusted; remote (or loopback
+    # with trust off) requires setting a master password.
     if not configured:
-        required = False
-        authenticated = (loopback and _host_allowed(request)) or has_creds
+        required = not trusted_loopback
+        authenticated = trusted_loopback or has_creds
         return {"required": required, "authenticated": authenticated}
 
     required = not trusted_loopback

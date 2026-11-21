@@ -196,7 +196,7 @@ export function CurrencySection({ toast }: SectionProps) {
 
       <Panel
         title="Time zone"
-        sub="Decides what 'today' is and what time Lucius thinks it is — and when daily digests arrive"
+        sub="Decides what 'today' is and what time Uzi thinks it is — and when daily digests arrive"
       >
         <div className="rd-formgrid">
           <Field

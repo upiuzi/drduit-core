@@ -18,7 +18,7 @@ function humanizeSkillName(value: string): string {
  *  ("only while still 'New conversation'") means this is set once and never overwritten by
  *  whatever the person says next. */
 export function conversationTitleFromFirstMessage(message: string): string {
-  if (isOnboardingInit(message)) return 'Onboarding to Open Net Worth'
+  if (isOnboardingInit(message)) return 'Onboarding to Dr Duit'
   const skillNames: string[] = []
   // Older clients sliced the serialized first message at 60 characters before storing the
   // title, sometimes cutting a skill token before its closing bracket. Strip and humanize

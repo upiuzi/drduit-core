@@ -92,10 +92,10 @@ export function VoiceCallPill({
 
   const label =
     mode === 'rest'
-      ? 'Lucius'
+      ? 'Uzi'
       : mode === 'problem'
         ? 'Voice call problem'
-        : 'Voice call with Lucius'
+        : 'Voice call with Uzi'
   return (
     <div
       ref={root}
@@ -122,7 +122,7 @@ export function VoiceCallPill({
               onAsk()
             }}
           >
-            Ask Lucius
+            Ask Uzi
           </button>
         </>
       )}

@@ -76,11 +76,11 @@ const PRESENTATION: Record<string, { icon: string; hue: string }> = {
  *  `lunch_money`/`ynab`/every web-search provider entirely — no attribution line rendered for
  *  any of them once installed. */
 const DEVELOPERS: Record<string, { name: string; url: string }> = {
-  telegram: { name: 'Open Net Worth', url: 'https://opennetworth.ai' },
-  voice: { name: 'Open Net Worth', url: 'https://opennetworth.ai' },
-  webhook: { name: 'Open Net Worth', url: 'https://opennetworth.ai' },
-  email: { name: 'Open Net Worth', url: 'https://opennetworth.ai' },
-  rest: { name: 'Open Net Worth', url: 'https://opennetworth.ai' },
+  telegram: { name: 'Dr Duit', url: 'https://opennetworth.ai' },
+  voice: { name: 'Dr Duit', url: 'https://opennetworth.ai' },
+  webhook: { name: 'Dr Duit', url: 'https://opennetworth.ai' },
+  email: { name: 'Dr Duit', url: 'https://opennetworth.ai' },
+  rest: { name: 'Dr Duit', url: 'https://opennetworth.ai' },
   simplefin: { name: 'SimpleFIN', url: 'https://www.simplefin.org/' },
   plaid: { name: 'Plaid Inc.', url: 'https://plaid.com/docs/link/' },
   lunch_money: { name: 'Lunch Money', url: 'https://lunchmoney.app' },
@@ -109,8 +109,8 @@ const DEVELOPERS: Record<string, { name: string; url: string }> = {
   // the vendor (Yahoo, CoinGecko) is still named in the card's own name/description, just
   // not on this specific "who wrote this connector" line (see ConnectorDetail.tsx's own
   // comment on the non-MCP "Developed by" line for the full reasoning).
-  yahoo_finance: { name: 'Open Net Worth', url: 'https://opennetworth.ai' },
-  coingecko: { name: 'Open Net Worth', url: 'https://opennetworth.ai' },
+  yahoo_finance: { name: 'Dr Duit', url: 'https://opennetworth.ai' },
+  coingecko: { name: 'Dr Duit', url: 'https://opennetworth.ai' },
   'web_search:duckduckgo': { name: 'DuckDuckGo', url: 'https://duckduckgo.com/' },
   'web_search:tavily': {
     name: 'Tavily AI',

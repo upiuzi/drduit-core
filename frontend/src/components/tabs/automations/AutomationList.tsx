@@ -170,7 +170,7 @@ export function AutomationList({
           }
           items={[
             {
-              label: 'Create with Lucius',
+              label: 'Create with Uzi',
               icon: (
                 <span className="a3-menu-ic lucius">
                   <LuciusMark size={13} aria-hidden="true" />
@@ -202,7 +202,7 @@ export function AutomationList({
             action={
               <Cluster gap="--space-3" justify="center">
                 <LuciusCta
-                  label="Set up with Lucius"
+                  label="Set up with Uzi"
                   message={FIRST_AUTOMATION_MESSAGE}
                   onAskLucius={onAskLucius}
                 />

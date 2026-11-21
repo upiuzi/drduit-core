@@ -191,7 +191,7 @@ export function WealthBriefing({ onChatSuggest, hideTitle }: Props) {
       {!hideTitle && (
         <div className="briefing-header">
           <div className="briefing-header-left" onClick={() => setCollapsed((c) => !c)}>
-            <span className="briefing-label">Lucius</span>
+            <span className="briefing-label">Uzi</span>
             {data && <span className="briefing-date">{fDateTime(data.generated_at)}</span>}
           </div>
           <div className="briefing-header-right">
@@ -206,7 +206,7 @@ export function WealthBriefing({ onChatSuggest, hideTitle }: Props) {
               </button>
               {settingsOpen && (
                 <div className="briefing-settings-pop">
-                  <div className="briefing-settings-title">What Lucius covers</div>
+                  <div className="briefing-settings-title">What Uzi covers</div>
                   <div className="briefing-settings-list">
                     {SECTION_TOGGLES.map(({ key, label, hint }) => (
                       <label className="briefing-toggle" key={key}>
@@ -223,7 +223,7 @@ export function WealthBriefing({ onChatSuggest, hideTitle }: Props) {
                       </label>
                     ))}
                   </div>
-                  <div className="briefing-settings-title">Tell Lucius what to focus on</div>
+                  <div className="briefing-settings-title">Tell Uzi what to focus on</div>
                   <textarea
                     className="briefing-focus-input"
                     placeholder="e.g. Watch my ONWAI Inc exit timing; flag any big spending."
@@ -295,7 +295,7 @@ export function WealthBriefing({ onChatSuggest, hideTitle }: Props) {
                       key={`a${i}`}
                       className="briefing-chip"
                       onClick={() => onChatSuggest?.(`${data.note}\n\nHelp me with this: ${a}`)}
-                      title="Ask Lucius to help with this"
+                      title="Ask Uzi to help with this"
                     >
                       {a}
                     </button>

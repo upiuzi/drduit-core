@@ -363,7 +363,7 @@ export function McpConnectionFields({ flow }: { flow: McpAddFlow }): JSX.Element
             ) : null}
           </div>
           <span className="rd-help full">
-            This launches a local process on the machine running Lucius, with the same access as the
+            This launches a local process on the machine running Uzi, with the same access as the
             account it runs under. Only run commands you trust.
           </span>
         </>

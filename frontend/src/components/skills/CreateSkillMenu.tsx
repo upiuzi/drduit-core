@@ -67,8 +67,8 @@ export function CreateSkillMenu({
 
   const items: { label: string; sub: string; onClick: () => void }[] = [
     {
-      label: 'Create with Lucius',
-      sub: 'Chat with Lucius to design a new skill',
+      label: 'Create with Uzi',
+      sub: 'Chat with Uzi to design a new skill',
       onClick: () => pick(onCreateWithLucius),
     },
     {

@@ -55,7 +55,7 @@ import { useRailResize } from './useRailResize'
 
 /** Under every take: Lucius's view is an opinion, never licensed advice. */
 const TAKE_NOT_ADVICE =
-  'Lucius isn’t a licensed financial adviser. Treat its suggestions as information, not advice.'
+  'Uzi isn’t a licensed financial adviser. Treat its suggestions as information, not advice.'
 
 type DetailTab = 'overview' | 'analysis' | 'position'
 const DETAIL_TAB_VALUES: DetailTab[] = ['overview', 'analysis', 'position']
@@ -212,7 +212,7 @@ export function AssetDetailView({ instrumentId, seedName, seedTicker }: Props) {
         id: 'view-overview',
         type: 'view',
         label: 'Overview tab',
-        descriptor: 'Not open — price, chart, stats, news, Lucius take',
+        descriptor: 'Not open — price, chart, stats, news, Uzi take',
         source: 'view:overview',
       })
     }
@@ -1006,7 +1006,7 @@ export function AssetDetailView({ instrumentId, seedName, seedTicker }: Props) {
                           <span
                             className="asd-pi-updating"
                             role="status"
-                            aria-label="Lucius's take is updating in the background"
+                            aria-label="Uzi's take is updating in the background"
                           >
                             <span className="ui-btn__spinner" aria-hidden="true" />
                             {generating ? progressLabel : 'Updating'}
@@ -1172,7 +1172,7 @@ export function AssetDetailView({ instrumentId, seedName, seedTicker }: Props) {
               ) : (
                 <EmptyState
                   title="No key issues yet"
-                  body="Lucius hasn't written the bull and bear case for this asset yet. Refresh to try again."
+                  body="Uzi hasn't written the bull and bear case for this asset yet. Refresh to try again."
                   action={
                     data.has_ticker ? (
                       <Button variant="primary" size="sm" onClick={refresh} disabled={refreshing}>

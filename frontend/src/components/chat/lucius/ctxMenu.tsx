@@ -148,7 +148,7 @@ export function CtxMenu({
         <span className="lx-ctxmenu-ic">
           <LuciusMark size="1em" aria-hidden="true" />
         </span>
-        Ask Lucius about this
+        Ask Uzi about this
       </button>
     </div>,
     document.body,

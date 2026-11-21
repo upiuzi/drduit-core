@@ -26,7 +26,7 @@ export function HelpSection() {
       >
         {row(
           'Browse the docs',
-          'Installing it, the ideas behind it, every feature, and what Lucius can do on your behalf.',
+          'Installing it, the ideas behind it, every feature, and what Uzi can do on your behalf.',
           // A button, not an <a href="/help">: that was a real page load, which threw away the
           // whole app just to read a doc — and Help is now an overlay this navigation opens
           // over Settings, returning here when it closes.
@@ -47,15 +47,15 @@ export function HelpSection() {
         )}
       </Panel>
 
-      <Panel title="Ask Lucius" sub="He reads the same pages you do.">
+      <Panel title="Ask Uzi" sub="He reads the same pages you do.">
         {row(
           'Ask instead of searching',
-          'Lucius searches these docs before answering questions about how the app works, and cites the page he used.',
-          // Opens a FRESH thread, for the same reason "Ask Lucius about <asset>" does: a
+          'Uzi searches these docs before answering questions about how the app works, and cites the page he used.',
+          // Opens a FRESH thread, for the same reason "Ask Uzi about <asset>" does: a
           // question about how the app works has nothing to do with whatever conversation
           // happens to be open. The composer is left empty — we don't know what they want to
           // ask, and a canned question in your own composer reads like a placeholder.
-          // Lucius is exempt from the Settings modal's outside-click dismissal
+          // Uzi is exempt from the Settings modal's outside-click dismissal
           // (ui/Modal.tsx::isOutsideExempt), so it opens cleanly over this pane.
           <button
             className="rd-btn secondary"
@@ -63,7 +63,7 @@ export function HelpSection() {
             disabled={!composer}
             onClick={() => composer?.requestOpen(true)}
           >
-            Ask Lucius
+            Ask Uzi
           </button>,
         )}
       </Panel>

@@ -22,7 +22,7 @@ import type { VerificationState } from './model'
 
 /** Our own name, as the catalog spells it. A connector WE publish is not a third party to
  *  ourselves, so it gets the attribution line with no trust sentence under it. */
-export const FIRST_PARTY_PUBLISHER = 'Open Net Worth'
+export const FIRST_PARTY_PUBLISHER = 'Dr Duit'
 /** Our own homepage — the link target for the "Developed by Open Net Worth" half of a
  *  native connector's attribution line (owner correction, 2026-08-21: naming only the API
  *  vendor left the reader with no idea WE wrote the integration; naming only us left the
@@ -83,11 +83,11 @@ export function ExternalLink({
  */
 const TRUST_SENTENCE: Record<VerificationState, string> = {
   verified:
-    'We’ve verified this publisher. Open Net Worth still doesn’t control which tools a developer makes available, and can’t verify that they will work as intended or that they won’t change.',
+    'We’ve verified this publisher. Dr Duit still doesn’t control which tools a developer makes available, and can’t verify that they will work as intended or that they won’t change.',
   unverified:
-    'Only use connectors from developers you trust. We haven’t verified this publisher, and Open Net Worth doesn’t control which tools a developer makes available or verify that they won’t change.',
+    'Only use connectors from developers you trust. We haven’t verified this publisher, and Dr Duit doesn’t control which tools a developer makes available or verify that they won’t change.',
   unknown:
-    'Only use connectors from developers you trust. We don’t know who published this one — Open Net Worth can’t vouch for its code, the tools it makes available, or that they won’t change.',
+    'Only use connectors from developers you trust. We don’t know who published this one — Dr Duit can’t vouch for its code, the tools it makes available, or that they won’t change.',
 }
 
 export interface PublisherLineProps {
@@ -185,13 +185,13 @@ export interface VendorTrustProps {
 // specified. `unverified` takes the known-publisher note plus the one sentence that is the
 // whole reason the state exists: we found a maintainer, and it is NOT the vendor.
 const THIRD_PARTY_NOTE =
-  'This is a third-party MCP server — its code runs outside Open Net Worth and isn’t audited by us. It can only reach the tools listed below; nothing else on this device.'
+  'This is a third-party MCP server — its code runs outside Dr Duit and isn’t audited by us. It can only reach the tools listed below; nothing else on this device.'
 
 const NOT_VENDOR_OFFICIAL_NOTE =
   ' We haven’t confirmed it’s published by the vendor it integrates with — treat it as a community project.'
 
 const UNKNOWN_NOTE =
-  'You’re pointing Lucius at a server you specify. Open Net Worth can’t vouch for its code or the tools it exposes — review the URL and only add servers you trust.'
+  'You’re pointing Uzi at a server you specify. Dr Duit can’t vouch for its code or the tools it exposes — review the URL and only add servers you trust.'
 
 const BADGE: Record<VerificationState, { label: string; tone: BadgeProps['tone'] }> = {
   verified: { label: 'Verified publisher', tone: 'good' },

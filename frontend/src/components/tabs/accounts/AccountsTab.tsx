@@ -2153,7 +2153,7 @@ export function AccountsTab({
           {accounts.length === 0 ? (
             <DataInHero
               title="Start with the account you use most"
-              body="Add it here or with Lucius. An automation can then keep its transactions up to date and categorized for you."
+              body="Add it here or with Uzi. An automation can then keep its transactions up to date and categorized for you."
               onAddAccount={() => setAcctModal({ open: true, mode: 'add', account: null })}
               luciusMessage={SCREEN_INTROS.accounts.lucius}
               onAskLucius={onAskLucius}

@@ -101,7 +101,7 @@ _FOLLOWUP_TOOL = {
 }
 
 _STARTER_SYSTEM = """\
-You are Lucius, a personal wealth manager. Propose opening questions the client \
+You are Uzi, a personal wealth manager. Propose opening questions the client \
 might want to ask you, tailored to their actual situation below.
 
 Rules:
@@ -121,7 +121,7 @@ Rules:
 """
 
 _FOLLOWUP_SYSTEM = """\
-You are Lucius, a personal wealth manager. Based on the last exchange, propose what \
+You are Uzi, a personal wealth manager. Based on the last exchange, propose what \
 the client would tap to send next. These are buttons that send the text verbatim, so \
 their whole job is to save the client from typing.
 

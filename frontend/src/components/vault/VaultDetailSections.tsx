@@ -77,7 +77,7 @@ export function ActionBar({
         <button
           type="button"
           className="vault-action-tile vault-action-tile--lucius"
-          aria-label={asked ? 'Added to your message' : 'Ask Lucius about this'}
+          aria-label={asked ? 'Added to your message' : 'Ask Uzi about this'}
           onClick={() => {
             mention({ type: 'document', ref: item.id, label: item.title }, { open: false })
             setAsked(true)
@@ -85,7 +85,7 @@ export function ActionBar({
           }}
         >
           {asked ? <Check {...ICON} /> : <LuciusMark {...ICON} />}
-          <span>{asked ? 'Added' : 'Ask Lucius'}</span>
+          <span>{asked ? 'Added' : 'Ask Uzi'}</span>
         </button>
       )}
       <LinkedTile item={item} />
@@ -156,8 +156,8 @@ export function SettingsCard({ item }: { item: VaultItem }) {
           <span className="vault-card-text">
             <span>Private</span>
             <span className="vault-card-help">
-              Lucius can't read a Private file — not even when you ask.
-              {item.kind === 'asset' && ' The same as “Lucius can read” on its asset’s page.'}
+              Uzi can't read a Private file — not even when you ask.
+              {item.kind === 'asset' && ' The same as “Uzi can read” on its asset’s page.'}
             </span>
           </span>
           <Switch

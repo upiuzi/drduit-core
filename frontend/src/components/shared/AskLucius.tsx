@@ -25,7 +25,7 @@ interface LuciusAskButtonProps {
   refId: string
   label: string
   className: string
-  glyph?: ReactNode // defaults to Lucius's mark
+  glyph?: ReactNode // defaults to Uzi's mark
 }
 
 export function LuciusAskButton({
@@ -36,7 +36,7 @@ export function LuciusAskButton({
   glyph = <LuciusMark size="1em" aria-hidden="true" />,
 }: LuciusAskButtonProps) {
   const mention = useLuciusMention()
-  const aria = `Ask Lucius about ${label}`
+  const aria = `Ask Uzi about ${label}`
   return (
     <button
       type="button"

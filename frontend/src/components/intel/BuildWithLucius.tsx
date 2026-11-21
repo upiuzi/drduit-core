@@ -26,7 +26,7 @@ export function BuildWithLucius({
   return (
     <button type="button" className="asd-thesis-lucius" onClick={start}>
       <LuciusMark size={13} aria-hidden="true" />
-      Build with Lucius
+      Build with Uzi
     </button>
   )
 }

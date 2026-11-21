@@ -7,8 +7,8 @@
 // it and need no offset arithmetic.
 //
 // This file owns the shell and the screen state; the list, the detail page and the
-// directory are their own modules. The nav rail and the Lucius panel are NOT part of it —
-// RouterShell and LuciusDock host this tab, and every "Ask Lucius" affordance routes to
+// directory are their own modules. The nav rail and the Uzi panel are NOT part of it —
+// RouterShell and LuciusDock host this tab, and every "Ask Uzi" affordance routes to
 // the real composer prefill.
 
 import { useEffect, useMemo, useRef, useState, type JSX } from 'react'
@@ -184,7 +184,7 @@ export function ConnectorsTab(): JSX.Element {
     setDetailId(connectorId)
   }
 
-  // A link straight to one connector (/connectors?connector=email — Lucius sends these): open
+  // A link straight to one connector (/connectors?connector=email — Uzi sends these): open
   // its settings, or its page in Browse & add when it is not a connector the app has yet.
   // Read from the router, not once at mount: the same link tapped while Connectors is already
   // open only changes the URL, and has to open the connector all the same.
@@ -282,21 +282,21 @@ export function ConnectorsTab(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialLoading, ebReturn?.state, ebReturn?.code])
 
-  // Lucius's `connectors.open_setup`: UI state only. It opens the same form a card's `+` (or an
+  // Uzi's `connectors.open_setup`: UI state only. It opens the same form a card's `+` (or an
   // installed row's settings) does; the user enters credentials and clicks Connect themselves.
   // A command that lands before the list has loaded waits in a ref for it.
   const pendingSetup = useRef<{ id: string; connect: boolean } | null>(null)
   function applySetup({ id, connect }: { id: string; connect: boolean }) {
     const target = setupTargetFor(connectors, id)
     if (target.kind === 'unknown') {
-      toast("Lucius suggested a connector that isn't in the directory.")
+      toast("Uzi suggested a connector that isn't in the directory.")
       return
     }
     if (target.kind === 'add') {
       setDetailId(null)
       setDirectoryPreviewId(null)
       setDirectoryAddId(target.id)
-      // Set only by Lucius's card on the user's own Connect click (never by the model — the
+      // Set only by Uzi's card on the user's own Connect click (never by the model — the
       // backend refuses any argument but id): go straight on to the sign-in.
       setDirectoryAutoConnect(connect)
       setDirectoryFamily('all')

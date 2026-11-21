@@ -51,6 +51,12 @@ from pydantic import BaseModel
 
 from backend.ai.models import cli_sign_in
 from backend.ai.models.cli_default_model import cli_default_model, cli_default_models
+from backend.ai.models.antigravity_cli_catalog import (
+    catalog_readable as _antigravity_catalog_readable,
+    missing_catalog_message as _antigravity_missing_catalog,
+    model_ids as _antigravity_model_ids,
+    refresh as _antigravity_refresh_catalog,
+)
 from backend.ai.models.codex_cli_catalog import catalog_readable as _codex_catalog_readable
 from backend.ai.models.codex_cli_catalog import missing_catalog_message as _codex_missing_catalog
 from backend.ai.models.codex_cli_catalog import model_ids as _codex_model_ids
@@ -89,9 +95,12 @@ _OPENAI_FALLBACK: list[str] = []
 # pinned ids for someone who does.
 _CLAUDE_CLI_MODELS = [*CLAUDE_CLI_ALIASES, *CURRENT_CLAUDE_MODELS]
 _ANTIGRAVITY_CLI_MODELS: list[str] = [
-    "gemini-2.5-flash",
-    "gemini-2.5-pro",
-    "gemini-3.7-flash",
+    "gemini-3.8-flash-high",
+    "gemini-3.8-flash-medium",
+    "gemini-3.8-flash-low",
+    "claude-opus-4-6-thinking",
+    "claude-sonnet-4-6",
+    "gpt-oss-120b-medium",
 ]
 
 # Below this the CLI could truncate the final `result` line when stdout is piped, which
@@ -119,7 +128,7 @@ _CLI_TRANSPORTS: dict = {
         "upgrade": "claude update",
         "install": (
             "Install it from https://claude.com/claude-code on the machine running "
-            "Open Net Worth, run `claude` once to sign in, then check again. "
+            "Dr Duit, run `claude` once to sign in, then check again. "
             "If needed, enter the executable's absolute CLI path."
         ),
     },
@@ -134,13 +143,15 @@ _CLI_TRANSPORTS: dict = {
         "upgrade": "codex --upgrade",
         "install": (
             "Install it from https://developers.openai.com/codex/cli on the machine running "
-            "Open Net Worth, run `codex login` once to sign in, then check again. "
+            "Dr Duit, run `codex login` once to sign in, then check again. "
             "If needed, enter the executable's absolute CLI path."
         ),
     },
     "antigravity_cli": {
         "name": "Antigravity CLI",
-        "models": lambda: list(_ANTIGRAVITY_CLI_MODELS),
+        "models": _antigravity_model_ids,
+        "refresh_catalog": _antigravity_refresh_catalog,
+        "catalog_note": lambda: None if _antigravity_catalog_readable() else _antigravity_missing_catalog(),
         "min_version": None,
         "upgrade": "agy update",
         "install": (
@@ -164,7 +175,8 @@ _CACHE_TTL_SECONDS = 6 * 60 * 60
 # v5: cache file shape changed to a multi-key {providers: {key: {...}}} map (a v4
 # single-slot file would just miss and re-fetch).
 # v6: a Codex CLI static floor is no longer cached as "live" — a v5 file may hold one.
-_CACHE_SCHEMA = 6
+# v7: Antigravity CLI catalog refreshed from agy models.
+_CACHE_SCHEMA = 7
 
 _ANTHROPIC_MODELS_URL = "https://api.anthropic.com/v1/models"
 _ANTHROPIC_VERSION = "2023-06-01"

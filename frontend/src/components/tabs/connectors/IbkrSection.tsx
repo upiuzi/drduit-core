@@ -11,7 +11,7 @@ import { ConnectorAccountsList } from './ConnectorAccountsList'
 // saved value unchanged, and the saved token is read back through the eye (GET
 // /api/connectors/ibkr/secret/flex_token). The query ID (not a secret) is shown/editable.
 // S1 is read-only by construction: the Flex token cannot place orders. Fetching activity is
-// now Lucius's job via a template (see the connector page's Automate button).
+// now Uzi's job via a template (see the connector page's Automate button).
 
 interface IbkrStatus {
   configured: boolean

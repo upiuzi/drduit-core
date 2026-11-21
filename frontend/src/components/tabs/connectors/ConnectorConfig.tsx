@@ -14,7 +14,7 @@
 //
 // Every connector's on/off is Pause/Resume/Remove ONLY (no per-form Enable checkbox). Email
 // is ONE connector with one row, one address, one password and one save
-// (`EmailUnifiedSection`); whether Lucius may SEND mail is the `email_send_message` tool's own
+// (`EmailUnifiedSection`); whether Uzi may SEND mail is the `email_send_message` tool's own
 // `tool_permissions` entry (Connectors → Email → Tool permissions), not a second on/off bit.
 
 import type { JSX } from 'react'

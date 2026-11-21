@@ -305,7 +305,7 @@ export function Sidebar({
         </div>
       </EntityRow>
 
-      {/* scrollable account list — the Lucius "nav" screen-context region */}
+      {/* scrollable account list — the Uzi "nav" screen-context region */}
       <div className="acct-side-scroll" data-ctx-region="nav" data-ctx-region-label="Accounts">
         {/* "All accounts" row */}
         <div

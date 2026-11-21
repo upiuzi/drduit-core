@@ -920,7 +920,7 @@ export function AssetPriceChart({
               not a link; .asd-chart-brand hides it under the same 640px breakpoint the
               timeframe controls swap at, so it never crowds the compact dropdown. */}
           <span className="asd-chart-brand" aria-hidden="true">
-            Open Net Worth
+            Dr Duit
           </span>
         </div>
       </div>

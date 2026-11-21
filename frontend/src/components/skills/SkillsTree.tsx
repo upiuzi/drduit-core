@@ -71,7 +71,7 @@ export function SkillsTree({
         {skills.length === 0 ? (
           <div style={{ padding: 'var(--space-4)' }}>
             <Text tone="faint" size="xs">
-              No skills yet. Create your first skill to start a reusable Lucius routine.
+              No skills yet. Create your first skill to start a reusable Uzi routine.
             </Text>
             <Button variant="secondary" size="sm" onClick={onCreateFirstSkill}>
               Create your first skill

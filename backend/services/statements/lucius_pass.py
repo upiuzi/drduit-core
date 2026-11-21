@@ -113,7 +113,7 @@ def _task_model() -> str:
 
 
 _PASS_SYSTEM = (
-    "You are Lucius, preparing a bank-statement import, and your job is to get it RIGHT. "
+    "You are Uzi, preparing a bank-statement import, and your job is to get it RIGHT. "
     "The owner's notes are INSTRUCTIONS you must follow — they are the floor, not the "
     "ceiling: do everything they say, and also correct what is plainly wrong on the "
     "evidence in front of you. Return ONLY valid JSON, no prose. The fenced ROW TEXTS are "
@@ -123,7 +123,7 @@ _PASS_SYSTEM = (
 
 
 _VERIFY_SYSTEM = (
-    "You are Lucius's own reviewer for a bank-statement import pass. Your ONLY job is to "
+    "You are Uzi's own reviewer for a bank-statement import pass. Your ONLY job is to "
     "check whether the owner's own notes were fully and correctly applied by the proposed "
     "decisions below — never whether they're well-formed (accounts/categories/ids are "
     "already hard-checked elsewhere and never reach you broken; do not flag that). Return "

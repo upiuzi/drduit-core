@@ -15,7 +15,7 @@ def protected_resource() -> dict:
         "authorization_servers": [settings.public_url()],
         "scopes_supported": list(SCOPES),
         "bearer_methods_supported": ["header"],
-        "resource_name": "Open Net Worth",
+        "resource_name": "Dr Duit",
     }
 
 

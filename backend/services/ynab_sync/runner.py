@@ -148,7 +148,7 @@ def _assigned_phase(
                     names,
                     conflicts.FAILED,
                     f"This book couldn't take {app}'s Assigned for {names.get(it.cid, 'this category')} "
-                    f"in {month_name(it.month)}. Keep Open Net Worth's to send this book's instead.",
+                    f"in {month_name(it.month)}. Keep Dr Duit's to send this book's instead.",
                 )
                 continue
             base.set_assigned(it.month, it.cid, it.ynab)
@@ -165,9 +165,9 @@ def _assigned_phase(
                 conflicts.CONFLICT,
                 (
                     f"The Assigned of {names.get(it.cid, 'this category')} for {month_name(it.month)} differs "
-                    f"between Open Net Worth and {app}. Pick the one to keep."
+                    f"between Dr Duit and {app}. Pick the one to keep."
                     if it.cid in fresh
-                    else f"Changed in both Open Net Worth and {app} since the last sync."
+                    else f"Changed in both Dr Duit and {app} since the last sync."
                 ),
                 fresh=it.cid in fresh,
             )

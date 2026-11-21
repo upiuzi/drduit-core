@@ -143,7 +143,7 @@ describe('StepRestore — preview before it writes anything', () => {
 
   it('refuses to offer the import when the bundle is invalid', async () => {
     const message =
-      "This file isn't an Open Net Worth backup. Choose the .zip you exported from Settings \u2192 Data."
+      "This file isn't a Dr Duit backup. Choose the .zip you exported from Settings \u2192 Data."
     mockApi({ ...GOOD_REPORT, ok: false, errors: [message] })
     render(<StepRestore onDone={() => {}} onBack={() => {}} />)
 

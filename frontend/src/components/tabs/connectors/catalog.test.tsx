@@ -185,7 +185,7 @@ describe('native entries carry links too, and every one was fetched', () => {
   it('points a connector WE publish at our own site, and nobody else at it', () => {
     for (const e of CATALOG) {
       const ours = e.homepageUrl === 'https://opennetworth.ai'
-      expect(ours, e.id).toBe(e.publisher === 'Open Net Worth')
+      expect(ours, e.id).toBe(e.publisher === 'Dr Duit')
     }
   })
 

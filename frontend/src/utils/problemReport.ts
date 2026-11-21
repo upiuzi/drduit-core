@@ -34,7 +34,7 @@ const EMAIL_BODY_CHARS = 1000
 /** The report as plain text: what Copy report puts on the clipboard and Email instead pastes in. */
 export function reportText(report: ProblemReport): string {
   const lines = [
-    'Open Net Worth problem report',
+    'Dr Duit problem report',
     '',
     `Version: ${report.app_version}`,
     `Platform: ${report.platform}`,
@@ -64,7 +64,7 @@ export function discordText(report: ProblemReport): string {
 
 /** A mail draft carries the top of the report; the whole text, logs included, goes on the clipboard. */
 export function emailHref(report: ProblemReport): string {
-  const subject = `Open Net Worth problem report (${report.app_version})`
+  const subject = `Dr Duit problem report (${report.app_version})`
   const body = reportText(report).slice(0, EMAIL_BODY_CHARS)
   return `mailto:${SUPPORT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
 }

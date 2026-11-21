@@ -52,8 +52,8 @@ export function ThinkingRow({ text, streaming }: { text: string; streaming?: boo
         onClick={() => setChoice(!open)}
       >
         <span className="msg-toolact__icon">
-          {/* LuciusMark is the app's Lucius mark ("Ask Lucius about…") — the reasoning is
-              Lucius's, so it wears Lucius's icon rather than a generic brain. */}
+          {/* LuciusMark is the app's Uzi mark ("Ask Uzi about…") — the reasoning is
+              Uzi's, so it wears Uzi's icon rather than a generic brain. */}
           <LuciusMark size={14} strokeWidth={1.5} aria-hidden="true" />
         </span>
         <span className="msg-toolact__label msg-toolact__label--think">

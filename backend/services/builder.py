@@ -155,12 +155,12 @@ def engine_statuses() -> list[dict[str, Any]]:
         "codex": {
             "label": "Codex",
             "build_is_sandboxed": True,
-            "guidance": "Install Codex, run `codex login`, then restart Open Net Worth.",
+            "guidance": "Install Codex, run `codex login`, then restart Dr Duit.",
         },
         "claude": {
             "label": "Claude Code",
             "build_is_sandboxed": False,
-            "guidance": "Install Claude Code, run `claude login`, then restart Open Net Worth.",
+            "guidance": "Install Claude Code, run `claude login`, then restart Dr Duit.",
         },
     }
     refusal = _execution_refusal()
@@ -249,12 +249,12 @@ def build_prompt(mode: BuilderMode, request: str) -> str:
         )
     else:
         authority = (
-            "This is an implementation run. You may inspect and edit this Open Net Worth checkout to "
+            "This is an implementation run. You may inspect and edit this Dr Duit checkout to "
             "deliver the requested outcome. Follow the repository instructions and run relevant "
             "tests. Preserve unrelated user changes."
         )
     return (
-        "You are the local coding engine behind Open Net Worth's human-operated Build workspace.\n\n"
+        "You are the local coding engine behind Dr Duit's human-operated Build workspace.\n\n"
         f"{authority}\n\n"
         "Do not commit, push, open a pull request, or deploy. Those actions require separate "
         "human authority outside this workspace.\n\n"
@@ -500,7 +500,7 @@ class BuilderManager:
             raise BuilderValidationError(f"Unknown Builder mode {mode!r}.")
         cleaned_prompt = (prompt or "").strip()
         if not cleaned_prompt:
-            raise BuilderValidationError("Describe the change you want Open Net Worth to make.")
+            raise BuilderValidationError("Describe the change you want Dr Duit to make.")
         if len(cleaned_prompt) > MAX_PROMPT_LENGTH:
             raise BuilderValidationError(
                 f"Keep the request under {MAX_PROMPT_LENGTH:,} characters and attach detail in files."

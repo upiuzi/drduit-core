@@ -13,7 +13,7 @@ import { ConnectorAccountsList } from './ConnectorAccountsList'
 // deliberately excludes from its revealable-fields allowlist for the identical reason. The
 // GET only echoes `has_access_url`; a blank setup-token field leaves the saved access URL
 // unchanged. This form owns the config fields (setup token / enable); fetching transactions
-// is now Lucius's job via a template (see the connector page's Automate button) — the unified
+// is now Uzi's job via a template (see the connector page's Automate button) — the unified
 // /api/connectors PATCH owns the card-header enable toggle. Save lives in the modal
 // footer — see ./formSave.
 
@@ -127,7 +127,7 @@ export function SimpleFinSection() {
         </a>{' '}
         (US / Canada, ~$15/yr — no OAuth). Create a SimpleFIN access at your provider, then paste
         the one-time <strong>setup token</strong> below. Fetching and booking transactions is
-        Lucius's job — automate it with a template below.
+        Uzi's job — automate it with a template below.
       </Text>
 
       {cfg.configured && !cfg.enabled && (

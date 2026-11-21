@@ -73,7 +73,7 @@ function DocsTable({ a, onOpen, onToggle, onRename, onNote, onRemove }: DocsTabl
             <tr>
               <th className="l">File</th>
               <th>Added</th>
-              <th style={{ textAlign: 'right' }}>Lucius can read</th>
+              <th style={{ textAlign: 'right' }}>Uzi can read</th>
               <th>
                 <span className="ui-visually-hidden">Actions</span>
               </th>
@@ -101,7 +101,7 @@ function DocsTable({ a, onOpen, onToggle, onRename, onNote, onRemove }: DocsTabl
                 <td className="dim">{monthYear(d.added_on)}</td>
                 <td style={{ textAlign: 'right' }} onClick={(e) => e.stopPropagation()}>
                   <Switch
-                    aria-label={`Lucius can read ${d.name}`}
+                    aria-label={`Uzi can read ${d.name}`}
                     checked={d.lucius_readable}
                     onChange={(e) => onToggle(d, e.target.checked)}
                   />
@@ -154,7 +154,7 @@ function DocsList({ a, onOpen, onToggle, onRename, onNote, onRemove }: DocsTable
               )}
               <Text size="xs" tone="faint">
                 {monthYear(d.added_on)} ·{' '}
-                {d.lucius_readable ? 'Lucius can read' : 'Lucius can’t read'}
+                {d.lucius_readable ? 'Uzi can read' : 'Uzi can’t read'}
               </Text>
             </span>
           </button>
@@ -166,7 +166,7 @@ function DocsList({ a, onOpen, onToggle, onRename, onNote, onRemove }: DocsTable
               { label: 'Rename', onSelect: () => onRename(d) },
               noteItem(d, onNote),
               {
-                label: d.lucius_readable ? 'Don’t let Lucius read it' : 'Let Lucius read it',
+                label: d.lucius_readable ? 'Don’t let Uzi read it' : 'Let Uzi read it',
                 onSelect: () => onToggle(d, !d.lucius_readable),
               },
               { label: 'Remove', tone: 'danger', onSelect: () => onRemove(d) },

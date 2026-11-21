@@ -421,7 +421,7 @@ def inspect_bundle(source: BundleSource, *, verify_blobs: bool = True) -> dict:
             "files": [],
             "warnings": [],
             "errors": [
-                "This file isn't an Open Net Worth backup. Choose the .zip you exported from "
+                "This file isn't a Dr Duit backup. Choose the .zip you exported from "
                 "Settings \u2192 Data."
             ],
         }

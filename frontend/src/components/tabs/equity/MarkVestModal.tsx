@@ -160,7 +160,7 @@ export function MarkVestModal({ grant, tranche, onClose, onDone }: Props) {
           )}
           <Text as="p" size="sm" tone="faint">
             To undo, use the Undo button on the grant detail or restore from the checkpoint in
-            Lucius chat.
+            Uzi chat.
           </Text>
         </Stack>
       </Modal>

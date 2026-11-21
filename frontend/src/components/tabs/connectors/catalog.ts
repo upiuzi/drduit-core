@@ -61,7 +61,7 @@ export interface CatalogEntry extends Omit<
   /**
    * A feature flag this NATIVE connector ships behind (`core/feature_flags.py`). The backend is
    * the one seam that reads it: off, `list_connectors()` omits the connector, so the directory
-   * lists the card only when its live counterpart exists, and Lucius's directory search skips it.
+   * lists the card only when its live counterpart exists, and Uzi's directory search skips it.
    */
   flag?: string
   /** The vendor. `null` for a server the user points us at themselves. */
@@ -247,7 +247,7 @@ export const CATALOG: CatalogEntry[] = [
     hue: 'var(--accent)',
     // sub/desc: read live from services/connectors.py's `_SHORT_DESC`/`_LONG_DESC["telegram"]` —
     // see `CatalogEntry.sub`'s doc comment.
-    publisher: 'Open Net Worth',
+    publisher: 'Dr Duit',
     verification: 'unverified',
     // OURS — we publish this connector, so the attribution line links to us, not to Telegram.
     homepageUrl: 'https://opennetworth.ai',
@@ -261,7 +261,7 @@ export const CATALOG: CatalogEntry[] = [
     tools: [],
   },
   {
-    // Voice calls with Lucius — listed only while the `voice_calls` flag is on.
+    // Voice calls with Uzi — listed only while the `voice_calls` flag is on.
     id: 'voice',
     flag: 'voice_calls',
     name: 'Voice calls',
@@ -270,7 +270,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'voice',
     hue: 'var(--cta)',
     // sub/desc: read live from `services/connector_copy.py` SHORT/LONG["voice"].
-    publisher: 'Open Net Worth',
+    publisher: 'Dr Duit',
     verification: 'unverified',
     homepageUrl: 'https://opennetworth.ai',
     // The call's audio and the front voice's side of the conversation cross LiveKit.
@@ -291,7 +291,7 @@ export const CATALOG: CatalogEntry[] = [
     hue: 'var(--recv)',
     // sub/desc: read live from `_SHORT_DESC`/`_LONG_DESC["email"]` — see `CatalogEntry.sub`'s
     // doc comment. This is the exact connector the owner hit the drift bug on three times.
-    publisher: 'Open Net Worth',
+    publisher: 'Dr Duit',
     verification: 'unverified',
     // OURS. No privacy link, and correctly so: this connector talks to the user's OWN mail
     // server. There is no vendor service in the middle whose policy would govern it.
@@ -385,7 +385,7 @@ export const CATALOG: CatalogEntry[] = [
     tools: ['get_connector_status', 'connector_sync'],
   },
   {
-    // Behind the `actual_budget_sync` flag. No Lucius tools: it is driven from the Data Sync tab.
+    // Behind the `actual_budget_sync` flag. No Uzi tools: it is driven from the Data Sync tab.
     id: 'actual_budget',
     flag: 'actual_budget_sync',
     name: 'Actual Budget',
@@ -453,7 +453,7 @@ export const CATALOG: CatalogEntry[] = [
     privacyUrl: 'https://legal.yahoo.com/us/en/yahoo/privacy/index.html',
     mcp: false,
     popular: false,
-    // No Lucius tools — a price-fetch backend, not a callable tool surface (this is a
+    // No Uzi tools — a price-fetch backend, not a callable tool surface (this is a
     // migration of the existing "Data" settings panel, not a new capability).
     tools: [],
   },
@@ -485,7 +485,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'link2',
     hue: 'var(--accent)',
     // sub/desc: read live from `_SHORT_DESC`/`_LONG_DESC["rest"]`.
-    publisher: 'Open Net Worth',
+    publisher: 'Dr Duit',
     verification: 'unverified',
     // OURS, and no privacy link: it talks to whatever API the person points it at, so there
     // is no vendor of ours in the middle whose policy would govern it.
@@ -608,7 +608,7 @@ export const CATALOG: CatalogEntry[] = [
 
   // ── MCP (third-party — someone else's code, over a transport we don't own) ────
   //
-  // Every `desc` here is written from the server's OWN published tool list, so "Lucius can …"
+  // Every `desc` here is written from the server's OWN published tool list, so "Uzi can …"
   // names capabilities that actually exist rather than what the vendor's marketing implies.
   // Where a server WRITES to a live financial account, the description says so plainly — as a
   // fact about what it does, not as a warning. There is deliberately no capability tier and no
@@ -625,8 +625,8 @@ export const CATALOG: CatalogEntry[] = [
     categories: [],
     icon: 'cpu',
     hue: 'var(--apt)',
-    sub: 'Point Lucius at any MCP endpoint — URL or local command',
-    desc: 'Connect any MCP-compatible server — a hosted URL or a command that runs on this machine — and Lucius gains whatever tools that server exposes. Lucius connects once before anything is saved, lists the tools it found, and shows you each one so you can set its permission level before it can ever be called. Useful when a service you already use publishes its own MCP server, when you run a server of your own, or when you need a capability nothing else in this directory covers — you supply the endpoint and credentials, and nothing is added until the connection actually answers.',
+    sub: 'Point Uzi at any MCP endpoint — URL or local command',
+    desc: 'Connect any MCP-compatible server — a hosted URL or a command that runs on this machine — and Uzi gains whatever tools that server exposes. Uzi connects once before anything is saved, lists the tools it found, and shows you each one so you can set its permission level before it can ever be called. Useful when a service you already use publishes its own MCP server, when you run a server of your own, or when you need a capability nothing else in this directory covers — you supply the endpoint and credentials, and nothing is added until the connection actually answers.',
     // No publisher, and specifically NOT "Open Net Worth": we author the add flow, not the
     // server you point it at (spec §5 calls that claim out as a contradiction).
     publisher: null,
@@ -643,8 +643,8 @@ export const CATALOG: CatalogEntry[] = [
     categories: ['Browsing'],
     icon: 'cpu',
     hue: 'var(--apt)',
-    sub: 'Real browser rendering for Lucius in chat',
-    desc: 'Connect Playwright MCP to give Lucius a real, controllable browser instead of a raw HTML fetch. Lucius can navigate to a page and wait for it to render, read a structured snapshot of what is actually on screen, click links and buttons, type into fields, fill and submit whole forms, and take screenshots it can show you in chat. Useful for anything a plain fetch returns empty — a bank or broker portal that renders in JavaScript, a multi-step flow that has to be walked rather than requested, or capturing what a statement page looked like so you can see exactly what Lucius saw.',
+    sub: 'Real browser rendering for Uzi in chat',
+    desc: 'Connect Playwright MCP to give Uzi a real, controllable browser instead of a raw HTML fetch. Uzi can navigate to a page and wait for it to render, read a structured snapshot of what is actually on screen, click links and buttons, type into fields, fill and submit whole forms, and take screenshots it can show you in chat. Useful for anything a plain fetch returns empty — a bank or broker portal that renders in JavaScript, a multi-step flow that has to be walked rather than requested, or capturing what a statement page looked like so you can see exactly what Uzi saw.',
     publisher: 'Microsoft',
     verification: 'verified',
     repoUrl: 'https://github.com/microsoft/playwright-mcp',
@@ -668,7 +668,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'search',
     hue: 'var(--apt)',
     sub: 'Crawl + scrape sites into clean markdown',
-    desc: 'Connect Firecrawl to let Lucius read whole sites rather than one page at a time. Lucius can scrape a single URL into clean markdown, map a site to discover every reachable URL, crawl a section and bring back all of it, run a web search that returns full page content instead of snippets, and extract structured fields from a set of pages against a shape you describe. Useful when the answer is spread across a documentation set, an investor-relations section, or a fee schedule split over a dozen pages — and for pulling a rate table or a set of figures back as data instead of prose.',
+    desc: 'Connect Firecrawl to let Uzi read whole sites rather than one page at a time. Uzi can scrape a single URL into clean markdown, map a site to discover every reachable URL, crawl a section and bring back all of it, run a web search that returns full page content instead of snippets, and extract structured fields from a set of pages against a shape you describe. Useful when the answer is spread across a documentation set, an investor-relations section, or a fee schedule split over a dozen pages — and for pulling a rate table or a set of figures back as data instead of prose.',
     publisher: 'Firecrawl',
     verification: 'verified',
     repoUrl: 'https://github.com/firecrawl/firecrawl-mcp-server',
@@ -695,7 +695,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'accounts',
     hue: 'var(--apt)',
     sub: 'Payments, invoices, and balances from your Stripe account',
-    desc: 'Connect Stripe to let Lucius work with your Stripe account directly. Lucius can read your balance, charges, payment intents, checkout sessions, invoices, subscriptions, customers, products, prices, payouts, disputes and balance transactions, issue a refund, create an invoice, and search Stripe’s API reference and documentation while you build against it. Its general write tool also creates and updates Stripe objects, so Lucius can raise an invoice or change a subscription, not only read one. Useful for reconciling what Stripe paid out against what landed in your bank, finding which invoices are still unpaid, tracing a customer’s billing history, or checking a balance without opening the dashboard.',
+    desc: 'Connect Stripe to let Uzi work with your Stripe account directly. Uzi can read your balance, charges, payment intents, checkout sessions, invoices, subscriptions, customers, products, prices, payouts, disputes and balance transactions, issue a refund, create an invoice, and search Stripe’s API reference and documentation while you build against it. Its general write tool also creates and updates Stripe objects, so Uzi can raise an invoice or change a subscription, not only read one. Useful for reconciling what Stripe paid out against what landed in your bank, finding which invoices are still unpaid, tracing a customer’s billing history, or checking a balance without opening the dashboard.',
     publisher: 'Stripe',
     verification: 'verified',
     repoUrl: 'https://github.com/stripe/ai',
@@ -727,7 +727,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'accounts',
     hue: 'var(--apt)',
     sub: 'Read and write a QuickBooks Online company',
-    desc: 'Connect QuickBooks Online to let Lucius work with your company’s books. Lucius can pull the Balance Sheet, Profit & Loss, Cash Flow, Trial Balance, General Ledger and aged receivables and payables, and search or read customers, vendors, invoices, bills, payments, purchases, deposits, transfers and journal entries across twenty-nine entity types. Create, update and delete tools are registered by default, so Lucius can also raise an invoice, record a payment, add a customer or void a document — each of those three categories can be switched off with an environment variable when you set the server up. Useful for pulling a report without opening QuickBooks, tracing a figure back to the document behind it, or reconciling a QuickBooks balance against an account tracked here.',
+    desc: 'Connect QuickBooks Online to let Uzi work with your company’s books. Uzi can pull the Balance Sheet, Profit & Loss, Cash Flow, Trial Balance, General Ledger and aged receivables and payables, and search or read customers, vendors, invoices, bills, payments, purchases, deposits, transfers and journal entries across twenty-nine entity types. Create, update and delete tools are registered by default, so Uzi can also raise an invoice, record a payment, add a customer or void a document — each of those three categories can be switched off with an environment variable when you set the server up. Useful for pulling a report without opening QuickBooks, tracing a figure back to the document behind it, or reconciling a QuickBooks balance against an account tracked here.',
     publisher: 'Intuit',
     verification: 'verified',
     repoUrl: 'https://github.com/intuit/quickbooks-online-mcp-server',
@@ -754,7 +754,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'accounts',
     hue: 'var(--apt)',
     sub: 'Read and write a Xero organisation',
-    desc: 'Connect Xero to let Lucius work with your organisation’s accounting data. Lucius can list invoices, bank transactions, contacts, accounts, items, payments, credit notes, quotes, manual journals, tracking categories and tax rates, and pull the Balance Sheet, Profit & Loss, Trial Balance and aged receivables and payables reports. It can also create and update invoices, payments, contacts, bank transactions, credit notes, quotes, items and manual journals, and read and edit payroll timesheets — write access is on by default, bounded only by the OAuth scopes on the connection you create. Useful for checking what is owed and what is overdue, reconciling a Xero bank feed against an account tracked here, or drafting an invoice straight out of a conversation.',
+    desc: 'Connect Xero to let Uzi work with your organisation’s accounting data. Uzi can list invoices, bank transactions, contacts, accounts, items, payments, credit notes, quotes, manual journals, tracking categories and tax rates, and pull the Balance Sheet, Profit & Loss, Trial Balance and aged receivables and payables reports. It can also create and update invoices, payments, contacts, bank transactions, credit notes, quotes, items and manual journals, and read and edit payroll timesheets — write access is on by default, bounded only by the OAuth scopes on the connection you create. Useful for checking what is owed and what is overdue, reconciling a Xero bank feed against an account tracked here, or drafting an invoice straight out of a conversation.',
     publisher: 'Xero',
     verification: 'verified',
     repoUrl: 'https://github.com/XeroAPI/xero-mcp-server',
@@ -782,7 +782,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'accounts',
     hue: 'var(--apt)',
     sub: 'Read-only access to Mercury business banking',
-    desc: 'Connect Mercury to let Lucius read your business banking data. Mercury’s hosted server exposes accounts, balances, transactions with the category, merchant and spending user attached to each, cards, recipients, treasury accounts and downloadable statements. It is read-only by design — it cannot move money, send a payment, or change anything in the account. Useful for reconciling Mercury balances against what is recorded here, categorising business spend, pulling a statement for a period you are closing, or answering “what did we pay this vendor last quarter” without opening the dashboard. Sign-in happens in the browser over OAuth.',
+    desc: 'Connect Mercury to let Uzi read your business banking data. Mercury’s hosted server exposes accounts, balances, transactions with the category, merchant and spending user attached to each, cards, recipients, treasury accounts and downloadable statements. It is read-only by design — it cannot move money, send a payment, or change anything in the account. Useful for reconciling Mercury balances against what is recorded here, categorising business spend, pulling a statement for a period you are closing, or answering “what did we pay this vendor last quarter” without opening the dashboard. Sign-in happens in the browser over OAuth.',
     publisher: 'Mercury',
     verification: 'verified',
     homepageUrl: 'https://docs.mercury.com/docs/what-is-mercury-mcp',
@@ -802,7 +802,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'accounts',
     hue: 'var(--apt)',
     sub: 'Reads and edits your Monarch transactions and budgets',
-    desc: 'Connect Monarch’s own hosted server to let Lucius work with your Monarch data: transactions, accounts, balances, categories, budgets and net worth. If you allow writing, it can also create and edit transactions, tags and rules, and Monarch can’t undo those changes. Sign-in happens in the browser over OAuth, and Monarch’s consent page lets you leave Write unticked for read-only access. Accounts Monarch gets through Finicity aren’t available to it yet, which particularly affects Fidelity. Monarch sets a weekly usage limit, higher on Plus than on Core.',
+    desc: 'Connect Monarch’s own hosted server to let Uzi work with your Monarch data: transactions, accounts, balances, categories, budgets and net worth. If you allow writing, it can also create and edit transactions, tags and rules, and Monarch can’t undo those changes. Sign-in happens in the browser over OAuth, and Monarch’s consent page lets you leave Write unticked for read-only access. Accounts Monarch gets through Finicity aren’t available to it yet, which particularly affects Fidelity. Monarch sets a weekly usage limit, higher on Plus than on Core.',
     publisher: 'Monarch',
     verification: 'verified',
     // help.monarch.com publishes this endpoint, but it refuses non-browser clients, so it is
@@ -821,7 +821,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--ibkr)',
     sub: 'Trades stocks, options & futures; live positions and P&L',
-    desc: 'Connect Interactive Brokers’ own hosted server to let Lucius work with your IBKR account directly. It exposes account balances, positions, trades, orders and performance; quotes, price history, option chains and contract search; screeners, watchlists, price alerts and IBKR’s company research. It can also act: it previews, submits, modifies and cancels orders, and edits watchlists, alerts and saved screeners. Useful for reconciling IBKR positions against what is recorded here, checking an allocation or a day’s move, researching a holding, or drafting an order you review before it goes. Sign-in happens on IBKR’s own login screen over OAuth, for one account at a time; you can revoke it in Client Portal under Settings › Manage Third-Party Consents.',
+    desc: 'Connect Interactive Brokers’ own hosted server to let Uzi work with your IBKR account directly. It exposes account balances, positions, trades, orders and performance; quotes, price history, option chains and contract search; screeners, watchlists, price alerts and IBKR’s company research. It can also act: it previews, submits, modifies and cancels orders, and edits watchlists, alerts and saved screeners. Useful for reconciling IBKR positions against what is recorded here, checking an allocation or a day’s move, researching a holding, or drafting an order you review before it goes. Sign-in happens on IBKR’s own login screen over OAuth, for one account at a time; you can revoke it in Client Portal under Settings › Manage Third-Party Consents.',
     publisher: 'Interactive Brokers',
     verification: 'verified',
     // IBKR's own pages publish this exact endpoint for "any MCP client": the AI-integrations
@@ -849,7 +849,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades US stocks in an agent account; reads every account',
-    desc: 'Connect Robinhood’s own hosted Trading server to let Lucius see your Robinhood investing. It can read every Robinhood account you hold — account numbers, positions, balances and order history included — but it can only place trades inside a separate Agentic account that Robinhood opens when you connect, using only the money you move into it. Robinhood describes it as a beta that trades US equities for now. Robinhood sends a push notification for each trade. Useful for reconciling Robinhood positions against what is recorded here, reviewing allocation and order history, or trying an idea with a small, ring-fenced balance. Sign-in happens on Robinhood’s own screen over OAuth.',
+    desc: 'Connect Robinhood’s own hosted Trading server to let Uzi see your Robinhood investing. It can read every Robinhood account you hold — account numbers, positions, balances and order history included — but it can only place trades inside a separate Agentic account that Robinhood opens when you connect, using only the money you move into it. Robinhood describes it as a beta that trades US equities for now. Robinhood sends a push notification for each trade. Useful for reconciling Robinhood positions against what is recorded here, reviewing allocation and order history, or trying an idea with a small, ring-fenced balance. Sign-in happens on Robinhood’s own screen over OAuth.',
     publisher: 'Robinhood',
     verification: 'verified',
     // Robinhood's Help Center publishes this endpoint ("Onboarding an external agent"), and its
@@ -869,7 +869,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades and researches: quotes, options, live positions',
-    desc: 'Connect moomoo’s own hosted server to let Lucius work with your moomoo account through moomoo OpenAPI. moomoo describes it as real-time quotes, derivatives screening, fundamentals and technicals, portfolio management and trade execution, so it can act on your account. Unlike moomoo’s older API route it needs no OpenD gateway running on this machine. Useful for checking moomoo positions against what is recorded here, researching a holding, or screening options. Sign-in happens on moomoo’s own consent page over OAuth.',
+    desc: 'Connect moomoo’s own hosted server to let Uzi work with your moomoo account through moomoo OpenAPI. moomoo describes it as real-time quotes, derivatives screening, fundamentals and technicals, portfolio management and trade execution, so it can act on your account. Unlike moomoo’s older API route it needs no OpenD gateway running on this machine. Useful for checking moomoo positions against what is recorded here, researching a holding, or screening options. Sign-in happens on moomoo’s own consent page over OAuth.',
     publisher: 'moomoo',
     verification: 'verified',
     // moomoo's OpenAPI docs (open.moomoo.com/mcp-docs) publish this endpoint and its OAuth flow.
@@ -888,7 +888,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades stocks, options & crypto; paper trading by default',
-    desc: 'Connect Alpaca’s own MCP server, run on this machine, to let Lucius trade at Alpaca — unlike the read-only Alpaca data source, which only imports positions. It reads your account, positions, orders and market data, and places, changes and cancels stock, option and crypto orders. It starts on paper trading: add ALPACA_PAPER_TRADE=false to the environment variables for real money. Needs uv on this machine, and an Alpaca API key pair pasted into the environment variables.',
+    desc: 'Connect Alpaca’s own MCP server, run on this machine, to let Uzi trade at Alpaca — unlike the read-only Alpaca data source, which only imports positions. It reads your account, positions, orders and market data, and places, changes and cancels stock, option and crypto orders. It starts on paper trading: add ALPACA_PAPER_TRADE=false to the environment variables for real money. Needs uv on this machine, and an Alpaca API key pair pasted into the environment variables.',
     publisher: 'Alpaca',
     verification: 'verified',
     // alpacahq/alpaca-mcp-server is Alpaca's own org; the PyPI package links back to it.
@@ -907,7 +907,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades crypto on Coinbase; balances, orders, fills, fees',
-    desc: 'Connect Coinbase’s own MCP server — part of the Coinbase CLI, run on this machine — to let Lucius trade on Coinbase Advanced Trade. It reads balances, portfolios, orders, fills, fees and market data; previews, places, edits and cancels orders; converts between assets; and moves funds between your own portfolios (never out to an external address). Needs Node.js 22 or later, and a Coinbase developer API key whose permissions you choose when you create it — pick ECDSA as its signature algorithm, since Advanced Trade refuses Ed25519 keys.',
+    desc: 'Connect Coinbase’s own MCP server — part of the Coinbase CLI, run on this machine — to let Uzi trade on Coinbase Advanced Trade. It reads balances, portfolios, orders, fills, fees and market data; previews, places, edits and cancels orders; converts between assets; and moves funds between your own portfolios (never out to an external address). Needs Node.js 22 or later, and a Coinbase developer API key whose permissions you choose when you create it — pick ECDSA as its signature algorithm, since Advanced Trade refuses Ed25519 keys.',
     publisher: 'Coinbase',
     verification: 'verified',
     // @coinbase/coinbase-cli is published by Coinbase's own npm accounts. Help-centre and
@@ -925,7 +925,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades spot, perpetuals & options on OKX; demo by default',
-    desc: 'Connect OKX’s own Agent Trade Kit server, run on this machine, to let Lucius trade on OKX. It reads balances, positions, orders, fills and bills, and places, amends and cancels spot, perpetual-swap and option orders, including algo orders and grid bots. It starts in OKX’s demo (simulated) trading: remove --demo from the arguments for real money, or add --read-only to allow no orders at all. Needs Node.js 18 or later, and an OKX API key, secret and passphrase.',
+    desc: 'Connect OKX’s own Agent Trade Kit server, run on this machine, to let Uzi trade on OKX. It reads balances, positions, orders, fills and bills, and places, amends and cancels spot, perpetual-swap and option orders, including algo orders and grid bots. It starts in OKX’s demo (simulated) trading: remove --demo from the arguments for real money, or add --read-only to allow no orders at all. Needs Node.js 18 or later, and an OKX API key, secret and passphrase.',
     publisher: 'OKX',
     verification: 'verified',
     // okx/agent-trade-kit is OKX's own org; the @okx_ai npm package is maintained from OKG.
@@ -944,7 +944,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Crypto market data, balances, paper trading; live opt-in',
-    desc: 'Connect Kraken’s own MCP server — part of the Kraken CLI, run on this machine — to let Lucius work with your Kraken account. As set up here it reads market data, your balances, orders, trades and ledgers, and paper-trades with no real money. Live spot orders are opt-in: add trade to the -s list in the arguments (futures for futures); keep funding out unless you want deposits and withdrawals offered. Install the Kraken CLI first (macOS or Linux), and paste a Kraken API key and secret — create the key with only the permissions you want allowed.',
+    desc: 'Connect Kraken’s own MCP server — part of the Kraken CLI, run on this machine — to let Uzi work with your Kraken account. As set up here it reads market data, your balances, orders, trades and ledgers, and paper-trades with no real money. Live spot orders are opt-in: add trade to the -s list in the arguments (futures for futures); keep funding out unless you want deposits and withdrawals offered. Install the Kraken CLI first (macOS or Linux), and paste a Kraken API key and secret — create the key with only the permissions you want allowed.',
     publisher: 'Kraken',
     verification: 'verified',
     // krakenfx/kraken-cli is Kraken's own org; v0.5.1 moved the server to its own `kraken-mcp`
@@ -965,7 +965,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Accounts, positions, quotes; orders you confirm in Webull',
-    desc: 'Connect Webull’s own hosted server (Webull Cloud MCP) to let Lucius work with your Webull account. It reads your accounts, balances, positions, orders and market data, and can stage stock, option, futures and crypto orders — which Webull holds as instructions until you confirm each one in the Webull app. You choose which accounts and which capability groups to grant on Webull’s own consent page, signed in over OAuth with your Webull trading password. Market data needs a Webull subscription.',
+    desc: 'Connect Webull’s own hosted server (Webull Cloud MCP) to let Uzi work with your Webull account. It reads your accounts, balances, positions, orders and market data, and can stage stock, option, futures and crypto orders — which Webull holds as instructions until you confirm each one in the Webull app. You choose which accounts and which capability groups to grant on Webull’s own consent page, signed in over OAuth with your Webull trading password. Market data needs a Webull subscription.',
     publisher: 'Webull',
     verification: 'verified',
     // developer.webull.com documents this endpoint (AI-friendly Resources → MCP); its 401
@@ -986,7 +986,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades stocks and options; US, HK, SG and China quotes',
-    desc: 'Connect Longbridge’s own hosted server to let Lucius work with your Longbridge account (Singapore, Hong Kong or US). It reads quotes for US, Hong Kong, Singapore and China A-share listings, options, fundamentals, your account and portfolio, and places, changes and cancels orders, plus price alerts and recurring investment plans, so it can act on your account with real money. Which markets you can trade depends on your Longbridge account and region. Sign-in happens on Longbridge’s own consent page over OAuth. Customers in mainland China use https://mcp.longbridge.cn instead.',
+    desc: 'Connect Longbridge’s own hosted server to let Uzi work with your Longbridge account (Singapore, Hong Kong or US). It reads quotes for US, Hong Kong, Singapore and China A-share listings, options, fundamentals, your account and portfolio, and places, changes and cancels orders, plus price alerts and recurring investment plans, so it can act on your account with real money. Which markets you can trade depends on your Longbridge account and region. Sign-in happens on Longbridge’s own consent page over OAuth. Customers in mainland China use https://mcp.longbridge.cn instead.',
     publisher: 'Longbridge',
     verification: 'verified',
     // open.longbridge.com/docs/mcp publishes this endpoint; the server is longbridge/
@@ -1007,7 +1007,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Reads quotes, positions, assets & orders; no trading yet',
-    desc: 'Connect Tiger Brokers’ own hosted server to let Lucius read your Tiger account — quotes, positions, assets, orders and transactions — for checking holdings against what is recorded here. Tiger lists trading through this server as coming soon, so today it cannot place orders. For individual accounts in the markets Tiger serves (US, Hong Kong, Singapore, Australia, New Zealand, the UK and more). Needs Tiger OpenAPI switched on in Tiger’s Developer Center; quotes are 15 minutes delayed unless you buy real-time quotes for the API. Sign-in happens on Tiger’s own consent page over OAuth.',
+    desc: 'Connect Tiger Brokers’ own hosted server to let Uzi read your Tiger account — quotes, positions, assets, orders and transactions — for checking holdings against what is recorded here. Tiger lists trading through this server as coming soon, so today it cannot place orders. For individual accounts in the markets Tiger serves (US, Hong Kong, Singapore, Australia, New Zealand, the UK and more). Needs Tiger OpenAPI switched on in Tiger’s Developer Center; quotes are 15 minutes delayed unless you buy real-time quotes for the API. Sign-in happens on Tiger’s own consent page over OAuth.',
     publisher: 'Tiger Brokers',
     verification: 'verified',
     // docs.itigerup.com/docs/remote-mcp publishes this endpoint. Tiger's local `tigermcp`
@@ -1026,7 +1026,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Indian holdings, positions, margins & quotes; GTT orders',
-    desc: 'Connect Zerodha’s own hosted Kite MCP server to let Lucius read your Zerodha account — holdings, positions, margins, orders, mutual funds, live quotes and price history on NSE, BSE and MCX. Zerodha’s hosted server places no regular orders; it does let you set, change and delete GTT (good-till-triggered) orders. It is free. Connecting needs no key: once it is added, ask Lucius to log in to Kite, open the link it gives you, and sign in on Zerodha’s own page with your 2FA.',
+    desc: 'Connect Zerodha’s own hosted Kite MCP server to let Uzi read your Zerodha account — holdings, positions, margins, orders, mutual funds, live quotes and price history on NSE, BSE and MCX. Zerodha’s hosted server places no regular orders; it does let you set, change and delete GTT (good-till-triggered) orders. It is free. Connecting needs no key: once it is added, ask Uzi to log in to Kite, open the link it gives you, and sign in on Zerodha’s own page with your 2FA.',
     publisher: 'Zerodha',
     verification: 'verified',
     // Zerodha's support article "Connect Zerodha with an AI assistant" publishes this address;
@@ -1048,7 +1048,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Indian holdings, positions, funds, orders & SIPs; read-only',
-    desc: 'Connect Upstox’s own hosted server to let Lucius read your Upstox account — profile, funds and margin, holdings, positions, orders and trades, mutual fund holdings and SIPs, and IPO applications. It is read-only by design: it cannot place, change or cancel anything. Sign-in happens on Upstox’s own page over OAuth.',
+    desc: 'Connect Upstox’s own hosted server to let Uzi read your Upstox account — profile, funds and margin, holdings, positions, orders and trades, mutual fund holdings and SIPs, and IPO applications. It is read-only by design: it cannot place, change or cancel anything. Sign-in happens on Upstox’s own page over OAuth.',
     publisher: 'Upstox',
     verification: 'verified',
     // upstox.com's developer announcement (plugin marketplace launch, 2026-07-07) publishes
@@ -1070,7 +1070,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades US stocks, options & crypto; live money only',
-    desc: 'Connect Public.com’s own MCP server, run on this machine, to let Lucius trade at Public.com. It reads your portfolio, quotes and tax lots, estimates an order’s cost before it is sent, and places, replaces and cancels stock, ETF, option (including multi-leg), crypto and event-contract orders. Public.com offers no paper or read-only mode, so every order is real money. Needs uv on this machine, and a Public.com API secret from Settings → API pasted into the environment variables.',
+    desc: 'Connect Public.com’s own MCP server, run on this machine, to let Uzi trade at Public.com. It reads your portfolio, quotes and tax lots, estimates an order’s cost before it is sent, and places, replaces and cancels stock, ETF, option (including multi-leg), crypto and event-contract orders. Public.com offers no paper or read-only mode, so every order is real money. Needs uv on this machine, and a Public.com API secret from Settings → API pasted into the environment variables.',
     publisher: 'Public.com',
     verification: 'verified',
     // PyPI publicdotcom-mcp-server is released by PublicDotCom/publicdotcom-mcp-server through a
@@ -1090,7 +1090,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Trades crypto spot, perps & options; live unless testnet',
-    desc: 'Connect Bybit’s own MCP server, run on this machine, to let Lucius work with your Bybit account. It reads market data, balances, positions, orders and history, and places, amends and cancels spot, perpetual and option orders, sets leverage and places Earn orders — close to 400 tools in all. It connects to Bybit’s live exchange unless you add BYBIT_TESTNET=true to the environment variables, and it has no read-only switch of its own: create the API key with only the permissions you want allowed (read-only, if Lucius should not trade). Needs Node.js 20.6 or later, and a Bybit API key and secret.',
+    desc: 'Connect Bybit’s own MCP server, run on this machine, to let Uzi work with your Bybit account. It reads market data, balances, positions, orders and history, and places, amends and cancels spot, perpetual and option orders, sets leverage and places Earn orders — close to 400 tools in all. It connects to Bybit’s live exchange unless you add BYBIT_TESTNET=true to the environment variables, and it has no read-only switch of its own: create the API key with only the permissions you want allowed (read-only, if Uzi should not trade). Needs Node.js 20.6 or later, and a Bybit API key and secret.',
     publisher: 'Bybit',
     verification: 'verified',
     // bybit-exchange/trading-mcp is Bybit's GitHub-verified org; the npm package's maintainers
@@ -1110,7 +1110,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'accounts',
     hue: 'var(--apt)',
     sub: 'Read-only search over expenses and reports',
-    desc: 'Connect Expensify to let Lucius read your expense data. The server exposes a single Search tool, scoped to exactly what your own Expensify account can already see, across expenses, reports and receipts. Lucius can find spend by merchant, category, date range or person, summarise a period, flag expenses that are still missing a receipt, and compare spending across months. It is read-only — it cannot approve a report, edit an expense, reimburse anyone, or change workspace settings. Useful for folding reimbursable spend into a monthly review, checking what is still outstanding before a close, or finding the receipt behind a card charge. Sign-in happens in the browser over OAuth.',
+    desc: 'Connect Expensify to let Uzi read your expense data. The server exposes a single Search tool, scoped to exactly what your own Expensify account can already see, across expenses, reports and receipts. Uzi can find spend by merchant, category, date range or person, summarise a period, flag expenses that are still missing a receipt, and compare spending across months. It is read-only — it cannot approve a report, edit an expense, reimburse anyone, or change workspace settings. Useful for folding reimbursable spend into a monthly review, checking what is still outstanding before a close, or finding the receipt behind a card charge. Sign-in happens in the browser over OAuth.',
     publisher: 'Expensify',
     verification: 'verified',
     homepageUrl: 'https://use.expensify.com/blog/expensify-mcp',
@@ -1128,7 +1128,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'cpu',
     hue: 'var(--apt)',
     sub: 'Sales tax calculation and nexus lookups',
-    desc: 'Connect Avalara AvaTax to let Lucius answer sales tax questions against your Avalara account. Lucius can calculate the tax on a transaction from its addresses and line items, validate and resolve an address to the jurisdiction it really falls in, read existing transactions for a company, list the companies on the account, look up nexus definitions and the nexus you are actually registered for, browse tax code definitions, and get a ranked tax-code recommendation for a product. It can also register a new nexus, which is a write to your Avalara account. Useful for checking what tax applies to a sale before you invoice it, confirming an address resolves where you expect, or reviewing where you are obliged to collect. Sign-in happens in the browser over OAuth.',
+    desc: 'Connect Avalara AvaTax to let Uzi answer sales tax questions against your Avalara account. Uzi can calculate the tax on a transaction from its addresses and line items, validate and resolve an address to the jurisdiction it really falls in, read existing transactions for a company, list the companies on the account, look up nexus definitions and the nexus you are actually registered for, browse tax code definitions, and get a ranked tax-code recommendation for a product. It can also register a new nexus, which is a write to your Avalara account. Useful for checking what tax applies to a sale before you invoice it, confirming an address resolves where you expect, or reviewing where you are obliged to collect. Sign-in happens in the browser over OAuth.',
     publisher: 'Avalara',
     verification: 'verified',
     homepageUrl: 'https://developer.avalara.com/mcp-servers/avatax/',
@@ -1156,7 +1156,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Market prices, indicators, and fundamentals',
-    desc: 'Connect Twelve Data to give Lucius live and historical market data across stocks, ETFs, mutual funds, forex, crypto and commodities. Lucius can search for a symbol, fetch a current price or a full quote, pull a historical time series, compute technical indicators such as RSI, MACD or moving averages, read a company profile, its key statistics, market cap, financial statements and news, convert between currencies, check whether a market is open, list the day’s movers, and read analyst ratings and price targets. Useful for pricing a holding this app has no feed for, checking a fund’s fundamentals before you add it, or asking what moved a position today and why.',
+    desc: 'Connect Twelve Data to give Uzi live and historical market data across stocks, ETFs, mutual funds, forex, crypto and commodities. Uzi can search for a symbol, fetch a current price or a full quote, pull a historical time series, compute technical indicators such as RSI, MACD or moving averages, read a company profile, its key statistics, market cap, financial statements and news, convert between currencies, check whether a market is open, list the day’s movers, and read analyst ratings and price targets. Useful for pricing a holding this app has no feed for, checking a fund’s fundamentals before you add it, or asking what moved a position today and why.',
     publisher: 'Twelve Data',
     verification: 'verified',
     repoUrl: 'https://github.com/twelvedata/mcp',
@@ -1186,7 +1186,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'search',
     hue: 'var(--apt)',
     sub: 'Company filings and XBRL financials from SEC EDGAR',
-    desc: 'Connect this server to give Lucius direct access to SEC EDGAR. Lucius can look up a company’s CIK, read its profile and company facts, list its recent filings, pull the full text or a named section of a 10-K, 10-Q or 8-K, read balance sheet, income statement and cash flow figures parsed from a filing’s XBRL rather than scraped from its prose, read individual XBRL concepts, and read Form 3, 4 and 5 insider transactions — every answer carrying the filing URL it came from. Useful for checking a holding’s actual reported numbers before you act on a headline, reading what a company disclosed in an 8-K, or tracking insider buying and selling. Built and maintained independently by Stefano Amorelli: it reads the SEC’s public EDGAR system and is not an SEC product.',
+    desc: 'Connect this server to give Uzi direct access to SEC EDGAR. Uzi can look up a company’s CIK, read its profile and company facts, list its recent filings, pull the full text or a named section of a 10-K, 10-Q or 8-K, read balance sheet, income statement and cash flow figures parsed from a filing’s XBRL rather than scraped from its prose, read individual XBRL concepts, and read Form 3, 4 and 5 insider transactions — every answer carrying the filing URL it came from. Useful for checking a holding’s actual reported numbers before you act on a headline, reading what a company disclosed in an 8-K, or tracking insider buying and selling. Built and maintained independently by Stefano Amorelli: it reads the SEC’s public EDGAR system and is not an SEC product.',
     publisher: 'Stefano Amorelli',
     verification: 'unverified',
     repoUrl: 'https://github.com/stefanoamorelli/sec-edgar-mcp',
@@ -1216,7 +1216,7 @@ export const CATALOG: CatalogEntry[] = [
     icon: 'investments',
     hue: 'var(--apt)',
     sub: 'Federal Reserve economic time series',
-    desc: 'Connect this server to give Lucius the Federal Reserve Bank of St. Louis’s FRED database — over 800,000 economic time series. Lucius can search FRED for series matching a term, browse its category tree to find what exists on a subject, and fetch a series’ observations over a date range with the usual unit and frequency transformations. Useful for putting your own numbers in context: comparing a savings rate or a portfolio return against CPI inflation, checking where policy rates or mortgage rates sat when you took a loan, or pulling the unemployment or GDP series behind a piece of news. Needs a free FRED API key. Built and maintained independently by Stefano Amorelli: it reads FRED’s public API and is not a Federal Reserve product.',
+    desc: 'Connect this server to give Uzi the Federal Reserve Bank of St. Louis’s FRED database — over 800,000 economic time series. Uzi can search FRED for series matching a term, browse its category tree to find what exists on a subject, and fetch a series’ observations over a date range with the usual unit and frequency transformations. Useful for putting your own numbers in context: comparing a savings rate or a portfolio return against CPI inflation, checking where policy rates or mortgage rates sat when you took a loan, or pulling the unemployment or GDP series behind a piece of news. Needs a free FRED API key. Built and maintained independently by Stefano Amorelli: it reads FRED’s public API and is not a Federal Reserve product.',
     publisher: 'Stefano Amorelli',
     verification: 'unverified',
     repoUrl: 'https://github.com/stefanoamorelli/fred-mcp-server',

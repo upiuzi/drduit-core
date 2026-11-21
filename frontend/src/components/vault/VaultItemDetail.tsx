@@ -88,7 +88,7 @@ export function VaultItemDetail({
         <ActionBar item={item} artifact={artifactRef(item)} onAsked={onAsked} />
         {item.private && (
           <p className="vault-private-note">
-            <Lock size={13} strokeWidth={1.8} aria-hidden="true" /> Private — Lucius can see this
+            <Lock size={13} strokeWidth={1.8} aria-hidden="true" /> Private — Uzi can see this
             file’s name, note and tags, never what is in it.
           </p>
         )}

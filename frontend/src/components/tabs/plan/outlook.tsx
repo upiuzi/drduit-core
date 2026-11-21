@@ -1534,7 +1534,7 @@ export function OutlookTab(props: OutlookTabProps) {
           setStreams(nextStreams)
           setActiveScen(null)
           setLoadedFrom(null)
-          toast('Lucius staged a what-if — nothing saved')
+          toast('Uzi staged a what-if — nothing saved')
         },
       },
       {
@@ -1840,19 +1840,19 @@ export function OutlookTab(props: OutlookTabProps) {
                 <span className="pl-sum-acts">
                   <button
                     className="pl-sum-act pl-ai"
-                    title="Puts this question in the Lucius chat for you to send"
+                    title="Puts this question in the Uzi chat for you to send"
                     onClick={() => onAsk('How do I improve the chance my money lasts?')}
                   >
                     <Spark size={11} />
-                    Ask Lucius how to improve
+                    Ask Uzi how to improve
                   </button>
                   <button
                     className="pl-sum-act pl-ai"
-                    title="Puts this question in the Lucius chat for you to send"
+                    title="Puts this question in the Uzi chat for you to send"
                     onClick={() => onAsk('Am I saving enough to retire at ' + retireAge + '?')}
                   >
                     <Spark size={11} />
-                    Ask Lucius if I'm saving enough
+                    Ask Uzi if I'm saving enough
                   </button>
                 </span>
               </div>
@@ -2096,7 +2096,7 @@ export function OutlookTab(props: OutlookTabProps) {
                           }
                         >
                           <Spark size={11} />
-                          Ask Lucius
+                          Ask Uzi
                         </button>
                       </span>
                     </div>

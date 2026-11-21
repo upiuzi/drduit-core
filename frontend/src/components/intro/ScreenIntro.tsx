@@ -194,7 +194,7 @@ function Intro({
       open={open}
       steps={config.steps}
       lucius={{
-        label: filled ? 'Walk me through it' : (config.luciusLabel ?? 'Set up with Lucius'),
+        label: filled ? 'Walk me through it' : (config.luciusLabel ?? 'Set up with Uzi'),
         onClick: () => {
           close()
           onAskLucius(

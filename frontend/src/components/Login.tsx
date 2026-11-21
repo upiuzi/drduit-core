@@ -9,7 +9,13 @@ import { PasswordField } from './ui'
 // On success the server sets the HttpOnly `onw_session` cookie; we call back to
 // App.tsx to re-check GET /api/auth/status and render the app.
 
-export function Login({ onAuthenticated }: { onAuthenticated: () => void }) {
+export function Login({
+  onAuthenticated,
+  onGoToRegister,
+}: {
+  onAuthenticated: () => void
+  onGoToRegister?: () => void
+}) {
   const brand = useBrand()
   const [password, setPassword] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -59,7 +65,7 @@ export function Login({ onAuthenticated }: { onAuthenticated: () => void }) {
           type="text"
           name="username"
           autoComplete="username"
-          defaultValue="opennetworth"
+          defaultValue="drduit"
           readOnly
           tabIndex={-1}
           aria-hidden="true"
@@ -88,6 +94,27 @@ export function Login({ onAuthenticated }: { onAuthenticated: () => void }) {
         >
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
+        {onGoToRegister && (
+          <p className="login-help" style={{ textAlign: 'center', margin: '4px 0 0 0' }}>
+            Belum mengatur password?{' '}
+            <button
+              type="button"
+              className="text-btn"
+              onClick={onGoToRegister}
+              style={{
+                color: 'var(--accent)',
+                cursor: 'pointer',
+                background: 'none',
+                border: 'none',
+                padding: 0,
+                font: 'inherit',
+                textDecoration: 'underline',
+              }}
+            >
+              Daftar di sini
+            </button>
+          </p>
+        )}
         <p className="login-help">
           Lost your password? In the desktop app, set a new one in Settings → Security. On a server,
           run <code>onw reset-password</code> on that machine.{' '}

@@ -158,7 +158,7 @@ export interface RestSpecDraft {
   endpoints: RestEndpoint[]
   note: string
   /** The document's own description of the API (`info.description`), for Instructions for
-   *  Lucius — the OpenAPI counterpart of an MCP server's instructions. */
+   *  Uzi — the OpenAPI counterpart of an MCP server's instructions. */
   instructions?: string
 }
 

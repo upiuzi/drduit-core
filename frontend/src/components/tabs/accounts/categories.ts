@@ -244,7 +244,7 @@ export const SOURCE_META: Record<string, SourceMeta> = {
   bank: { key: 'bank', label: 'Bank sync', addedBy: 'Bank feed', icon: 'sync' },
   import: { key: 'import', label: 'Imported (file)', addedBy: 'File import', icon: 'import' },
   reconcile: { key: 'reconcile', label: 'Reconcile', addedBy: 'System', icon: 'reconcile' },
-  ai: { key: 'ai', label: 'Lucius (AI)', addedBy: 'Lucius', icon: 'lucius' },
+  ai: { key: 'ai', label: 'Uzi (AI)', addedBy: 'Uzi', icon: 'lucius' },
   automation: { key: 'automation', label: 'Automation', addedBy: 'Automation', icon: 'automation' },
   agent: { key: 'agent', label: 'Agent', addedBy: 'Agent', icon: 'agent' },
 }

@@ -64,7 +64,7 @@ _LINK_PRODUCTS = ["transactions"]
 _TRANSACTIONS_DAYS_REQUESTED = 730
 _LINK_COUNTRY_CODES = ["US", "CA"]
 _LINK_LANGUAGE = "en"
-_CLIENT_NAME = "Open Net Worth"
+_CLIENT_NAME = "Dr Duit"
 # /transactions/get page size + a guard against a pathological never-terminating page loop.
 _PAGE_SIZE = 500
 _MAX_FETCH_PAGES = 50

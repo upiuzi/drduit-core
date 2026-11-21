@@ -43,7 +43,7 @@ const LUCIUS_ONLY_SUBTITLE =
 
 const VIEW_SUBTITLES: Record<AutomationsView, string> = {
   lucius:
-    'Lucius runs these on a schedule or when something happens. Every run is a conversation you can pick back up.',
+    'Uzi runs these on a schedule or when something happens. Every run is a conversation you can pick back up.',
   sync: 'Keep this book and your other apps in step, by fixed rules. No AI involved and nothing to pay.',
 }
 
@@ -164,7 +164,7 @@ export function Automations({ onOpenChat, onOpenConversation }: AutomationsProps
         const draft = commandDraft(args.automation)
         if (!draft) {
           setActionError(
-            'Lucius’s draft could not be opened because it is incomplete. Ask Lucius to review it again.',
+            'Uzi’s draft could not be opened because it is incomplete. Ask Uzi to review it again.',
           )
           return
         }
@@ -548,7 +548,7 @@ export function Automations({ onOpenChat, onOpenConversation }: AutomationsProps
               value={view}
               onChange={setView}
               tabs={[
-                { key: 'lucius', label: 'Lucius' },
+                { key: 'lucius', label: 'Uzi' },
                 { key: 'sync', label: 'Data Sync', badge: toReview || undefined },
               ]}
             />

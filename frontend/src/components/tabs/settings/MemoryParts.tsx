@@ -282,10 +282,10 @@ export function ForgetConfirm({
         : `Forget all ${pending.count} memories?`
   const body =
     pending.kind === 'one'
-      ? 'Lucius will no longer remember this. This can’t be undone.'
+      ? 'Uzi will no longer remember this. This can’t be undone.'
       : pending.kind === 'topic'
-        ? `Lucius will forget its ${pending.ids.length} ${pending.ids.length === 1 ? 'fact' : 'facts'}. This can’t be undone.`
-        : 'Lucius will start again with an empty memory. This can’t be undone.'
+        ? `Uzi will forget its ${pending.ids.length} ${pending.ids.length === 1 ? 'fact' : 'facts'}. This can’t be undone.`
+        : 'Uzi will start again with an empty memory. This can’t be undone.'
   return (
     <div
       className="rd-confirm-scrim"

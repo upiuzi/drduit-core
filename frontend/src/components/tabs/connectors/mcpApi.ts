@@ -442,7 +442,7 @@ export async function setToolPermission(
  *
  * A FAILED PERMISSION WRITE FAILS THE ADD, loudly. The original version fired these and
  * ignored the result entirely, which meant a `blocked` chosen on step 4 could silently land
- * as `needs_approval` — a tool the user had just blocked would be offered to Lucius, one
+ * as `needs_approval` — a tool the user had just blocked would be offered to Uzi, one
  * confirm away from running, with the flow reporting success. The server does exist by
  * then, so the message says so rather than implying nothing happened; the levels are the
  * part that needs another go.
@@ -483,7 +483,7 @@ export async function createMcpServer(input: {
 }
 
 /** Said the same way on both commit paths: the connection landed, the levels did not, and
- *  the levels are what matters for what Lucius may fire. */
+ *  the levels are what matters for what Uzi may fire. */
 function permissionWriteError(failed: number): string {
   const changes = `${failed} permission ${failed === 1 ? 'level' : 'levels'}`
   return `The server was saved, but ${changes} could not be written — those tools are still at Needs approval. Try again.`

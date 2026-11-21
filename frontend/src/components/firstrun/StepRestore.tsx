@@ -121,7 +121,7 @@ export function StepRestore({ onDone, onBack }: StepRestoreProps) {
             {file ? file.name : 'Choose a backup file'}
           </Text>
           <Text size="xs" tone="faint">
-            An Open Net Worth export .zip from Settings › Data
+            A Dr Duit export .zip from Settings › Data
           </Text>
         </Stack>
       </label>

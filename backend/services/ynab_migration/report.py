@@ -10,7 +10,7 @@ from backend.services.budget_app import current
 PROBLEMS_LISTED = 100
 
 _HINTS = {
-    "failed": "Open Net Worth refused this row. Fix the cause in {app}, or add the transaction by "
+    "failed": "Dr Duit refused this row. Fix the cause in {app}, or add the transaction by "
     "hand.",
     "refused_duplicate": "It looks like a transaction already in the book. If it is a separate "
     "one, add it by hand.",
