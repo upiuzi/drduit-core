@@ -178,6 +178,27 @@ def classify_category(category_id: str | None, category_label: str, overrides: d
     return "guilt_free"
 
 
+def normalize_bucket(
+    val: Any,
+    name: str = "",
+    category_id: str | None = None,
+    overrides: dict[str, str] | None = None,
+) -> str:
+    """Normalize any bucket string into canonical keys ('fixed_costs', 'investments', 'savings', 'guilt_free')."""
+    s = str(val or "").strip().lower().replace(" ", "_").replace("-", "_")
+    if s in ("fixed_costs", "fixed_cost", "needs", "need", "fixed", "kebutuhan", "biaya_tetap"):
+        return "fixed_costs"
+    if s in ("investments", "investment", "invest", "investasi"):
+        return "investments"
+    if s in ("savings", "saving", "savings_goals", "savings_goal", "goals", "goal", "tabungan"):
+        return "savings"
+    if s in ("guilt_free", "guilt_free_spending", "wants", "want", "discretionary", "fun", "jajan", "keinginan"):
+        return "guilt_free"
+    if s in BUCKETS:
+        return s
+    return classify_category(category_id, name, overrides or {})
+
+
 def get_csp_tracking(month: str | None = None) -> dict[str, Any]:
     """Computes the Conscious Spending Plan tracking data for the requested month (YYYY-MM)."""
     today = user_today()
@@ -445,6 +466,18 @@ def get_csp_tracking(month: str | None = None) -> dict[str, Any]:
         if d and str(d).startswith(month):
             planned_in_month.append(item)
 
+    # Enrich each bucket with planned expenses and due dates for seamless integration
+    for k, b in bucket_data.items():
+        plan_bucket = plan_data.get("buckets", {}).get(k, {})
+        b["planned_monthly"] = plan_bucket.get("monthly_total", 0.0)
+        b["planned_items"] = plan_bucket.get("items", [])
+        due_items = [
+            it for it in plan_bucket.get("items", [])
+            if it.get("due_date") and str(it["due_date"]).startswith(month)
+        ]
+        b["planned_due_in_month"] = due_items
+        b["planned_due_amount"] = round(sum(it.get("amount", 0.0) for it in due_items), 2)
+
     return {
         "month": month,
         "base_currency": base,
@@ -493,9 +526,12 @@ def get_planned_expenses() -> list[dict[str, Any]]:
             monthly_amt = round(amt, 2)
             annual_amt = round(amt * 12.0, 2)
 
-        bucket = str(item.get("bucket") or "").lower().strip()
-        if bucket not in BUCKETS:
-            bucket = classify_category(item.get("category_id"), name, overrides)
+        bucket = normalize_bucket(
+            item.get("bucket"),
+            name=name,
+            category_id=item.get("category_id"),
+            overrides=overrides,
+        )
 
         cleaned.append({
             "id": item_id,
@@ -533,9 +569,12 @@ def add_or_update_planned_expense(payload: dict[str, Any]) -> dict[str, Any]:
     freq = normalize_frequency(payload.get("frequency"))
 
     overrides = current.get("category_mappings", {})
-    bucket = str(payload.get("bucket") or "").lower().strip()
-    if bucket not in BUCKETS:
-        bucket = classify_category(payload.get("category_id"), name, overrides)
+    bucket = normalize_bucket(
+        payload.get("bucket"),
+        name=name,
+        category_id=payload.get("category_id"),
+        overrides=overrides,
+    )
 
     if freq == "annual":
         monthly_amt = round(amt / 12.0, 2)
@@ -579,10 +618,6 @@ def add_or_update_planned_expense(payload: dict[str, Any]) -> dict[str, Any]:
         expenses[target_idx] = record
     else:
         expenses.append(record)
-
-    current["planned_expenses"] = expenses
-    store.save(current)
-    return record
 
     current["planned_expenses"] = expenses
     store.save(current)

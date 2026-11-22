@@ -40,6 +40,10 @@ interface BucketDetail {
   status: 'good' | 'warning' | 'danger' | 'neutral'
   categories: BucketCategory[]
   transactions_count: number
+  planned_monthly?: number
+  planned_items?: any[]
+  planned_due_in_month?: any[]
+  planned_due_amount?: number
 }
 
 interface CspTrackResponse {
@@ -93,6 +97,12 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [activeView, setActiveView] = useState<'worksheet' | 'track'>('worksheet')
   const [addModalOpen, setAddModalOpen] = useState(false)
+  const [addModalBucket, setAddModalBucket] = useState<'fixed_costs' | 'investments' | 'savings' | 'guilt_free'>('fixed_costs')
+
+  const handleOpenAddModal = (bucket: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free' = 'fixed_costs') => {
+    setAddModalBucket(bucket)
+    setAddModalOpen(true)
+  }
 
   // Modals state
   const [customizeOpen, setCustomizeOpen] = useState(false)
@@ -176,8 +186,9 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         body: JSON.stringify(payload),
       })
       await loadData(month)
-    } catch {
+    } catch (err) {
       toast?.('Failed to save planned expense.')
+      throw err
     }
   }
 
@@ -309,7 +320,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           <Button
             variant="primary"
             size="dense"
-            onClick={() => setAddModalOpen(true)}
+            onClick={() => handleOpenAddModal('fixed_costs')}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
             <Plus size={14} />
@@ -421,220 +432,144 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
       {/* ── The 4 Buckets Grid ── */}
       <div className="csp-buckets-grid">
-        {/* 1. Fixed Costs */}
-        <div className="csp-bucket-card">
-          <div className="csp-bucket-card-head">
-            <div className="csp-bucket-badge">
-              <span className="csp-bucket-dot" style={{ background: buckets.fixed_costs.color }} />
-              <span>{buckets.fixed_costs.label}</span>
-            </div>
-            <span className="csp-bucket-target-pill">Target: 50–60%</span>
-          </div>
+        {([
+          { key: 'fixed_costs', max: 60, target: '50–60%', label: 'Max 60%' },
+          { key: 'investments', max: 100, target: '10%+', label: 'Min 10%' },
+          { key: 'savings', max: 10, target: '5–10%', label: 'Target 5–10%' },
+          { key: 'guilt_free', max: 35, target: '20–35%', label: 'Max 35%' },
+        ] as const).map(({ key, max, target, label }) => {
+          const b = buckets[key]
+          const hasActual = b.actual_spent > 0
+          const hasDue = (b.planned_due_amount || 0) > 0
+          const hasPlanned = (b.planned_monthly || 0) > 0
+          const displayAmount = hasActual
+            ? b.actual_spent
+            : hasDue
+              ? (b.planned_due_amount || 0)
+              : (b.planned_monthly || 0)
+          const displayPct =
+            net_income > 0 ? Math.round((displayAmount / net_income) * 1000) / 10 : 0
+          const pctWidth = Math.min(100, (displayPct / max) * 100)
+          const isOver = displayPct > max && (key === 'fixed_costs' || key === 'guilt_free')
 
-          <div className="csp-bucket-amount">{fBaseWhole(buckets.fixed_costs.actual_spent)}</div>
-
-          <div className="csp-bucket-progress-wrap">
-            <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.fixed_costs.color }}>{buckets.fixed_costs.actual_pct}% of income</span>
-              <span style={{ color: 'var(--muted)' }}>Max 60%</span>
-            </div>
-            <div className="csp-bucket-track">
-              <div
-                className="csp-bucket-bar"
-                style={{
-                  width: `${Math.min(100, (buckets.fixed_costs.actual_pct / 60) * 100)}%`,
-                  background:
-                    buckets.fixed_costs.actual_pct > 60
-                      ? 'var(--bad)'
-                      : buckets.fixed_costs.color,
-                }}
-              />
-            </div>
-          </div>
-
-          <p className="csp-bucket-desc">
-            {buckets.fixed_costs.description}
-            {unexpected_buffer_enabled && unexpected_buffer > 0 && (
-              <span style={{ display: 'block', marginTop: '4px', color: 'var(--primary)', fontWeight: 600 }}>
-                +15% Unexpected Buffer: {fBase(unexpected_buffer)}
-              </span>
-            )}
-          </p>
-
-          <div className="csp-bucket-cats">
-            {buckets.fixed_costs.categories.slice(0, 3).map((c) => (
-              <div key={c.id || c.label} className="csp-bucket-cat-row">
-                <span className="csp-bucket-cat-name" title={c.label}>
-                  {c.label}
-                </span>
-                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+          return (
+            <div key={b.key} className="csp-bucket-card">
+              <div className="csp-bucket-card-head">
+                <div className="csp-bucket-badge">
+                  <span className="csp-bucket-dot" style={{ background: b.color }} />
+                  <span>{b.label}</span>
+                </div>
+                <span className="csp-bucket-target-pill">Target: {target}</span>
               </div>
-            ))}
-          </div>
 
-          <button
-            className="csp-bucket-footer-btn"
-            onClick={() => openDrawerForBucket('fixed_costs')}
-          >
-            View Transactions ({buckets.fixed_costs.transactions_count})
-          </button>
-        </div>
-
-        {/* 2. Investments */}
-        <div className="csp-bucket-card">
-          <div className="csp-bucket-card-head">
-            <div className="csp-bucket-badge">
-              <span className="csp-bucket-dot" style={{ background: buckets.investments.color }} />
-              <span>{buckets.investments.label}</span>
-            </div>
-            <span className="csp-bucket-target-pill">Target: 10%+</span>
-          </div>
-
-          <div className="csp-bucket-amount">{fBaseWhole(buckets.investments.actual_spent)}</div>
-
-          <div className="csp-bucket-progress-wrap">
-            <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.investments.color }}>{buckets.investments.actual_pct}% of income</span>
-              <span style={{ color: 'var(--muted)' }}>Min 10%</span>
-            </div>
-            <div className="csp-bucket-track">
-              <div
-                className="csp-bucket-bar"
-                style={{
-                  width: `${Math.min(100, (buckets.investments.actual_pct / 10) * 100)}%`,
-                  background: buckets.investments.color,
-                }}
-              />
-            </div>
-          </div>
-
-          <p className="csp-bucket-desc">
-            {buckets.investments.description}
-          </p>
-
-          <div className="csp-bucket-cats">
-            {buckets.investments.categories.slice(0, 3).map((c) => (
-              <div key={c.id || c.label} className="csp-bucket-cat-row">
-                <span className="csp-bucket-cat-name" title={c.label}>
-                  {c.label}
-                </span>
-                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+              <div>
+                <div className="csp-bucket-amount">{fBaseWhole(displayAmount)}</div>
+                <div className="csp-bucket-sub-amount">
+                  {hasActual ? (
+                    <span>
+                      Actual spent ({fBase(b.planned_monthly || 0)}/mo planned)
+                    </span>
+                  ) : hasDue ? (
+                    <span style={{ color: 'var(--primary)', fontWeight: 600 }}>
+                      Due in {formatMonthTitle(month)} • {fBase(b.planned_monthly || 0)}/mo plan
+                    </span>
+                  ) : hasPlanned ? (
+                    <span>Planned: {fBase(b.planned_monthly || 0)} / bulan</span>
+                  ) : (
+                    <span>No spend or plan recorded</span>
+                  )}
+                </div>
               </div>
-            ))}
-          </div>
 
-          <button
-            className="csp-bucket-footer-btn"
-            onClick={() => openDrawerForBucket('investments')}
-          >
-            View Transactions ({buckets.investments.transactions_count})
-          </button>
-        </div>
-
-        {/* 3. Savings Goals */}
-        <div className="csp-bucket-card">
-          <div className="csp-bucket-card-head">
-            <div className="csp-bucket-badge">
-              <span className="csp-bucket-dot" style={{ background: buckets.savings.color }} />
-              <span>{buckets.savings.label}</span>
-            </div>
-            <span className="csp-bucket-target-pill">Target: 5–10%</span>
-          </div>
-
-          <div className="csp-bucket-amount">{fBaseWhole(buckets.savings.actual_spent)}</div>
-
-          <div className="csp-bucket-progress-wrap">
-            <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.savings.color }}>{buckets.savings.actual_pct}% of income</span>
-              <span style={{ color: 'var(--muted)' }}>Target 5–10%</span>
-            </div>
-            <div className="csp-bucket-track">
-              <div
-                className="csp-bucket-bar"
-                style={{
-                  width: `${Math.min(100, (buckets.savings.actual_pct / 10) * 100)}%`,
-                  background: buckets.savings.color,
-                }}
-              />
-            </div>
-          </div>
-
-          <p className="csp-bucket-desc">
-            {buckets.savings.description}
-          </p>
-
-          <div className="csp-bucket-cats">
-            {buckets.savings.categories.slice(0, 3).map((c) => (
-              <div key={c.id || c.label} className="csp-bucket-cat-row">
-                <span className="csp-bucket-cat-name" title={c.label}>
-                  {c.label}
-                </span>
-                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+              <div className="csp-bucket-progress-wrap">
+                <div className="csp-bucket-pct-row">
+                  <span style={{ color: b.color }}>{displayPct}% of income</span>
+                  <span style={{ color: 'var(--muted)' }}>{label}</span>
+                </div>
+                <div className="csp-bucket-track">
+                  <div
+                    className="csp-bucket-bar"
+                    style={{
+                      width: `${pctWidth}%`,
+                      background: isOver ? 'var(--bad)' : b.color,
+                    }}
+                  />
+                </div>
               </div>
-            ))}
-          </div>
 
-          <button
-            className="csp-bucket-footer-btn"
-            onClick={() => openDrawerForBucket('savings')}
-          >
-            View Transactions ({buckets.savings.transactions_count})
-          </button>
-        </div>
+              <p className="csp-bucket-desc">
+                {b.description}
+                {key === 'fixed_costs' && unexpected_buffer_enabled && unexpected_buffer > 0 && (
+                  <span
+                    style={{
+                      display: 'block',
+                      marginTop: '4px',
+                      color: 'var(--primary)',
+                      fontWeight: 600,
+                    }}
+                  >
+                    +15% Unexpected Buffer: {fBase(unexpected_buffer)}
+                  </span>
+                )}
+              </p>
 
-        {/* 4. Guilt-Free Spending */}
-        <div className="csp-bucket-card">
-          <div className="csp-bucket-card-head">
-            <div className="csp-bucket-badge">
-              <span className="csp-bucket-dot" style={{ background: buckets.guilt_free.color }} />
-              <span>{buckets.guilt_free.label}</span>
-            </div>
-            <span className="csp-bucket-target-pill">Target: 20–35%</span>
-          </div>
+              {/* Planned Expenses in this Pos */}
+              {b.planned_items && b.planned_items.length > 0 && (
+                <div className="csp-bucket-planned-section">
+                  <span className="csp-bucket-section-label">
+                    Planned Expenses ({b.planned_items.length})
+                  </span>
+                  {b.planned_items.slice(0, 3).map((it: any) => (
+                    <div key={it.id} className="csp-bucket-cat-row">
+                      <span className="csp-bucket-cat-name" title={it.name}>
+                        {it.name} {it.due_date ? `• Due ${it.due_date}` : ''}
+                      </span>
+                      <span className="csp-bucket-cat-val">
+                        {fBase(it.monthly_amount)}/mo
+                        {it.frequency === 'annual' ? ` (${fBase(it.amount)}/thn)` : ''}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-          <div className="csp-bucket-amount">{fBaseWhole(buckets.guilt_free.actual_spent)}</div>
+              {/* Actual ledger transactions breakdown if any */}
+              {b.categories && b.categories.length > 0 && (
+                <div className="csp-bucket-cats">
+                  <span className="csp-bucket-section-label">Actual Spent by Category</span>
+                  {b.categories.slice(0, 3).map((c) => (
+                    <div key={c.id || c.label} className="csp-bucket-cat-row">
+                      <span className="csp-bucket-cat-name" title={c.label}>
+                        {c.label}
+                      </span>
+                      <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
 
-          <div className="csp-bucket-progress-wrap">
-            <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.guilt_free.color }}>{buckets.guilt_free.actual_pct}% of income</span>
-              <span style={{ color: 'var(--muted)' }}>Max 35%</span>
-            </div>
-            <div className="csp-bucket-track">
-              <div
-                className="csp-bucket-bar"
-                style={{
-                  width: `${Math.min(100, (buckets.guilt_free.actual_pct / 35) * 100)}%`,
-                  background:
-                    buckets.guilt_free.actual_pct > 35
-                      ? 'var(--bad)'
-                      : buckets.guilt_free.color,
-                }}
-              />
-            </div>
-          </div>
-
-          <p className="csp-bucket-desc">
-            {buckets.guilt_free.description}
-          </p>
-
-          <div className="csp-bucket-cats">
-            {buckets.guilt_free.categories.slice(0, 3).map((c) => (
-              <div key={c.id || c.label} className="csp-bucket-cat-row">
-                <span className="csp-bucket-cat-name" title={c.label}>
-                  {c.label}
-                </span>
-                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+              <div className="csp-bucket-actions-row">
+                <button
+                  type="button"
+                  className="csp-bucket-add-btn"
+                  onClick={() => handleOpenAddModal(key)}
+                  title={`Add expense to ${b.label}`}
+                >
+                  <Plus size={12} />
+                  <span>+ Add</span>
+                </button>
+                <button
+                  type="button"
+                  className="csp-bucket-footer-btn"
+                  style={{ flex: 1 }}
+                  onClick={() => openDrawerForBucket(key)}
+                >
+                  Txns ({b.transactions_count})
+                </button>
               </div>
-            ))}
-          </div>
-
-          <button
-            className="csp-bucket-footer-btn"
-            onClick={() => openDrawerForBucket('guilt_free')}
-          >
-            View Transactions ({buckets.guilt_free.transactions_count})
-          </button>
-        </div>
+            </div>
+          )
+        })}
       </div>
 
       {/* ── Summary Strip: Take-Home vs Total Spent vs Net Savings ── */}
@@ -795,6 +730,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           toast?.('Planned expense added.')
           await loadData(month)
         }}
+        defaultBucket={addModalBucket}
       />
     </div>
   )

@@ -254,7 +254,29 @@ class TestCspTrack(unittest.TestCase):
             self.assertEqual(saved["due_date"], "2027-01-25")
             self.assertIn("score", res["updated_plan_summary"])
 
+            # Verify that get_csp_tracking for 2027-01 has this planned expense and due amount
+            track_2027 = csp_track.get_csp_tracking("2027-01")
+            fc = track_2027["buckets"]["fixed_costs"]
+            # 2,333,333.33 + 15% unexpected buffer (350,000) = 2,683,333.33
+            self.assertEqual(fc["planned_monthly"], 2683333.33)
+            self.assertEqual(fc["planned_due_amount"], 28000000.0)
+            self.assertEqual(len(fc["planned_due_in_month"]), 1)
+            self.assertEqual(fc["planned_due_in_month"][0]["name"], "Kontrakan Rumah")
+
         asyncio.run(_run())
+
+    def test_normalize_bucket_variations(self):
+        self.assertEqual(csp_track.normalize_bucket("Fixed Costs"), "fixed_costs")
+        self.assertEqual(csp_track.normalize_bucket("fixed costs"), "fixed_costs")
+        self.assertEqual(csp_track.normalize_bucket("fixed_cost"), "fixed_costs")
+        self.assertEqual(csp_track.normalize_bucket("needs"), "fixed_costs")
+        self.assertEqual(csp_track.normalize_bucket("kebutuhan"), "fixed_costs")
+        self.assertEqual(csp_track.normalize_bucket("Investments"), "investments")
+        self.assertEqual(csp_track.normalize_bucket("investasi"), "investments")
+        self.assertEqual(csp_track.normalize_bucket("Savings Goals"), "savings")
+        self.assertEqual(csp_track.normalize_bucket("tabungan"), "savings")
+        self.assertEqual(csp_track.normalize_bucket("Guilt Free"), "guilt_free")
+        self.assertEqual(csp_track.normalize_bucket("jajan"), "guilt_free")
 
 
 if __name__ == "__main__":

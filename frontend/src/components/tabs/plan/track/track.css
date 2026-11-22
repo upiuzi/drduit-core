@@ -322,6 +322,61 @@
   color: var(--text);
 }
 
+.csp-bucket-sub-amount {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: -6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.csp-bucket-actions-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.csp-bucket-add-btn {
+  flex: 1.2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px dashed var(--line-strong);
+  background: var(--bg-2);
+  color: var(--text);
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-bucket-add-btn:hover {
+  background: var(--line);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.csp-bucket-planned-section {
+  border-top: 1px solid var(--line);
+  padding-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csp-bucket-section-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 700;
+  color: var(--faint);
+  margin-bottom: 2px;
+}
+
 .csp-bucket-footer-btn {
   width: 100%;
   padding: 7px 10px;
