@@ -4,6 +4,7 @@ import {
   ChevronRight,
   SlidersHorizontal,
   Sparkles,
+  CalendarDays,
 } from '../../../../ui/icons'
 import { Button } from '../../../ui'
 import { fBase, fBaseWhole } from '../../../../utils/format'
@@ -62,6 +63,7 @@ interface CspTrackResponse {
   category_mappings: Record<string, string>
   categories_catalog: CategoryCatalogItem[]
   plan?: CspPlanData
+  planned_in_month?: any[]
 }
 
 interface Props {
@@ -87,7 +89,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   const [data, setData] = useState<CspTrackResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const [activeView, setActiveView] = useState<'track' | 'worksheet'>('track')
+  const [activeView, setActiveView] = useState<'worksheet' | 'track'>('worksheet')
 
   // Modals state
   const [customizeOpen, setCustomizeOpen] = useState(false)
@@ -265,20 +267,20 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           <div className="csp-view-toggle">
             <button
               type="button"
-              className={`csp-view-btn ${activeView === 'track' ? 'active' : ''}`}
-              onClick={() => setActiveView('track')}
-            >
-              Spending Track
-            </button>
-            <button
-              type="button"
               className={`csp-view-btn ${activeView === 'worksheet' ? 'active' : ''}`}
               onClick={() => setActiveView('worksheet')}
             >
-              Plan Worksheet & Ratios
+              Plan Worksheet & Scorecard
               {data.plan?.planned_expenses?.length ? (
                 <span className="csp-pill-badge">{data.plan.planned_expenses.length}</span>
               ) : null}
+            </button>
+            <button
+              type="button"
+              className={`csp-view-btn ${activeView === 'track' ? 'active' : ''}`}
+              onClick={() => setActiveView('track')}
+            >
+              Monthly Actuals (Ledger)
             </button>
           </div>
 
@@ -643,6 +645,32 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         </div>
       </div>
 
+      {/* ── Upcoming Planned in This Month ── */}
+      {data.planned_in_month && data.planned_in_month.length > 0 && (
+        <div className="csp-upcoming-banner">
+          <div className="csp-upcoming-head">
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <CalendarDays size={16} color="var(--primary, #3b86dd)" />
+              <h4 style={{ margin: 0, fontSize: '13.5px', fontWeight: 700 }}>
+                Planned Expenses Due in {formatMonthTitle(month)} ({data.planned_in_month.length})
+              </h4>
+            </div>
+            <Button variant="secondary" size="dense" onClick={() => setActiveView('worksheet')}>
+              View in Plan Worksheet
+            </Button>
+          </div>
+          <div className="csp-upcoming-grid">
+            {data.planned_in_month.map((it: any) => (
+              <div key={it.id} className="csp-upcoming-chip">
+                <span className="csp-upcoming-name">{it.name}</span>
+                <span className="csp-upcoming-amt">{fBase(it.amount)}</span>
+                <span className="csp-upcoming-due">Due: {it.due_date}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* ── Recent CSP Transactions ── */}
       <div className="csp-txns-section">
         <div className="csp-txns-head">
@@ -676,9 +704,14 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         </div>
 
         {filteredTxns.length === 0 ? (
-          <p style={{ textAlign: 'center', color: 'var(--muted)', padding: '24px 0', fontSize: '13px' }}>
-            No transactions found for this filter in the selected month.
-          </p>
+          <div style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--muted)', fontSize: '13px' }}>
+            <p style={{ margin: '0 0 12px' }}>
+              No bank transactions recorded for {formatMonthTitle(month)} in the ledger.
+            </p>
+            <Button variant="secondary" size="dense" onClick={() => setActiveView('worksheet')}>
+              Open Plan Worksheet & Scorecard
+            </Button>
+          </div>
         ) : (
           <div className="csp-txns-list">
             {filteredTxns.slice(0, 15).map((t) => {

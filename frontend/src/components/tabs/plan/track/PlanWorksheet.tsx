@@ -32,6 +32,11 @@ export interface CspPlanData {
   net_income_source: string
   unexpected_buffer_enabled: boolean
   planned_expenses: PlannedExpenseItem[]
+  score?: {
+    points: number
+    grade: string
+    verdict: string
+  }
   buckets: {
     fixed_costs: {
       key: string
@@ -130,6 +135,71 @@ export function PlanWorksheet({
   // Income edit modal/inline state
   const [editingIncome, setEditingIncome] = useState(false)
   const [incomeInput, setIncomeInput] = useState<string>(String(plan.net_income || ''))
+
+  // Quick inline row state (Excel style)
+  const [quickName, setQuickName] = useState('')
+  const [quickAmount, setQuickAmount] = useState('')
+  const [quickFrequency, setQuickFrequency] = useState<'monthly' | 'annual'>('monthly')
+  const [quickBucket, setQuickBucket] = useState<'fixed_costs' | 'investments' | 'savings' | 'guilt_free'>('fixed_costs')
+  const [quickDueDate, setQuickDueDate] = useState('')
+  const [savingQuick, setSavingQuick] = useState(false)
+
+  const parseInputAmount = (val: string): number => {
+    let s = val.trim().toLowerCase()
+    let mult = 1
+    if (s.includes('jt') || s.includes('juta')) {
+      mult = 1_000_000
+      s = s.replace(/(jt|juta)/g, '')
+    } else if (s.includes('rb') || s.includes('ribu') || s.endsWith('k')) {
+      mult = 1_000
+      s = s.replace(/(rb|ribu|k)/g, '')
+    } else if (s.endsWith('m') && !s.endsWith('am') && !s.endsWith('pm')) {
+      mult = 1_000_000
+      s = s.slice(0, -1)
+    }
+    s = s.replace(/^(rp|idr|\$)/g, '').trim()
+    if (s.split('.').length > 2) {
+      s = s.replace(/\./g, '')
+    } else if (s.split(',').length > 2) {
+      s = s.replace(/,/g, '')
+    } else {
+      s = s.replace(/,/g, '.')
+    }
+    const num = parseFloat(s)
+    return isNaN(num) ? 0 : Math.round(num * mult * 100) / 100
+  }
+
+  const handleQuickAdd = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault()
+    if (!quickName.trim()) {
+      toast?.('Please enter an expense name.')
+      return
+    }
+    const amt = parseInputAmount(quickAmount)
+    if (amt <= 0) {
+      toast?.('Please enter a valid amount (e.g. 28jt or 28000000).')
+      return
+    }
+    setSavingQuick(true)
+    try {
+      await onSaveExpense({
+        name: quickName.trim(),
+        amount: amt,
+        frequency: quickFrequency,
+        bucket: quickBucket,
+        due_date: quickDueDate.trim() || null,
+      })
+      setQuickName('')
+      setQuickAmount('')
+      setQuickDueDate('')
+      toast?.(`Added "${quickName.trim()}" to worksheet.`)
+      await onRefresh()
+    } catch {
+      toast?.('Failed to add expense.')
+    } finally {
+      setSavingQuick(false)
+    }
+  }
 
   const handleOpenAdd = () => {
     setEditingItem(null)
@@ -246,6 +316,51 @@ export function PlanWorksheet({
           </div>
         </div>
       </div>
+
+      {/* ── Financial Health Scorecard Banner ── */}
+      {plan.score && (
+        <div className={`csp-score-banner csp-score-${plan.score.grade.toLowerCase().replace(/\s+/g, '-')}`}>
+          <div className="csp-score-left">
+            <div className="csp-score-circle">
+              <span className="csp-score-number">{plan.score.points}</span>
+              <span className="csp-score-denom">/100</span>
+            </div>
+            <div className="csp-score-details">
+              <div className="csp-score-badge-wrap">
+                <span className="csp-score-badge">{plan.score.grade} Plan</span>
+                <span className="csp-score-subtext">Ramit Sethi Conscious Spending Score</span>
+              </div>
+              <p className="csp-score-verdict">{plan.score.verdict}</p>
+            </div>
+          </div>
+          <div className="csp-score-metrics">
+            <div className="csp-score-metric-item">
+              <span className="csp-sm-label">Fixed Costs</span>
+              <span className={`csp-sm-val ${fixed_costs.pct_of_income <= 60 ? 'good' : 'danger'}`}>
+                {fixed_costs.pct_of_income}% <span className="csp-sm-target">(50-60%)</span>
+              </span>
+            </div>
+            <div className="csp-score-metric-item">
+              <span className="csp-sm-label">Investments</span>
+              <span className={`csp-sm-val ${investments.pct_of_income >= 10 ? 'good' : 'warning'}`}>
+                {investments.pct_of_income}% <span className="csp-sm-target">(10%+)</span>
+              </span>
+            </div>
+            <div className="csp-score-metric-item">
+              <span className="csp-sm-label">Savings</span>
+              <span className={`csp-sm-val ${savings.pct_of_income >= 5 ? 'good' : 'warning'}`}>
+                {savings.pct_of_income}% <span className="csp-sm-target">(5-10%)</span>
+              </span>
+            </div>
+            <div className="csp-score-metric-item">
+              <span className="csp-sm-label">Guilt-Free</span>
+              <span className={`csp-sm-val ${guilt_free.pct_of_income <= 35 ? 'good' : 'warning'}`}>
+                {guilt_free.pct_of_income}% <span className="csp-sm-target">(20-35%)</span>
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ── Ramit Sethi 4-Bucket Ratio Progress Cards ── */}
       <div className="csp-worksheet-cards-grid">
@@ -539,37 +654,105 @@ export function PlanWorksheet({
           </div>
         </div>
 
-        {filteredItems.length === 0 ? (
-          <div className="csp-empty-worksheet">
-            <div className="csp-empty-icon">
-              <CalendarDays size={32} />
-            </div>
-            <h4>No planned expenses in this view</h4>
-            <p>
-              Add your monthly bills (rent, utilities, groceries) or annual lump-sum expenses (kontrakan, tuition, insurance)
-              to see your live Conscious Spending Plan ratios.
-            </p>
-            <Button variant="primary" size="dense" onClick={handleOpenAdd}>
-              <Plus size={14} />
-              <span>Add Your First Expense</span>
-            </Button>
-          </div>
-        ) : (
-          <div className="csp-table-wrap">
-            <table className="csp-planned-table">
-              <thead>
+        <div className="csp-table-wrap">
+          <table className="csp-planned-table">
+            <thead>
+              <tr>
+                <th>Expense Name</th>
+                <th>Frequency</th>
+                <th>Nominal Amount</th>
+                <th>Monthly Impact</th>
+                <th>Bucket</th>
+                <th>Due / Renewal</th>
+                <th style={{ textAlign: 'right' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* ── Excel-like Quick Add Row ── */}
+              <tr className="csp-quick-add-tr">
+                <td>
+                  <input
+                    type="text"
+                    className="csp-quick-cell-input"
+                    placeholder="+ Add expense (e.g. Kontrakan)..."
+                    value={quickName}
+                    onChange={(e) => setQuickName(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') void handleQuickAdd()
+                    }}
+                  />
+                </td>
+                <td>
+                  <select
+                    className="csp-quick-cell-select"
+                    value={quickFrequency}
+                    onChange={(e) => setQuickFrequency(e.target.value as 'monthly' | 'annual')}
+                  >
+                    <option value="monthly">Monthly</option>
+                    <option value="annual">Annual (/yr)</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    className="csp-quick-cell-input"
+                    placeholder="e.g. 28jt or 28000000"
+                    value={quickAmount}
+                    onChange={(e) => setQuickAmount(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') void handleQuickAdd()
+                    }}
+                  />
+                </td>
+                <td>
+                  <span className="csp-quick-preview-impact">
+                    {quickAmount
+                      ? `${fBase(parseInputAmount(quickAmount) / (quickFrequency === 'annual' ? 12 : 1))} /mo`
+                      : '—'}
+                  </span>
+                </td>
+                <td>
+                  <select
+                    className="csp-quick-cell-select"
+                    value={quickBucket}
+                    onChange={(e) => setQuickBucket(e.target.value as any)}
+                  >
+                    <option value="fixed_costs">Fixed Costs (50-60%)</option>
+                    <option value="investments">Investments (10%+)</option>
+                    <option value="savings">Savings (5-10%)</option>
+                    <option value="guilt_free">Guilt-Free (20-35%)</option>
+                  </select>
+                </td>
+                <td>
+                  <input
+                    type="date"
+                    className="csp-quick-cell-input"
+                    value={quickDueDate}
+                    onChange={(e) => setQuickDueDate(e.target.value)}
+                  />
+                </td>
+                <td style={{ textAlign: 'right' }}>
+                  <Button
+                    variant="primary"
+                    size="dense"
+                    onClick={() => void handleQuickAdd()}
+                    disabled={savingQuick || !quickName.trim() || !quickAmount.trim()}
+                    title="Add expense row"
+                  >
+                    <Plus size={13} />
+                    <span>Add</span>
+                  </Button>
+                </td>
+              </tr>
+
+              {filteredItems.length === 0 ? (
                 <tr>
-                  <th>Expense Name</th>
-                  <th>Frequency</th>
-                  <th>Nominal Amount</th>
-                  <th>Monthly Impact</th>
-                  <th>Bucket</th>
-                  <th>Due / Renewal</th>
-                  <th style={{ textAlign: 'right' }}>Actions</th>
+                  <td colSpan={7} style={{ textAlign: 'center', padding: '32px 16px', color: 'var(--faint)' }}>
+                    No planned expenses found for this filter. Use the input row above to add one, or click &ldquo;Add Planned Expense&rdquo;.
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {filteredItems.map((item) => {
+              ) : (
+                filteredItems.map((item) => {
                   const bMeta = plan.buckets[item.bucket] || fixed_costs
                   return (
                     <tr key={item.id}>
@@ -643,11 +826,11 @@ export function PlanWorksheet({
                       </td>
                     </tr>
                   )
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+                })
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Add / Edit Planned Expense Modal */}

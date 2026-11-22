@@ -40,7 +40,7 @@ async def get_csp_plan_tool(input_data: dict) -> tuple[str, dict | None]:
         "(Track tab). For annual expenses (e.g., rent/kontrakan 28jt per year, annual car insurance, "
         "or tuition), specify frequency='annual' so it is automatically prorated into monthly "
         "fixed costs (e.g. 28jt/12 = 2.33jt/mo). Returns the saved item, updated bucket totals, "
-        "percentages, and diagnosis."
+        "percentages, financial health score, and diagnosis."
     ),
     input_schema={
         "type": "object",
@@ -50,22 +50,18 @@ async def get_csp_plan_tool(input_data: dict) -> tuple[str, dict | None]:
                 "description": "Descriptive name of the expense (e.g. 'Kontrakan Rumah', 'Listrik PLN', 'Gym', 'Netflix')",
             },
             "amount": {
-                "type": "number",
-                "description": "Nominal amount in base currency (e.g. 28000000 for 28jt)",
+                "description": "Nominal amount in base currency (e.g. 28000000 or '28jt' or '28.000.000')",
             },
             "frequency": {
                 "type": "string",
-                "enum": ["monthly", "annual"],
                 "description": "Payment frequency: 'monthly' (regular monthly bill) or 'annual' (yearly payment prorated by /12)",
                 "default": "monthly",
             },
             "bucket": {
                 "type": "string",
-                "enum": ["fixed_costs", "investments", "savings", "guilt_free"],
                 "description": (
-                    "Conscious Spending Plan bucket. 'fixed_costs': rent/mortgage, utilities, groceries, debt. "
-                    "'investments': index funds, stocks, crypto, retirement. 'savings': emergency fund, vacation, gifts. "
-                    "'guilt_free': dining out, entertainment, shopping. If omitted, auto-classified."
+                    "Conscious Spending Plan bucket: 'fixed_costs', 'investments', 'savings', or 'guilt_free'. "
+                    "If omitted, auto-classified."
                 ),
             },
             "due_date": {
@@ -82,8 +78,12 @@ async def get_csp_plan_tool(input_data: dict) -> tuple[str, dict | None]:
 )
 async def add_csp_planned_expense_tool(input_data: dict) -> tuple[str, dict | None]:
     name = str(input_data.get("name") or "").strip()
-    amount = float(input_data.get("amount", 0.0))
-    frequency = str(input_data.get("frequency") or "monthly").lower().strip()
+    if not name:
+        notes = str(input_data.get("notes") or "").strip()
+        name = notes if notes else "Planned Expense"
+
+    amount = csp_track.parse_amount(input_data.get("amount", 0.0))
+    frequency = csp_track.normalize_frequency(input_data.get("frequency"))
     bucket = input_data.get("bucket")
     due_date = input_data.get("due_date")
     notes = input_data.get("notes")
@@ -105,6 +105,7 @@ async def add_csp_planned_expense_tool(input_data: dict) -> tuple[str, dict | No
             "bucket_percentages": {k: b["pct_of_income"] for k, b in plan["buckets"].items()},
             "bucket_totals": {k: b["monthly_total"] for k, b in plan["buckets"].items()},
             "surplus_or_deficit": plan["summary"]["surplus_or_deficit"],
+            "score": plan.get("score"),
             "diagnoses": plan["diagnoses"],
         },
     }), None
@@ -138,6 +139,7 @@ async def delete_csp_planned_expense_tool(input_data: dict) -> tuple[str, dict |
             "net_income": plan["net_income"],
             "bucket_percentages": {k: b["pct_of_income"] for k, b in plan["buckets"].items()},
             "surplus_or_deficit": plan["summary"]["surplus_or_deficit"],
+            "score": plan.get("score"),
         },
     }), None
 
@@ -153,20 +155,20 @@ async def delete_csp_planned_expense_tool(input_data: dict) -> tuple[str, dict |
         "type": "object",
         "properties": {
             "monthly_net_income": {
-                "type": "number",
-                "description": "Monthly take-home pay in base currency (e.g. 15000000 for 15jt)",
+                "description": "Monthly take-home pay in base currency (e.g. 15000000 or '15jt')",
             },
         },
         "required": ["monthly_net_income"],
     },
 )
 async def set_csp_income_tool(input_data: dict) -> tuple[str, dict | None]:
-    income = float(input_data.get("monthly_net_income", 0.0))
+    income = csp_track.parse_amount(input_data.get("monthly_net_income", 0.0))
     csp_track.update_csp_config({"custom_monthly_income": income})
     plan = csp_track.get_csp_plan()
     return json.dumps({
         "net_income": plan["net_income"],
         "bucket_percentages": {k: b["pct_of_income"] for k, b in plan["buckets"].items()},
         "surplus_or_deficit": plan["summary"]["surplus_or_deficit"],
+        "score": plan.get("score"),
         "diagnoses": plan["diagnoses"],
     }), None

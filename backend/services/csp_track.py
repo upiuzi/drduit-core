@@ -101,6 +101,65 @@ def _get_settings_store() -> NamespacedSettingsStore:
     return NamespacedSettingsStore("csp_track")
 
 
+def parse_amount(val: Any) -> float:
+    """Robustly parse numeric or formatted string amounts (e.g. '28jt', '28.000.000', '2.5jt')."""
+    if isinstance(val, (int, float)):
+        return float(val)
+    if not val:
+        return 0.0
+    s = str(val).strip().lower()
+    mult = 1.0
+    if "jt" in s or "juta" in s:
+        mult = 1_000_000.0
+        s = re.sub(r"(jt|juta)", "", s)
+    elif "rb" in s or "ribu" in s:
+        mult = 1_000.0
+        s = re.sub(r"(rb|ribu)", "", s)
+    elif s.endswith("m") and not s.endswith("am") and not s.endswith("pm"):
+        mult = 1_000_000.0
+        s = s[:-1]
+    elif s.endswith("k"):
+        mult = 1_000.0
+        s = s[:-1]
+
+    # Strip currency indicators
+    s = re.sub(r"^(rp|idr|\$|€|£)", "", s).strip()
+    if s.count(".") > 1:
+        s = s.replace(".", "")
+    elif s.count(",") > 1:
+        s = s.replace(",", "")
+    elif s.count(".") == 1 and s.count(",") == 1:
+        if s.find(".") < s.find(","):
+            s = s.replace(".", "").replace(",", ".")
+        else:
+            s = s.replace(",", "")
+    elif s.count(".") == 1:
+        parts = s.split(".")
+        if len(parts[1]) == 3 and mult == 1.0:
+            s = s.replace(".", "")
+    elif s.count(",") == 1:
+        parts = s.split(",")
+        if len(parts[1]) == 3 and mult == 1.0:
+            s = s.replace(",", "")
+        else:
+            s = s.replace(",", ".")
+
+    try:
+        return round(float(s.strip()) * mult, 2)
+    except (ValueError, TypeError):
+        return 0.0
+
+
+def normalize_frequency(val: Any) -> str:
+    """Normalize frequency string: annual/yearly/tahunan/per tahun -> 'annual', else 'monthly'."""
+    s = str(val or "").strip().lower()
+    if any(k in s for k in ("annual", "year", "thn", "tahun")):
+        return "annual"
+    if re.search(r"\bth\b", s) or "/th" in s or "/yr" in s:
+        return "annual"
+    return "monthly"
+
+
 def classify_category(category_id: str | None, category_label: str, overrides: dict[str, str]) -> str:
     """Classifies a category into one of the 4 Conscious Spending Plan buckets."""
     if category_id and category_id in overrides:
@@ -379,6 +438,13 @@ def get_csp_tracking(month: str | None = None) -> dict[str, Any]:
         if c.get("kind") in ("expense", "transfer")
     ]
 
+    plan_data = get_csp_plan()
+    planned_in_month = []
+    for item in plan_data.get("planned_expenses", []):
+        d = item.get("due_date")
+        if d and str(d).startswith(month):
+            planned_in_month.append(item)
+
     return {
         "month": month,
         "base_currency": base,
@@ -396,7 +462,8 @@ def get_csp_tracking(month: str | None = None) -> dict[str, Any]:
         "recent_transactions": month_txns[:30],
         "category_mappings": overrides,
         "categories_catalog": categories_catalog,
-        "plan": get_csp_plan(),
+        "plan": plan_data,
+        "planned_in_month": planned_in_month,
     }
 
 
@@ -415,13 +482,8 @@ def get_planned_expenses() -> list[dict[str, Any]]:
             continue
         item_id = str(item.get("id") or f"plan_{uuid.uuid4().hex[:8]}")
         name = str(item.get("name") or "Unnamed Planned Expense").strip()
-        try:
-            amt = float(item.get("amount") or 0.0)
-        except (ValueError, TypeError):
-            amt = 0.0
-        freq = str(item.get("frequency") or "monthly").lower().strip()
-        if freq not in ("monthly", "annual"):
-            freq = "monthly"
+        amt = parse_amount(item.get("amount") or 0.0)
+        freq = normalize_frequency(item.get("frequency"))
 
         # Prorating: annual is divided by 12 to get monthly equivalent
         if freq == "annual":
@@ -461,18 +523,14 @@ def add_or_update_planned_expense(payload: dict[str, Any]) -> dict[str, Any]:
 
     name = str(payload.get("name") or "").strip()
     if not name:
-        raise ValueError("Expense name is required.")
+        notes = str(payload.get("notes") or "").strip()
+        name = notes if notes else "Planned Expense"
 
-    try:
-        amt = float(payload.get("amount", 0.0))
-    except (ValueError, TypeError):
-        amt = 0.0
+    amt = parse_amount(payload.get("amount", 0.0))
     if amt < 0:
         raise ValueError("Amount cannot be negative.")
 
-    freq = str(payload.get("frequency") or "monthly").lower().strip()
-    if freq not in ("monthly", "annual"):
-        freq = "monthly"
+    freq = normalize_frequency(payload.get("frequency"))
 
     overrides = current.get("category_mappings", {})
     bucket = str(payload.get("bucket") or "").lower().strip()
@@ -521,6 +579,10 @@ def add_or_update_planned_expense(payload: dict[str, Any]) -> dict[str, Any]:
         expenses[target_idx] = record
     else:
         expenses.append(record)
+
+    current["planned_expenses"] = expenses
+    store.save(current)
+    return record
 
     current["planned_expenses"] = expenses
     store.save(current)
@@ -757,6 +819,45 @@ def get_csp_plan() -> dict[str, Any]:
             "action": "Direct this surplus toward your emergency fund or investment accounts.",
         })
 
+    # Financial Score calculation (0 - 100)
+    score = 100.0
+    if net_income <= 0:
+        score = 50.0
+        grade = "Needs Income"
+        verdict = "Set your monthly Net Income to calculate your Conscious Spending Plan score."
+    else:
+        # Fixed costs penalty if > 60%
+        if fixed_pct > 60.0:
+            score -= min(35.0, (fixed_pct - 60.0) * 1.8)
+
+        # Investment penalty if < 10%
+        inv_pct = bucket_map["investments"]["pct_of_income"]
+        if inv_pct < 10.0:
+            score -= min(25.0, (10.0 - inv_pct) * 2.5)
+
+        # Savings penalty if < 5%
+        sav_pct = bucket_map["savings"]["pct_of_income"]
+        if sav_pct < 5.0:
+            score -= min(15.0, (5.0 - sav_pct) * 2.0)
+
+        # Deficit penalty
+        if surplus_or_deficit < 0:
+            score -= 20.0
+
+        score = float(max(10, min(100, round(score))))
+        if score >= 85:
+            grade = "Excellent"
+            verdict = "Outstanding! Your plan meets or exceeds Ramit Sethi's benchmarks across all buckets."
+        elif score >= 70:
+            grade = "Good"
+            verdict = "Solid financial balance with only minor optimizations recommended."
+        elif score >= 50:
+            grade = "Fair"
+            verdict = "Some imbalance detected. Check Fixed Costs and Investments targets."
+        else:
+            grade = "Needs Attention"
+            verdict = "Fixed costs are consuming too much income or spending exceeds take-home pay."
+
     return {
         "base_currency": base,
         "net_income": round(net_income, 2),
@@ -769,6 +870,11 @@ def get_csp_plan() -> dict[str, Any]:
             "surplus_or_deficit": surplus_or_deficit,
             "guilt_free_allowance": guilt_free_allowance,
             "guilt_free_remaining": guilt_free_remaining,
+        },
+        "score": {
+            "points": score,
+            "grade": grade,
+            "verdict": verdict,
         },
         "diagnoses": diagnoses,
     }

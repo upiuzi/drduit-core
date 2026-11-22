@@ -1323,3 +1323,290 @@
   line-height: 1.35;
 }
 
+/* ── Financial Health Scorecard Banner ── */
+.csp-score-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 18px 24px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.csp-score-banner::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--primary, #3b86dd);
+}
+
+.csp-score-excellent::before {
+  background: var(--good, #10b981);
+}
+
+.csp-score-good::before {
+  background: var(--primary, #3b86dd);
+}
+
+.csp-score-fair::before {
+  background: var(--warning, #f59e0b);
+}
+
+.csp-score-needs-attention::before,
+.csp-score-needs-income::before {
+  background: var(--bad, #ef4444);
+}
+
+.csp-score-left {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.csp-score-circle {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--bg-2);
+  border: 2.5px solid var(--primary, #3b86dd);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.csp-score-excellent .csp-score-circle {
+  border-color: var(--good, #10b981);
+}
+
+.csp-score-fair .csp-score-circle {
+  border-color: var(--warning, #f59e0b);
+}
+
+.csp-score-needs-attention .csp-score-circle,
+.csp-score-needs-income .csp-score-circle {
+  border-color: var(--bad, #ef4444);
+}
+
+.csp-score-number {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.csp-score-denom {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--faint);
+}
+
+.csp-score-details {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csp-score-badge-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.csp-score-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--primary, #3b86dd) 15%, transparent);
+  color: var(--primary, #3b86dd);
+}
+
+.csp-score-excellent .csp-score-badge {
+  background: color-mix(in srgb, var(--good, #10b981) 15%, transparent);
+  color: var(--good, #10b981);
+}
+
+.csp-score-fair .csp-score-badge {
+  background: color-mix(in srgb, var(--warning, #f59e0b) 15%, transparent);
+  color: var(--warning, #f59e0b);
+}
+
+.csp-score-needs-attention .csp-score-badge,
+.csp-score-needs-income .csp-score-badge {
+  background: color-mix(in srgb, var(--bad, #ef4444) 15%, transparent);
+  color: var(--bad, #ef4444);
+}
+
+.csp-score-subtext {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.csp-score-verdict {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--text);
+  max-width: 500px;
+  line-height: 1.4;
+}
+
+.csp-score-metrics {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.csp-score-metric-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 12px;
+  background: var(--bg-2);
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
+.csp-sm-label {
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--faint);
+  letter-spacing: 0.04em;
+}
+
+.csp-sm-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.csp-sm-val.good {
+  color: var(--good, #10b981);
+}
+
+.csp-sm-val.warning {
+  color: var(--warning, #f59e0b);
+}
+
+.csp-sm-val.danger {
+  color: var(--bad, #ef4444);
+}
+
+.csp-sm-target {
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* ── Excel Quick Add Row ── */
+.csp-quick-add-tr {
+  background: color-mix(in srgb, var(--primary, #3b86dd) 6%, var(--panel)) !important;
+  border-bottom: 2px solid color-mix(in srgb, var(--primary, #3b86dd) 25%, var(--line));
+}
+
+.csp-quick-cell-input {
+  width: 100%;
+  padding: 6px 10px;
+  font-size: 12.5px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.15s ease;
+}
+
+.csp-quick-cell-input:focus {
+  border-color: var(--primary, #3b86dd);
+  background: var(--panel);
+}
+
+.csp-quick-cell-select {
+  width: 100%;
+  padding: 6px 8px;
+  font-size: 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+  outline: none;
+  cursor: pointer;
+}
+
+.csp-quick-cell-select:focus {
+  border-color: var(--primary, #3b86dd);
+}
+
+.csp-quick-preview-impact {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--primary, #3b86dd);
+}
+
+/* ── Upcoming Planned in Month View ── */
+.csp-upcoming-banner {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.csp-upcoming-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.csp-upcoming-grid {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.csp-upcoming-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.csp-upcoming-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.csp-upcoming-amt {
+  font-weight: 600;
+  color: var(--primary, #3b86dd);
+}
+
+.csp-upcoming-due {
+  font-size: 11px;
+  color: var(--faint);
+}
+

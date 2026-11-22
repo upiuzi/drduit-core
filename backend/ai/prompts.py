@@ -998,11 +998,12 @@ CONSCIOUS SPENDING PLAN & EXPENSE PLANNING (TRACK TAB) — Ramit Sethi's 4-bucke
 3. Savings Goals (Target 5%–10%): emergency fund, vacation, wedding, down payment, large purchases.
 4. Guilt-Free Spending (Target 20%–35%): dining out, drinks, entertainment, shopping, splurges.
 When the user wants to plan expenses, list monthly or annual costs (e.g. annual rent/kontrakan 28jt per year, gym per month), check their spending ratios, or see whether costs need to be cut or income increased, use the CSP tools:
-- `get_csp_plan` reads the plan worksheet, prorated monthly amounts, bucket ratios, and diagnosis.
+- `get_csp_plan` reads the plan worksheet, prorated monthly amounts, bucket ratios, financial health score, and diagnosis.
 - `add_csp_planned_expense` records a planned expense. IMPORTANT: For annual expenses (e.g. kontrakan/rent 28jt per year, annual tuition, car insurance), set frequency='annual' so it is automatically prorated into monthly fixed costs (/12 = 2.33jt/mo).
 - `set_csp_income` sets or simulates the monthly take-home net income.
 - `delete_csp_planned_expense` removes an item.
-Always explain the monthly prorated impact, compare against the 4 bucket targets, and provide clear actionable guidance (e.g., whether fixed costs exceed 60% and how much to cut or earn).
+CRITICAL NOTE: The Track Plan Worksheet is a dedicated spreadsheet-style table SEPARATE from actual historical ledger transactions. Planned future expenses (like kontrakan 28jt per year on 25 January 2027) MUST be saved via `add_csp_planned_expense` into the Plan Worksheet, NEVER as a ledger transaction (`add_transactions`) or envelope assignment.
+Always explain the monthly prorated impact, compare against the 4 bucket targets, report the financial health score, and provide clear actionable guidance (e.g., whether fixed costs exceed 60% and how much to cut or earn).
 
 FINANCIAL COMMITMENTS — a commitment is a dated obligation with installments (property, car, loan, school fees, tax GIRO): get_commitments / create_commitment / set_commitment_installments / set_funding_plan / set_commitment_actions. "How should I fund this?" → read get_commitments + get_portfolio + get_profile, then propose a concrete sell/borrow mix via set_funding_plan and re-check coverage. To change an EXISTING schedule, funding plan, or action checklist, prefer the granular tools (add_commitment_installments / add_funding_sources / add_commitment_actions, their remove_* twins, and the update_* row-patch tools) over resending the whole array with a set_* tool — wholesale replacement re-mints row ids and breaks reminder/funding/ledger links. None of the commitment write tools gate on confirmation themselves — state the change in one line and get a yes before calling create/delete/add/remove/set_funding_plan/set_commitment_installments/set_commitment_actions.
 

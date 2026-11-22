@@ -195,11 +195,66 @@ class TestCspTrack(unittest.TestCase):
         self.assertEqual(plan_data["net_income"], 10000000.0)
         self.assertIn("buckets", plan_data)
         self.assertIn("diagnoses", plan_data)
+        self.assertIn("score", plan_data)
+        self.assertIn("points", plan_data["score"])
+        self.assertIn("grade", plan_data["score"])
 
         # 4. DELETE planned expense
         del_res = self.client.delete(f"/api/plan/track/planned-expenses/{expense_id}")
         self.assertEqual(del_res.status_code, 200)
         self.assertTrue(del_res.json()["ok"])
+
+    def test_parse_amount_and_normalize_frequency(self):
+        self.assertEqual(csp_track.parse_amount(28000000), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("28000000"), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("28jt"), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("28 jt"), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("28 juta"), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("2.5jt"), 2500000.0)
+        self.assertEqual(csp_track.parse_amount("28.000.000"), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("28,000,000"), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("Rp 28.000.000"), 28000000.0)
+        self.assertEqual(csp_track.parse_amount("500k"), 500000.0)
+        self.assertEqual(csp_track.parse_amount("500rb"), 500000.0)
+
+        self.assertEqual(csp_track.normalize_frequency("annual"), "annual")
+        self.assertEqual(csp_track.normalize_frequency("tahunan"), "annual")
+        self.assertEqual(csp_track.normalize_frequency("per tahun"), "annual")
+        self.assertEqual(csp_track.normalize_frequency("yearly"), "annual")
+        self.assertEqual(csp_track.normalize_frequency("monthly"), "monthly")
+        self.assertEqual(csp_track.normalize_frequency("bulanan"), "monthly")
+        self.assertEqual(csp_track.normalize_frequency("per bulan"), "monthly")
+
+    def test_ai_tools_planned_expense(self):
+        import asyncio
+        import json
+        from backend.ai.tools.csp_plan import (
+            add_csp_planned_expense_tool,
+            get_csp_plan_tool,
+            set_csp_income_tool,
+        )
+
+        async def _run():
+            # Set income using "15jt"
+            await set_csp_income_tool({"monthly_net_income": "15jt"})
+
+            # Add annual expense "28jt" "per tahun"
+            res_text, _ = await add_csp_planned_expense_tool({
+                "name": "Kontrakan Rumah",
+                "amount": "28jt",
+                "frequency": "per tahun",
+                "due_date": "2027-01-25",
+            })
+            res = json.loads(res_text)
+            saved = res["saved_expense"]
+            self.assertEqual(saved["name"], "Kontrakan Rumah")
+            self.assertEqual(saved["amount"], 28000000.0)
+            self.assertEqual(saved["frequency"], "annual")
+            self.assertEqual(saved["monthly_amount"], 2333333.33)
+            self.assertEqual(saved["due_date"], "2027-01-25")
+            self.assertIn("score", res["updated_plan_summary"])
+
+        asyncio.run(_run())
 
 
 if __name__ == "__main__":
