@@ -334,6 +334,107 @@ export function PlanWorksheet({
         </div>
       </div>
 
+      {/* ── Quick Manual Add Expense Strip ── */}
+      <div className="csp-manual-add-strip">
+        <div className="csp-mas-top">
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <Plus size={16} color="var(--primary, #3b86dd)" />
+            <h4 style={{ margin: 0, fontSize: '13.5px', fontWeight: 700, color: 'var(--ink)' }}>
+              Manual Add Expense (Tambah Pengeluaran)
+            </h4>
+          </div>
+          <span className="csp-mas-hint">
+            Masukkan pengeluaran bulanan atau tahunan (misal Kontrakan 28jt/thn otomatis dihitung per bulan)
+          </span>
+        </div>
+
+        <div className="csp-mas-form-row">
+          <div className="csp-mas-field" style={{ flex: 2, minWidth: '180px' }}>
+            <label className="csp-mas-label">Nama Pengeluaran</label>
+            <input
+              type="text"
+              className="csp-form-input"
+              placeholder="e.g. Kontrakan Rumah, Listrik, Bibit"
+              value={quickName}
+              onChange={(e) => setQuickName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') void handleQuickAdd()
+              }}
+            />
+          </div>
+
+          <div className="csp-mas-field" style={{ flex: 1, minWidth: '130px' }}>
+            <label className="csp-mas-label">Ritme / Periode</label>
+            <select
+              className="csp-form-input"
+              value={quickFrequency}
+              onChange={(e) => setQuickFrequency(e.target.value as 'monthly' | 'annual')}
+            >
+              <option value="monthly">Bulanan (/bln)</option>
+              <option value="annual">Tahunan (/thn)</option>
+            </select>
+          </div>
+
+          <div className="csp-mas-field" style={{ flex: 1.5, minWidth: '140px' }}>
+            <label className="csp-mas-label">Nominal</label>
+            <input
+              type="text"
+              className="csp-form-input"
+              placeholder="e.g. 28jt atau 28000000"
+              value={quickAmount}
+              onChange={(e) => setQuickAmount(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') void handleQuickAdd()
+              }}
+            />
+          </div>
+
+          <div className="csp-mas-field" style={{ flex: 1.5, minWidth: '150px' }}>
+            <label className="csp-mas-label">Pos / Kategori</label>
+            <select
+              className="csp-form-input"
+              value={quickBucket}
+              onChange={(e) => setQuickBucket(e.target.value as any)}
+            >
+              <option value="fixed_costs">Fixed Costs (50-60%)</option>
+              <option value="investments">Investments (10%+)</option>
+              <option value="savings">Savings (5-10%)</option>
+              <option value="guilt_free">Guilt-Free (20-35%)</option>
+            </select>
+          </div>
+
+          <div className="csp-mas-field" style={{ flex: 1, minWidth: '130px' }}>
+            <label className="csp-mas-label">Tanggal (Opsional)</label>
+            <input
+              type="date"
+              className="csp-form-input"
+              value={quickDueDate}
+              onChange={(e) => setQuickDueDate(e.target.value)}
+            />
+          </div>
+
+          <div className="csp-mas-field" style={{ alignSelf: 'flex-end', minWidth: '90px' }}>
+            <Button
+              variant="primary"
+              size="dense"
+              onClick={() => void handleQuickAdd()}
+              disabled={savingQuick || !quickName.trim() || !quickAmount.trim()}
+              style={{ width: '100%', height: '36px', fontWeight: 700 }}
+            >
+              <Plus size={14} />
+              <span>Tambah</span>
+            </Button>
+          </div>
+        </div>
+
+        {quickAmount && (
+          <div className="csp-mas-preview">
+            💡 Dampak terhitung: <strong>{fBase(parseInputAmount(quickAmount) / (quickFrequency === 'annual' ? 12 : 1))} / bulan</strong>
+            {quickFrequency === 'annual' && ` (${fBase(parseInputAmount(quickAmount))} ÷ 12 bulan)`}
+          </div>
+        )}
+      </div>
+
       {/* ── Ramit Sethi 4 Pos Cards with Manual Add Button & Item Breakdown ── */}
       <div className="csp-worksheet-cards-grid">
         {/* Fixed Costs Card */}

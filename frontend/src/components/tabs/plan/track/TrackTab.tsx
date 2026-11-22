@@ -5,6 +5,7 @@ import {
   SlidersHorizontal,
   Sparkles,
   CalendarDays,
+  Plus,
 } from '../../../../ui/icons'
 import { Button } from '../../../ui'
 import { fBase, fBaseWhole } from '../../../../utils/format'
@@ -15,6 +16,7 @@ import {
 } from './CustomizeCategoriesModal'
 import { TransactionsDrawer, type TrackTransaction } from './TransactionsDrawer'
 import { PlanWorksheet, type CspPlanData } from './PlanWorksheet'
+import { AddPlannedExpenseModal } from './AddPlannedExpenseModal'
 import './track.css'
 
 interface BucketCategory {
@@ -90,6 +92,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [activeView, setActiveView] = useState<'worksheet' | 'track'>('worksheet')
+  const [addModalOpen, setAddModalOpen] = useState(false)
 
   // Modals state
   const [customizeOpen, setCustomizeOpen] = useState(false)
@@ -303,6 +306,16 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         </div>
 
         <div className="csp-tools-right">
+          <Button
+            variant="primary"
+            size="dense"
+            onClick={() => setAddModalOpen(true)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Plus size={14} />
+            <span>+ Add Expense (Manual)</span>
+          </Button>
+
           {activeView === 'track' && (
             <Button
               variant="secondary"
@@ -772,6 +785,17 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           transactions={activeDrawerBucket.txns}
         />
       )}
+
+      {/* Manual Add Expense Modal (Accessible globally in Track) */}
+      <AddPlannedExpenseModal
+        isOpen={addModalOpen}
+        onClose={() => setAddModalOpen(false)}
+        onSave={async (payload) => {
+          await handleSaveExpense(payload)
+          toast?.('Planned expense added.')
+          await loadData(month)
+        }}
+      />
     </div>
   )
 }
