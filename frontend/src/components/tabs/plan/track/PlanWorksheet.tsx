@@ -13,6 +13,7 @@ import { fBase, fBaseWhole } from '../../../../utils/format'
 import {
   AddPlannedExpenseModal,
   type PlannedExpenseItem,
+  type PlannedIncomeItem,
 } from './AddPlannedExpenseModal'
 
 export interface CspDiagnosisItem {
@@ -29,6 +30,8 @@ export interface CspPlanData {
   net_income_source: string
   unexpected_buffer_enabled: boolean
   planned_expenses: PlannedExpenseItem[]
+  planned_incomes?: PlannedIncomeItem[]
+  planned_incomes_total?: number
   score?: {
     points: number
     grade: string
@@ -110,7 +113,15 @@ interface Props {
     due_date?: string | null
     notes?: string | null
   }) => Promise<void>
+  onSaveIncome?: (income: {
+    id?: string
+    name: string
+    amount: number
+    frequency: 'monthly' | 'annual'
+    notes?: string | null
+  }) => Promise<void>
   onDeleteExpense: (expenseId: string) => Promise<void>
+  onDeleteIncome?: (incomeId: string) => Promise<void>
   onUpdateIncome: (income: number) => Promise<void>
   onAskLucius?: (prompt: string) => void
   toast?: (msg: string) => void
@@ -120,14 +131,17 @@ export function PlanWorksheet({
   plan,
   onRefresh,
   onSaveExpense,
+  onSaveIncome,
   onDeleteExpense,
+  onDeleteIncome,
   onUpdateIncome,
   onAskLucius,
   toast,
 }: Props) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [modalType, setModalType] = useState<'expense' | 'income'>('expense')
   const [selectedBucket, setSelectedBucket] = useState<'fixed_costs' | 'investments' | 'savings' | 'guilt_free'>('fixed_costs')
-  const [editingItem, setEditingItem] = useState<PlannedExpenseItem | null>(null)
+  const [editingItem, setEditingItem] = useState<PlannedExpenseItem | PlannedIncomeItem | null>(null)
   const [activeFilter, setActiveFilter] = useState<string>('all')
 
   // Income edit modal/inline state
@@ -135,6 +149,7 @@ export function PlanWorksheet({
   const [incomeInput, setIncomeInput] = useState<string>(String(plan.net_income || ''))
 
   // Quick inline row state (Excel style)
+  const [quickType, setQuickType] = useState<'expense' | 'income'>('expense')
   const [quickName, setQuickName] = useState('')
   const [quickAmount, setQuickAmount] = useState('')
   const [quickFrequency, setQuickFrequency] = useState<'monthly' | 'annual'>('monthly')
@@ -170,7 +185,7 @@ export function PlanWorksheet({
   const handleQuickAdd = async (e?: React.FormEvent) => {
     if (e) e.preventDefault()
     if (!quickName.trim()) {
-      toast?.('Please enter an expense name.')
+      toast?.(`Please enter ${quickType === 'income' ? 'an income' : 'an expense'} name.`)
       return
     }
     const amt = parseInputAmount(quickAmount)
@@ -180,20 +195,31 @@ export function PlanWorksheet({
     }
     setSavingQuick(true)
     try {
-      await onSaveExpense({
-        name: quickName.trim(),
-        amount: amt,
-        frequency: quickFrequency,
-        bucket: quickBucket,
-        due_date: quickDueDate.trim() || null,
-      })
+      if (quickType === 'income') {
+        if (onSaveIncome) {
+          await onSaveIncome({
+            name: quickName.trim(),
+            amount: amt,
+            frequency: quickFrequency,
+          })
+          toast?.(`Added income "${quickName.trim()}" to worksheet.`)
+        }
+      } else {
+        await onSaveExpense({
+          name: quickName.trim(),
+          amount: amt,
+          frequency: quickFrequency,
+          bucket: quickBucket,
+          due_date: quickDueDate.trim() || null,
+        })
+        toast?.(`Added "${quickName.trim()}" to worksheet.`)
+      }
       setQuickName('')
       setQuickAmount('')
       setQuickDueDate('')
-      toast?.(`Added "${quickName.trim()}" to worksheet.`)
       await onRefresh()
     } catch {
-      toast?.('Failed to add expense.')
+      toast?.(`Failed to add ${quickType}.`)
     } finally {
       setSavingQuick(false)
     }
@@ -207,12 +233,26 @@ export function PlanWorksheet({
         : 'fixed_costs'
     setSelectedBucket(safeBucket)
     setEditingItem(null)
+    setModalType('expense')
+    setModalOpen(true)
+  }
+
+  const handleOpenAddIncome = () => {
+    setEditingItem(null)
+    setModalType('income')
     setModalOpen(true)
   }
 
   const handleOpenEdit = (item: PlannedExpenseItem) => {
     setEditingItem(item)
     setSelectedBucket(item.bucket)
+    setModalType('expense')
+    setModalOpen(true)
+  }
+
+  const handleOpenEditIncome = (item: PlannedIncomeItem) => {
+    setEditingItem(item)
+    setModalType('income')
     setModalOpen(true)
   }
 
@@ -224,6 +264,20 @@ export function PlanWorksheet({
         await onRefresh()
       } catch {
         toast?.('Failed to delete expense.')
+      }
+    }
+  }
+
+  const handleDeleteIncome = async (item: PlannedIncomeItem) => {
+    if (confirm(`Remove planned income "${item.name}"?`)) {
+      try {
+        if (onDeleteIncome) {
+          await onDeleteIncome(item.id)
+        }
+        toast?.(`Removed income "${item.name}".`)
+        await onRefresh()
+      } catch {
+        toast?.('Failed to delete income.')
       }
     }
   }
@@ -286,7 +340,18 @@ export function PlanWorksheet({
 
         <div className="csp-qd-kpis">
           <div className="csp-qd-kpi-item">
-            <span className="csp-qd-label">Monthly Take-Home Income</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px' }}>
+              <span className="csp-qd-label">Monthly Take-Home Income</span>
+              <button
+                type="button"
+                className="csp-qd-income-add-link"
+                onClick={handleOpenAddIncome}
+                title="Tambah Sumber Pemasukan Baru"
+              >
+                <Plus size={11} />
+                <span>Add Income</span>
+              </button>
+            </div>
             <div className="csp-qd-val-wrap">
               {editingIncome ? (
                 <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
@@ -310,13 +375,18 @@ export function PlanWorksheet({
                       setIncomeInput(String(plan.net_income || ''))
                       setEditingIncome(true)
                     }}
-                    title="Edit Net Income"
+                    title="Manual Override Net Income"
                   >
                     <Pencil size={11} />
                   </button>
                 </>
               )}
             </div>
+            {plan.planned_incomes && plan.planned_incomes.length > 0 && (
+              <span className="csp-qd-sources-hint">
+                Total dari {plan.planned_incomes.length} sumber pemasukan
+              </span>
+            )}
           </div>
           <div className="csp-qd-kpi-item">
             <span className="csp-qd-label">Total Planned Outflows</span>
@@ -336,27 +406,50 @@ export function PlanWorksheet({
         </div>
       </div>
 
-      {/* ── Quick Manual Add Expense Strip ── */}
+      {/* ── Quick Manual Add Strip (Expenses & Income) ── */}
       <div className="csp-manual-add-strip">
         <div className="csp-mas-top">
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <Plus size={16} color="var(--primary, #3b86dd)" />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <div className="csp-mas-type-toggle">
+              <button
+                type="button"
+                className={`csp-mas-type-btn ${quickType === 'expense' ? 'active' : ''}`}
+                onClick={() => setQuickType('expense')}
+              >
+                💸 Tambah Pengeluaran
+              </button>
+              <button
+                type="button"
+                className={`csp-mas-type-btn ${quickType === 'income' ? 'active income' : ''}`}
+                onClick={() => setQuickType('income')}
+              >
+                💰 Tambah Pemasukan
+              </button>
+            </div>
             <h4 style={{ margin: 0, fontSize: '13.5px', fontWeight: 700, color: 'var(--ink)' }}>
-              Manual Add Expense (Tambah Pengeluaran)
+              {quickType === 'income' ? 'Manual Add Income (Tambah Pemasukan)' : 'Manual Add Expense (Tambah Pengeluaran)'}
             </h4>
           </div>
           <span className="csp-mas-hint">
-            Masukkan pengeluaran bulanan atau tahunan (misal Kontrakan 28jt/thn otomatis dihitung per bulan)
+            {quickType === 'income'
+              ? 'Tambah sumber pemasukan (gaji, freelance, bonus tahunan /12) untuk hitung total take-home pay'
+              : 'Masukkan pengeluaran bulanan atau tahunan (misal Kontrakan 28jt/thn otomatis dihitung per bulan)'}
           </span>
         </div>
 
         <div className="csp-mas-form-row">
           <div className="csp-mas-field" style={{ flex: 2, minWidth: '180px' }}>
-            <label className="csp-mas-label">Nama Pengeluaran</label>
+            <label className="csp-mas-label">
+              {quickType === 'income' ? 'Nama Pemasukan (Sumber Income)' : 'Nama Pengeluaran'}
+            </label>
             <input
               type="text"
               className="ui-input"
-              placeholder="e.g. Kontrakan Rumah, Listrik, Bibit"
+              placeholder={
+                quickType === 'income'
+                  ? 'e.g. Gaji Pokok, Freelance Project, Dividen'
+                  : 'e.g. Kontrakan Rumah, Listrik, Bibit'
+              }
               value={quickName}
               onChange={(e) => setQuickName(e.target.value)}
               onKeyDown={(e) => {
@@ -382,7 +475,11 @@ export function PlanWorksheet({
             <input
               type="text"
               className="ui-input"
-              placeholder="e.g. 28jt atau 28000000"
+              placeholder={
+                quickType === 'income'
+                  ? 'e.g. 15jt atau 15000000'
+                  : 'e.g. 28jt atau 28000000'
+              }
               value={quickAmount}
               onChange={(e) => setQuickAmount(e.target.value)}
               onKeyDown={(e) => {
@@ -393,16 +490,26 @@ export function PlanWorksheet({
 
           <div className="csp-mas-field" style={{ flex: 1.5, minWidth: '150px' }}>
             <label className="csp-mas-label">Pos / Kategori</label>
-            <select
-              className="ui-select"
-              value={quickBucket}
-              onChange={(e) => setQuickBucket(e.target.value as any)}
-            >
-              <option value="fixed_costs">Fixed Costs (50-60%)</option>
-              <option value="investments">Investments (10%+)</option>
-              <option value="savings">Savings (5-10%)</option>
-              <option value="guilt_free">Guilt-Free (20-35%)</option>
-            </select>
+            {quickType === 'income' ? (
+              <input
+                type="text"
+                className="ui-input"
+                value="💰 Take-Home Pay (Income)"
+                disabled
+                style={{ opacity: 0.85, cursor: 'not-allowed' }}
+              />
+            ) : (
+              <select
+                className="ui-select"
+                value={quickBucket}
+                onChange={(e) => setQuickBucket(e.target.value as any)}
+              >
+                <option value="fixed_costs">Fixed Costs (50-60%)</option>
+                <option value="investments">Investments (10%+)</option>
+                <option value="savings">Savings (5-10%)</option>
+                <option value="guilt_free">Guilt-Free (20-35%)</option>
+              </select>
+            )}
           </div>
 
           <div className="csp-mas-field" style={{ flex: 1, minWidth: '130px' }}>
@@ -417,24 +524,110 @@ export function PlanWorksheet({
 
           <div className="csp-mas-field" style={{ alignSelf: 'flex-end', minWidth: '90px' }}>
             <Button
-              variant="primary"
+              variant={quickType === 'income' ? 'secondary' : 'primary'}
               size="dense"
               onClick={() => void handleQuickAdd()}
               disabled={savingQuick || !quickName.trim() || !quickAmount.trim()}
-              style={{ width: '100%', height: '36px', fontWeight: 700 }}
+              style={{
+                width: '100%',
+                height: '36px',
+                fontWeight: 700,
+                color: quickType === 'income' ? 'var(--good, #10b981)' : undefined,
+                borderColor: quickType === 'income' ? 'var(--good, #10b981)' : undefined,
+              }}
             >
               <Plus size={14} />
-              <span>Tambah</span>
+              <span>{quickType === 'income' ? '+ Income' : '+ Expense'}</span>
             </Button>
           </div>
         </div>
 
         {quickAmount && (
           <div className="csp-mas-preview">
-            💡 Dampak terhitung: <strong>{fBase(parseInputAmount(quickAmount) / (quickFrequency === 'annual' ? 12 : 1))} / bulan</strong>
+            💡 Dampak terhitung:{' '}
+            <strong>
+              {quickType === 'income' ? '+' : ''}
+              {fBase(parseInputAmount(quickAmount) / (quickFrequency === 'annual' ? 12 : 1))} / bulan
+            </strong>
             {quickFrequency === 'annual' && ` (${fBase(parseInputAmount(quickAmount))} ÷ 12 bulan)`}
+            {quickType === 'income' && ' ke Total Take-Home Pay'}
           </div>
         )}
+      </div>
+
+      {/* ── Income Streams Breakdown Card ── */}
+      <div className="csp-income-card">
+        <div className="csp-wcard-top">
+          <div className="csp-wcard-title-group">
+            <span className="csp-bucket-dot" style={{ backgroundColor: 'var(--good, #10b981)' }} />
+            <span className="csp-wcard-name">Sumber Pemasukan Bersih (Income Streams)</span>
+            <span className="csp-sources-count-badge">
+              {plan.planned_incomes?.length || 1} Sumber
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <span className="csp-target-badge" style={{ color: 'var(--good, #10b981)', borderColor: 'rgba(16, 185, 129, 0.3)' }}>
+              Total: {fBaseWhole(plan.net_income)} /bln
+            </span>
+            <Button
+              variant="secondary"
+              size="dense"
+              onClick={handleOpenAddIncome}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}
+            >
+              <Plus size={13} color="var(--good, #10b981)" />
+              <span>+ Add Income</span>
+            </Button>
+          </div>
+        </div>
+
+        <div className="csp-card-items-wrap" style={{ marginTop: '12px' }}>
+          {!plan.planned_incomes || plan.planned_incomes.length === 0 ? (
+            <div className="csp-card-empty-hint" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+              <span>
+                Belum ada rincian multi-sumber pemasukan. Saat ini total take-home income adalah <strong>{fBase(plan.net_income)}/bulan</strong>.
+              </span>
+              <Button variant="secondary" size="dense" onClick={handleOpenAddIncome}>
+                + Tambah Sumber Pemasukan
+              </Button>
+            </div>
+          ) : (
+            plan.planned_incomes.map((inc) => (
+              <div key={inc.id} className="csp-card-item-row income-row">
+                <div className="csp-cir-left">
+                  <span className="csp-cir-title" style={{ fontWeight: 600 }}>{inc.name}</span>
+                  {inc.notes && <span className="csp-cir-due">{inc.notes}</span>}
+                </div>
+                <div className="csp-cir-right">
+                  <span className="csp-cir-amt" style={{ color: 'var(--good, #10b981)', fontWeight: 700 }}>
+                    +{fBase(inc.monthly_amount)}/mo
+                  </span>
+                  {inc.frequency === 'annual' && (
+                    <span className="csp-cir-freq">({fBase(inc.amount)}/yr)</span>
+                  )}
+                </div>
+                <div className="csp-cir-actions">
+                  <button
+                    type="button"
+                    className="csp-action-btn edit"
+                    onClick={() => handleOpenEditIncome(inc)}
+                    title="Edit Income"
+                  >
+                    <Pencil size={11} />
+                  </button>
+                  <button
+                    type="button"
+                    className="csp-action-btn delete"
+                    onClick={() => void handleDeleteIncome(inc)}
+                    title="Delete Income"
+                  >
+                    <Trash2 size={11} />
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
 
       {/* ── Ramit Sethi 4 Pos Cards with Manual Add Button & Item Breakdown ── */}
@@ -1031,7 +1224,7 @@ export function PlanWorksheet({
         </div>
       </div>
 
-      {/* Add / Edit Planned Expense Modal */}
+      {/* Add / Edit Planned Expense & Income Modal */}
       <AddPlannedExpenseModal
         isOpen={modalOpen}
         onClose={() => setModalOpen(false)}
@@ -1040,8 +1233,16 @@ export function PlanWorksheet({
           toast?.(editingItem ? 'Planned expense updated.' : 'Planned expense added.')
           await onRefresh()
         }}
+        onSaveIncome={async (payload) => {
+          if (onSaveIncome) {
+            await onSaveIncome(payload)
+            toast?.(editingItem ? 'Income source updated.' : 'Income source added.')
+            await onRefresh()
+          }
+        }}
         initialData={editingItem}
         defaultBucket={selectedBucket}
+        initialType={modalType}
       />
     </div>
   )

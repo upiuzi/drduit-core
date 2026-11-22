@@ -260,4 +260,86 @@ describe('AddPlannedExpenseModal - unit tests for all form controls', () => {
     expect(payload.bucket).toBe('fixed_costs')
     expect(() => JSON.stringify(payload)).not.toThrow()
   })
+
+  it('supports Income mode with onSaveIncome callback', async () => {
+    const onSave = vi.fn().mockResolvedValue(undefined)
+    const onSaveIncome = vi.fn().mockResolvedValue(undefined)
+    const onClose = vi.fn()
+
+    render(
+      <AddPlannedExpenseModal
+        isOpen={true}
+        onClose={onClose}
+        onSave={onSave}
+        onSaveIncome={onSaveIncome}
+        initialType="income"
+      />,
+    )
+
+    expect(screen.getByText('Add planned income')).toBeDefined()
+
+    const nameInput = screen.getByPlaceholderText('e.g. Gaji Pokok Kantor, Freelance UI, Dividen Saham, Bonus')
+    fireEvent.change(nameInput, { target: { value: 'Gaji Pokok' } })
+
+    const amountInput = screen.getByPlaceholderText('e.g. 15jt or 15.000.000')
+    fireEvent.change(amountInput, { target: { value: '15jt' } })
+
+    const submitBtn = screen.getByText('Add Income')
+    fireEvent.click(submitBtn)
+
+    await waitFor(() => {
+      expect(onSaveIncome).toHaveBeenCalledWith({
+        id: undefined,
+        name: 'Gaji Pokok',
+        amount: 15000000,
+        frequency: 'monthly',
+        notes: null,
+      })
+      expect(onClose).toHaveBeenCalled()
+      expect(onSave).not.toHaveBeenCalled()
+    })
+  })
+
+  it('allows switching from Expense to Income via SegmentedControl', async () => {
+    const onSave = vi.fn().mockResolvedValue(undefined)
+    const onSaveIncome = vi.fn().mockResolvedValue(undefined)
+    const onClose = vi.fn()
+
+    render(
+      <AddPlannedExpenseModal
+        isOpen={true}
+        onClose={onClose}
+        onSave={onSave}
+        onSaveIncome={onSaveIncome}
+        initialType="expense"
+      />,
+    )
+
+    // Initially expense
+    expect(screen.getByText('Add planned expense')).toBeDefined()
+
+    // Click Pemasukan (Income)
+    const incomeOption = screen.getByText('💰 Pemasukan (Income)')
+    fireEvent.click(incomeOption)
+
+    expect(screen.getByText('Add planned income')).toBeDefined()
+    const nameInput = screen.getByPlaceholderText('e.g. Gaji Pokok Kantor, Freelance UI, Dividen Saham, Bonus')
+    fireEvent.change(nameInput, { target: { value: 'Freelance Design' } })
+
+    const amountInput = screen.getByPlaceholderText('e.g. 15jt or 15.000.000')
+    fireEvent.change(amountInput, { target: { value: '5000000' } })
+
+    const submitBtn = screen.getByText('Add Income')
+    fireEvent.click(submitBtn)
+
+    await waitFor(() => {
+      expect(onSaveIncome).toHaveBeenCalledWith({
+        id: undefined,
+        name: 'Freelance Design',
+        amount: 5000000,
+        frequency: 'monthly',
+        notes: null,
+      })
+    })
+  })
 })

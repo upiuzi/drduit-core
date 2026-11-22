@@ -173,3 +173,101 @@ async def set_csp_income_tool(input_data: dict) -> tuple[str, dict | None]:
         "score": plan.get("score"),
         "diagnoses": plan["diagnoses"],
     }), None
+
+
+@tool(
+    "add_csp_planned_income",
+    description=(
+        "Record or add a planned income source to Track / Conscious Spending Plan (e.g. 'tambah income gaji 15jt/bulan', "
+        "'tambah pemasukan freelance 5jt', 'tambah bonus tahunan 24jt/tahun'). "
+        "Allows multiple income streams to be tracked and totaled up automatically. For annual income (e.g. bonus, dividends), "
+        "specify frequency='annual' so it is prorated into monthly income (/12 = 2jt/mo)."
+    ),
+    input_schema={
+        "type": "object",
+        "properties": {
+            "name": {
+                "type": "string",
+                "description": "Descriptive name of the income stream (e.g. 'Gaji Pokok', 'Freelance Web', 'Dividen Saham')",
+            },
+            "amount": {
+                "description": "Nominal amount in base currency (e.g. 15000000 or '15jt' or '15.000.000')",
+            },
+            "frequency": {
+                "type": "string",
+                "description": "Frequency: 'monthly' (regular monthly pay) or 'annual' (yearly bonus/dividends prorated by /12)",
+                "default": "monthly",
+            },
+            "notes": {
+                "type": "string",
+                "description": "Optional notes about this income stream",
+            },
+        },
+        "required": ["name", "amount"],
+    },
+)
+async def add_csp_planned_income_tool(input_data: dict) -> tuple[str, dict | None]:
+    name = str(input_data.get("name") or "").strip()
+    if not name:
+        notes = str(input_data.get("notes") or "").strip()
+        name = notes if notes else "Income Source"
+
+    amount = csp_track.parse_amount(input_data.get("amount", 0.0))
+    frequency = csp_track.normalize_frequency(input_data.get("frequency"))
+    notes = input_data.get("notes")
+
+    record = csp_track.add_or_update_planned_income({
+        "name": name,
+        "amount": amount,
+        "frequency": frequency,
+        "notes": notes,
+    })
+
+    plan = csp_track.get_csp_plan()
+    return json.dumps({
+        "saved_income": record,
+        "total_net_income": plan["net_income"],
+        "planned_incomes": plan.get("planned_incomes", []),
+        "updated_plan_summary": {
+            "net_income": plan["net_income"],
+            "bucket_percentages": {k: b["pct_of_income"] for k, b in plan["buckets"].items()},
+            "surplus_or_deficit": plan["summary"]["surplus_or_deficit"],
+            "score": plan.get("score"),
+            "diagnoses": plan["diagnoses"],
+        },
+    }), None
+
+
+@tool(
+    "delete_csp_planned_income",
+    description="Remove a planned income source from Track (Conscious Spending Plan) by its id or name.",
+    input_schema={
+        "type": "object",
+        "properties": {
+            "income_id": {
+                "type": "string",
+                "description": "The unique ID of the planned income stream (e.g. 'inc_a1b2c3d4')",
+            },
+            "name": {
+                "type": "string",
+                "description": "The name of the income source to delete (e.g. 'Freelance')",
+            },
+        },
+    },
+)
+async def delete_csp_planned_income_tool(input_data: dict) -> tuple[str, dict | None]:
+    income_id = input_data.get("income_id")
+    name = input_data.get("name")
+    deleted = csp_track.delete_planned_income(income_id=income_id, name=name)
+    plan = csp_track.get_csp_plan()
+    return json.dumps({
+        "deleted": deleted,
+        "total_net_income": plan["net_income"],
+        "planned_incomes": plan.get("planned_incomes", []),
+        "updated_plan_summary": {
+            "net_income": plan["net_income"],
+            "bucket_percentages": {k: b["pct_of_income"] for k, b in plan["buckets"].items()},
+            "surplus_or_deficit": plan["summary"]["surplus_or_deficit"],
+            "score": plan.get("score"),
+        },
+    }), None

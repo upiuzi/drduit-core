@@ -23,6 +23,16 @@ export interface PlannedExpenseItem {
   notes?: string | null
 }
 
+export interface PlannedIncomeItem {
+  id: string
+  name: string
+  amount: number
+  frequency: 'monthly' | 'annual'
+  monthly_amount: number
+  annual_amount: number
+  notes?: string | null
+}
+
 interface Props {
   isOpen: boolean
   onClose: () => void
@@ -35,8 +45,16 @@ interface Props {
     due_date?: string | null
     notes?: string | null
   }) => Promise<void>
-  initialData?: PlannedExpenseItem | null
+  onSaveIncome?: (payload: {
+    id?: string
+    name: string
+    amount: number
+    frequency: 'monthly' | 'annual'
+    notes?: string | null
+  }) => Promise<void>
+  initialData?: PlannedExpenseItem | PlannedIncomeItem | null
   defaultBucket?: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free'
+  initialType?: 'expense' | 'income'
 }
 
 export function parseInputAmount(val: string): number {
@@ -87,7 +105,16 @@ export function sanitizeBucket(b: unknown): BucketKey {
   return 'fixed_costs'
 }
 
-export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, defaultBucket }: Props) {
+export function AddPlannedExpenseModal({
+  isOpen,
+  onClose,
+  onSave,
+  onSaveIncome,
+  initialData,
+  defaultBucket,
+  initialType,
+}: Props) {
+  const [itemType, setItemType] = useState<'expense' | 'income'>(initialType || 'expense')
   const [name, setName] = useState('')
   const [amount, setAmount] = useState<string>('')
   const [frequency, setFrequency] = useState<'monthly' | 'annual'>('monthly')
@@ -99,13 +126,22 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
 
   useEffect(() => {
     if (initialData) {
+      const isIncome = !('bucket' in initialData) || initialType === 'income'
+      setItemType(isIncome ? 'income' : 'expense')
       setName(String(initialData.name || ''))
       setAmount(String(initialData.amount ?? ''))
       setFrequency(initialData.frequency === 'annual' ? 'annual' : 'monthly')
-      setBucket(sanitizeBucket(initialData.bucket))
-      setDueDate(initialData.due_date ? String(initialData.due_date) : '')
+      if ('bucket' in initialData && initialData.bucket) {
+        setBucket(sanitizeBucket(initialData.bucket))
+      }
+      if ('due_date' in initialData && initialData.due_date) {
+        setDueDate(String(initialData.due_date))
+      } else {
+        setDueDate('')
+      }
       setNotes(initialData.notes ? String(initialData.notes) : '')
     } else {
+      setItemType(initialType || 'expense')
       setName('')
       setAmount('')
       setFrequency('monthly')
@@ -114,7 +150,7 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
       setNotes('')
     }
     setError(null)
-  }, [initialData, defaultBucket, isOpen])
+  }, [initialData, defaultBucket, initialType, isOpen])
 
   if (!isOpen) return null
 
@@ -124,7 +160,7 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
   const handleSubmit = async () => {
     const cleanName = String(name || '').trim()
     if (!cleanName) {
-      setError('Please enter an expense name.')
+      setError(itemType === 'income' ? 'Please enter an income source name.' : 'Please enter an expense name.')
       return
     }
     if (numAmount <= 0) {
@@ -135,19 +171,37 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
     setSubmitting(true)
     setError(null)
     try {
-      const safePayload = {
-        id: initialData?.id ? String(initialData.id) : undefined,
-        name: cleanName,
-        amount: Number(numAmount) || 0,
-        frequency: frequency === 'annual' ? ('annual' as const) : ('monthly' as const),
-        bucket: sanitizeBucket(bucket),
-        due_date: typeof dueDate === 'string' && dueDate.trim() ? dueDate.trim() : null,
-        notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
+      if (itemType === 'income') {
+        const incomePayload = {
+          id: initialData?.id ? String(initialData.id) : undefined,
+          name: cleanName,
+          amount: Number(numAmount) || 0,
+          frequency: frequency === 'annual' ? ('annual' as const) : ('monthly' as const),
+          notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
+        }
+        if (onSaveIncome) {
+          await onSaveIncome(incomePayload)
+        } else {
+          await onSave({
+            ...incomePayload,
+            bucket: 'fixed_costs',
+          })
+        }
+      } else {
+        const safePayload = {
+          id: initialData?.id ? String(initialData.id) : undefined,
+          name: cleanName,
+          amount: Number(numAmount) || 0,
+          frequency: frequency === 'annual' ? ('annual' as const) : ('monthly' as const),
+          bucket: sanitizeBucket(bucket),
+          due_date: typeof dueDate === 'string' && dueDate.trim() ? dueDate.trim() : null,
+          notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
+        }
+        await onSave(safePayload)
       }
-      await onSave(safePayload)
       onClose()
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Failed to save planned expense.')
+      setError(err instanceof Error ? err.message : `Failed to save ${itemType}.`)
     } finally {
       setSubmitting(false)
     }
@@ -169,13 +223,26 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
         : `💡 Terhitung: ${fBaseWhole(numAmount)} / bulan`
       : 'Your best estimate is fine. Format fleksibel (28jt, 500k, 28.000.000)'
 
+  const modalTitle = initialData
+    ? itemType === 'income'
+      ? 'Edit planned income'
+      : 'Edit planned expense'
+    : itemType === 'income'
+      ? 'Add planned income'
+      : 'Add planned expense'
+
+  const modalSubtitle =
+    itemType === 'income'
+      ? 'Conscious Spending Plan · Sumber Pemasukan Bersih (Take-Home Pay)'
+      : 'Conscious Spending Plan · Rencana Pengeluaran'
+
   return (
     <Modal
       open={isOpen}
       onClose={onClose}
       size="md"
-      title={initialData ? 'Edit planned expense' : 'Add planned expense'}
-      subtitle="Conscious Spending Plan · Rencana Pengeluaran"
+      title={modalTitle}
+      subtitle={modalSubtitle}
       footer={
         <>
           <Button
@@ -193,7 +260,7 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
             onClick={() => void handleSubmit()}
             disabled={submitting || !name.trim() || numAmount <= 0}
           >
-            {submitting ? 'Saving…' : initialData ? 'Save Changes' : 'Add to Plan'}
+            {submitting ? 'Saving…' : initialData ? 'Save Changes' : itemType === 'income' ? 'Add Income' : 'Add to Plan'}
           </Button>
         </>
       }
@@ -208,8 +275,22 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
             </div>
           )}
 
+          <FormField label="Entry Type" htmlFor="entry-type">
+            <SegmentedControl<'expense' | 'income'>
+              options={[
+                { value: 'expense', label: '💸 Pengeluaran (Expense)' },
+                { value: 'income', label: '💰 Pemasukan (Income)' },
+              ]}
+              value={itemType}
+              onChange={(v) => {
+                setItemType(v)
+                setError(null)
+              }}
+            />
+          </FormField>
+
           <FormField
-            label="Name"
+            label={itemType === 'income' ? 'Sumber Pemasukan (Income Name)' : 'Name'}
             htmlFor="expense-name"
             required
             error={error && !name.trim() ? error : undefined}
@@ -219,7 +300,11 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
               autoFocus
               invalid={!!(error && !name.trim())}
               value={name}
-              placeholder="e.g. Rent / Kontrakan Rumah, Listrik, Netflix"
+              placeholder={
+                itemType === 'income'
+                  ? 'e.g. Gaji Pokok Kantor, Freelance UI, Dividen Saham, Bonus'
+                  : 'e.g. Rent / Kontrakan Rumah, Listrik, Netflix'
+              }
               onChange={(e) => {
                 setName(e.target.value)
                 if (error) setError(null)
@@ -227,7 +312,7 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
             />
           </FormField>
 
-          <FormField label="Payment Frequency" htmlFor="expense-freq">
+          <FormField label="Frequency (Ritme)" htmlFor="expense-freq">
             <SegmentedControl<'monthly' | 'annual'>
               options={[
                 { value: 'monthly', label: 'Monthly (Bulanan)' },
@@ -239,7 +324,15 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
           </FormField>
 
           <FormField
-            label={frequency === 'annual' ? 'Annual Amount (Nominal per Tahun)' : 'Monthly Amount (Nominal per Bulan)'}
+            label={
+              frequency === 'annual'
+                ? itemType === 'income'
+                  ? 'Annual Income (Nominal per Tahun)'
+                  : 'Annual Amount (Nominal per Tahun)'
+                : itemType === 'income'
+                  ? 'Monthly Income (Nominal per Bulan)'
+                  : 'Monthly Amount (Nominal per Bulan)'
+            }
             htmlFor="expense-amount"
             required
             help={amountHelp}
@@ -252,7 +345,15 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
                   id="expense-amount"
                   invalid={!!(error && numAmount <= 0)}
                   value={amount}
-                  placeholder={frequency === 'annual' ? 'e.g. 28jt or 28.000.000' : 'e.g. 2.5jt or 2.500.000'}
+                  placeholder={
+                    frequency === 'annual'
+                      ? itemType === 'income'
+                        ? 'e.g. 24jt or 24.000.000'
+                        : 'e.g. 28jt or 28.000.000'
+                      : itemType === 'income'
+                        ? 'e.g. 15jt or 15.000.000'
+                        : 'e.g. 2.5jt or 2.500.000'
+                  }
                   onChange={(e) => {
                     setAmount(e.target.value)
                     if (error) setError(null)
@@ -262,29 +363,54 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
             </div>
           </FormField>
 
-          <FormField label="Conscious Spending Bucket (Pos)" htmlFor="expense-bucket" required>
-            <Select
-              id="expense-bucket"
-              value={bucket}
-              options={BUCKET_OPTIONS}
-              onChange={(e) => setBucket(sanitizeBucket(e.target.value))}
-            />
-          </FormField>
+          {itemType === 'expense' ? (
+            <>
+              <FormField label="Conscious Spending Bucket (Pos)" htmlFor="expense-bucket" required>
+                <Select
+                  id="expense-bucket"
+                  value={bucket}
+                  options={BUCKET_OPTIONS}
+                  onChange={(e) => setBucket(sanitizeBucket(e.target.value))}
+                />
+              </FormField>
 
-          <FormField label="Optional Due Date / Next Renewal" htmlFor="expense-due-date">
-            <TextField
-              id="expense-due-date"
-              type="date"
-              value={dueDate}
-              onChange={(e) => setDueDate(e.target.value)}
-            />
-          </FormField>
+              <FormField label="Optional Due Date / Next Renewal" htmlFor="expense-due-date">
+                <TextField
+                  id="expense-due-date"
+                  type="date"
+                  value={dueDate}
+                  onChange={(e) => setDueDate(e.target.value)}
+                />
+              </FormField>
+            </>
+          ) : (
+            <div
+              style={{
+                background: 'var(--surface, #1e222a)',
+                border: '1px solid var(--line, #2d3340)',
+                borderRadius: '8px',
+                padding: '10px 14px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '10px',
+              }}
+            >
+              <span style={{ fontSize: '18px' }}>💡</span>
+              <span style={{ fontSize: '12px', color: 'var(--muted, #94a3b8)', lineHeight: 1.4 }}>
+                Pemasukan ini akan otomatis dijumlahkan ke <strong>Total Take-Home Pay</strong> untuk menghitung persentase alokasi Ramit Sethi (50-60% Fixed Costs, 10%+ Investasi, 5-10% Tabungan, 20-35% Bebas Bersalah).
+              </span>
+            </div>
+          )}
 
           <FormField label="Notes (Optional)" htmlFor="expense-notes">
             <TextField
               id="expense-notes"
               value={notes}
-              placeholder="e.g. Bayar kontrakan tahunan tiap tanggal 25 Jan"
+              placeholder={
+                itemType === 'income'
+                  ? 'e.g. Gaji ditransfer setiap tanggal 25'
+                  : 'e.g. Bayar kontrakan tahunan tiap tanggal 25 Jan'
+              }
               onChange={(e) => setNotes(e.target.value)}
             />
           </FormField>

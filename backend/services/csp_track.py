@@ -338,12 +338,17 @@ def get_csp_tracking(month: str | None = None) -> dict[str, Any]:
                 })
 
     # Determine Take-Home Net Income
-    net_income = total_income
-    income_source = "transactions"
-    if custom_income and custom_income > 0:
+    planned_incomes = get_planned_incomes()
+    if planned_incomes:
+        net_income = round(sum(inc["monthly_amount"] for inc in planned_incomes), 2)
+        income_source = "planned_incomes"
+    elif custom_income and custom_income > 0:
         net_income = custom_income
         income_source = "custom"
-    elif net_income <= 0:
+    elif total_income > 0:
+        net_income = total_income
+        income_source = "transactions"
+    else:
         profile = profile_service.read_profile() or {}
         p_inc = profile.get("monthly_net_income")
         if p_inc and float(p_inc) > 0:
@@ -497,6 +502,7 @@ def get_csp_tracking(month: str | None = None) -> dict[str, Any]:
         "categories_catalog": categories_catalog,
         "plan": plan_data,
         "planned_in_month": planned_in_month,
+        "planned_incomes": planned_incomes,
     }
 
 
@@ -649,6 +655,130 @@ def delete_planned_expense(expense_id: str | None = None, name: str | None = Non
     return False
 
 
+def get_planned_incomes() -> list[dict[str, Any]]:
+    """Returns the list of user-defined planned income sources with prorated monthly amounts."""
+    store = _get_settings_store()
+    settings = store.get() or {}
+    raw_list = settings.get("planned_incomes", [])
+    if not isinstance(raw_list, list):
+        return []
+
+    cleaned = []
+    for item in raw_list:
+        if not isinstance(item, dict):
+            continue
+        item_id = str(item.get("id") or f"inc_{uuid.uuid4().hex[:8]}")
+        name = str(item.get("name") or "Income Source").strip()
+        amt = parse_amount(item.get("amount") or 0.0)
+        freq = normalize_frequency(item.get("frequency"))
+
+        if freq == "annual":
+            monthly_amt = round(amt / 12.0, 2)
+            annual_amt = round(amt, 2)
+        else:
+            monthly_amt = round(amt, 2)
+            annual_amt = round(amt * 12.0, 2)
+
+        cleaned.append({
+            "id": item_id,
+            "name": name,
+            "amount": amt,
+            "frequency": freq,
+            "monthly_amount": monthly_amt,
+            "annual_amount": annual_amt,
+            "notes": item.get("notes") or "",
+        })
+    return cleaned
+
+
+def add_or_update_planned_income(payload: dict[str, Any]) -> dict[str, Any]:
+    """Adds a new planned income source or updates an existing one."""
+    store = _get_settings_store()
+    current = store.get() or {}
+    incomes = current.get("planned_incomes", [])
+    if not isinstance(incomes, list):
+        incomes = []
+
+    name = str(payload.get("name") or "").strip()
+    if not name:
+        notes = str(payload.get("notes") or "").strip()
+        name = notes if notes else "Income Source"
+
+    amt = parse_amount(payload.get("amount", 0.0))
+    if amt < 0:
+        raise ValueError("Amount cannot be negative.")
+
+    freq = normalize_frequency(payload.get("frequency"))
+
+    if freq == "annual":
+        monthly_amt = round(amt / 12.0, 2)
+        annual_amt = round(amt, 2)
+    else:
+        monthly_amt = round(amt, 2)
+        annual_amt = round(amt * 12.0, 2)
+
+    item_id = payload.get("id")
+    target_idx = None
+    if item_id:
+        for idx, inc in enumerate(incomes):
+            if isinstance(inc, dict) and inc.get("id") == item_id:
+                target_idx = idx
+                break
+    else:
+        for idx, inc in enumerate(incomes):
+            if isinstance(inc, dict) and str(inc.get("name", "")).strip().lower() == name.lower():
+                target_idx = idx
+                item_id = inc.get("id")
+                break
+
+    if not item_id:
+        item_id = f"inc_{uuid.uuid4().hex[:8]}"
+
+    record = {
+        "id": item_id,
+        "name": name,
+        "amount": amt,
+        "frequency": freq,
+        "monthly_amount": monthly_amt,
+        "annual_amount": annual_amt,
+        "notes": payload.get("notes") or "",
+    }
+
+    if target_idx is not None:
+        incomes[target_idx] = record
+    else:
+        incomes.append(record)
+
+    current["planned_incomes"] = incomes
+    store.save(current)
+    return record
+
+
+def delete_planned_income(income_id: str | None = None, name: str | None = None) -> bool:
+    """Deletes a planned income source by id or name."""
+    store = _get_settings_store()
+    current = store.get() or {}
+    incomes = current.get("planned_incomes", [])
+    if not isinstance(incomes, list):
+        return False
+
+    initial_len = len(incomes)
+    if income_id:
+        incomes = [e for e in incomes if isinstance(e, dict) and e.get("id") != income_id]
+    elif name:
+        target_name = name.strip().lower()
+        incomes = [
+            e for e in incomes
+            if isinstance(e, dict) and str(e.get("name", "")).strip().lower() != target_name
+        ]
+
+    if len(incomes) != initial_len:
+        current["planned_incomes"] = incomes
+        store.save(current)
+        return True
+    return False
+
+
 def get_csp_plan() -> dict[str, Any]:
     """Computes the Conscious Spending Plan Worksheet: planned items, live bucket ratios,
 
@@ -661,9 +791,13 @@ def get_csp_plan() -> dict[str, Any]:
     unexpected_buffer_enabled = bool(settings.get("unexpected_buffer_enabled", True))
 
     # Determine Net Income
+    planned_incomes = get_planned_incomes()
     net_income = 0.0
     income_source = "zero"
-    if custom_income and float(custom_income) > 0:
+    if planned_incomes:
+        net_income = round(sum(inc["monthly_amount"] for inc in planned_incomes), 2)
+        income_source = "planned_incomes"
+    elif custom_income and float(custom_income) > 0:
         net_income = float(custom_income)
         income_source = "custom"
     else:
@@ -899,6 +1033,8 @@ def get_csp_plan() -> dict[str, Any]:
         "net_income_source": income_source,
         "unexpected_buffer_enabled": unexpected_buffer_enabled,
         "planned_expenses": items,
+        "planned_incomes": planned_incomes,
+        "planned_incomes_total": net_income if income_source == "planned_incomes" else round(sum(inc["monthly_amount"] for inc in planned_incomes), 2),
         "buckets": bucket_map,
         "summary": {
             "total_planned_monthly": total_planned_monthly,

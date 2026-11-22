@@ -2015,4 +2015,93 @@
   font-variant-numeric: tabular-nums;
 }
 
+/* ── Multi-Income Sources & Two-Button Styling ── */
+.csp-btn-income {
+  border-color: color-mix(in srgb, var(--good, #10b981) 40%, var(--line)) !important;
+  color: var(--good, #10b981) !important;
+}
+
+.csp-btn-income:hover {
+  background: color-mix(in srgb, var(--good, #10b981) 12%, var(--surface)) !important;
+}
+
+.csp-income-card {
+  background: var(--surface);
+  border: 1px solid color-mix(in srgb, var(--good, #10b981) 30%, var(--line));
+  border-radius: var(--radius-md, 10px);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.csp-sources-count-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--good, #10b981) 12%, var(--bg-2));
+  color: var(--good, #10b981);
+  border: 1px solid color-mix(in srgb, var(--good, #10b981) 25%, var(--line));
+}
+
+.csp-qd-income-add-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--good, #10b981);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+  transition: all 0.15s ease;
+}
+
+.csp-qd-income-add-link:hover {
+  background: color-mix(in srgb, var(--good, #10b981) 15%, transparent);
+}
+
+.csp-qd-sources-hint {
+  font-size: 11px;
+  color: var(--good, #10b981);
+  display: block;
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+.csp-mas-type-toggle {
+  display: inline-flex;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.csp-mas-type-btn {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: var(--faint);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-mas-type-btn.active {
+  background: var(--surface);
+  color: var(--ink);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.csp-mas-type-btn.active.income {
+  color: var(--good, #10b981);
+}
+
+
 

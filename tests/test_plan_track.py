@@ -247,6 +247,89 @@ class TestCspTrack(unittest.TestCase):
         self.assertEqual(empty_res.status_code, 200)
         self.assertEqual(len(empty_res.json()), 0)
 
+    def test_planned_incomes_crud_and_total(self):
+        # 1. Add monthly salary 15,000,000
+        salary = csp_track.add_or_update_planned_income({
+            "name": "Gaji Pokok",
+            "amount": 15000000,
+            "frequency": "monthly",
+        })
+        self.assertEqual(salary["name"], "Gaji Pokok")
+        self.assertEqual(salary["monthly_amount"], 15000000.0)
+
+        # 2. Add freelance 5,000,000 monthly
+        freelance = csp_track.add_or_update_planned_income({
+            "name": "Freelance Web",
+            "amount": 5000000,
+            "frequency": "monthly",
+        })
+        self.assertEqual(freelance["monthly_amount"], 5000000.0)
+
+        # 3. Add annual bonus 24,000,000 (2,000,000/mo)
+        bonus = csp_track.add_or_update_planned_income({
+            "name": "Bonus Tahunan",
+            "amount": 24000000,
+            "frequency": "annual",
+        })
+        self.assertEqual(bonus["monthly_amount"], 2000000.0)
+        self.assertEqual(bonus["annual_amount"], 24000000.0)
+
+        # 4. Check get_planned_incomes
+        incomes = csp_track.get_planned_incomes()
+        self.assertEqual(len(incomes), 3)
+
+        # 5. Check plan calculates net income as total of all 3: 15m + 5m + 2m = 22,000,000
+        plan = csp_track.get_csp_plan()
+        self.assertEqual(plan["net_income"], 22000000.0)
+        self.assertEqual(plan["net_income_source"], "planned_incomes")
+        self.assertEqual(len(plan["planned_incomes"]), 3)
+
+        # 6. Delete one income source
+        deleted = csp_track.delete_planned_income(income_id=freelance["id"])
+        self.assertTrue(deleted)
+        plan_after = csp_track.get_csp_plan()
+        # 15m + 2m = 17,000,000
+        self.assertEqual(plan_after["net_income"], 17000000.0)
+
+    def test_api_planned_incomes_routes(self):
+        # 1. POST planned income
+        post_res = self.client.post(
+            "/api/plan/track/planned-incomes",
+            json={
+                "name": "Gaji Utama",
+                "amount": 18000000,
+                "frequency": "monthly",
+            },
+        )
+        self.assertEqual(post_res.status_code, 200)
+        saved = post_res.json()
+        self.assertEqual(saved["name"], "Gaji Utama")
+        self.assertEqual(saved["monthly_amount"], 18000000.0)
+        income_id = saved["id"]
+
+        # 2. GET planned incomes
+        get_res = self.client.get("/api/plan/track/planned-incomes")
+        self.assertEqual(get_res.status_code, 200)
+        self.assertEqual(len(get_res.json()), 1)
+
+        # 3. PUT update planned income
+        put_res = self.client.put(
+            f"/api/plan/track/planned-incomes/{income_id}",
+            json={
+                "name": "Gaji Pokok & Tunjangan",
+                "amount": 20000000,
+                "frequency": "monthly",
+            },
+        )
+        self.assertEqual(put_res.status_code, 200)
+        self.assertEqual(put_res.json()["name"], "Gaji Pokok & Tunjangan")
+        self.assertEqual(put_res.json()["monthly_amount"], 20000000.0)
+
+        # 4. DELETE planned income
+        del_res = self.client.delete(f"/api/plan/track/planned-incomes/{income_id}")
+        self.assertEqual(del_res.status_code, 200)
+        self.assertTrue(del_res.json()["ok"])
+
     def test_parse_amount_and_normalize_frequency(self):
         self.assertEqual(csp_track.parse_amount(28000000), 28000000.0)
         self.assertEqual(csp_track.parse_amount("28000000"), 28000000.0)
@@ -273,13 +356,32 @@ class TestCspTrack(unittest.TestCase):
         import json
         from backend.ai.tools.csp_plan import (
             add_csp_planned_expense_tool,
+            add_csp_planned_income_tool,
+            delete_csp_planned_income_tool,
             get_csp_plan_tool,
             set_csp_income_tool,
         )
 
         async def _run():
-            # Set income using "15jt"
-            await set_csp_income_tool({"monthly_net_income": "15jt"})
+            # Add planned income via tool
+            inc_res_text, _ = await add_csp_planned_income_tool({
+                "name": "Gaji Pokok",
+                "amount": "15jt",
+                "frequency": "bulanan",
+            })
+            inc_res = json.loads(inc_res_text)
+            self.assertEqual(inc_res["saved_income"]["name"], "Gaji Pokok")
+            self.assertEqual(inc_res["saved_income"]["monthly_amount"], 15000000.0)
+            self.assertEqual(inc_res["total_net_income"], 15000000.0)
+
+            # Add annual bonus
+            await add_csp_planned_income_tool({
+                "name": "Bonus Tahunan",
+                "amount": "24jt",
+                "frequency": "tahunan",
+            })
+            plan_now = csp_track.get_csp_plan()
+            self.assertEqual(plan_now["net_income"], 17000000.0)
 
             # Add annual expense "28jt" "per tahun"
             res_text, _ = await add_csp_planned_expense_tool({

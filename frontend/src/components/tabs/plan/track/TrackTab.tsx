@@ -99,6 +99,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   const [error, setError] = useState<string | null>(null)
   const [activeView, setActiveView] = useState<'worksheet' | 'track'>('worksheet')
   const [addModalOpen, setAddModalOpen] = useState(false)
+  const [addModalType, setAddModalType] = useState<'expense' | 'income'>('expense')
   const [addModalBucket, setAddModalBucket] = useState<'fixed_costs' | 'investments' | 'savings' | 'guilt_free'>('fixed_costs')
 
   const handleOpenAddModal = (bucket?: unknown) => {
@@ -108,6 +109,12 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         ? (bucket as 'fixed_costs' | 'investments' | 'savings' | 'guilt_free')
         : 'fixed_costs'
     setAddModalBucket(safeBucket)
+    setAddModalType('expense')
+    setAddModalOpen(true)
+  }
+
+  const handleOpenAddIncomeModal = () => {
+    setAddModalType('income')
     setAddModalOpen(true)
   }
 
@@ -236,6 +243,48 @@ export function TrackTab({ onAskLucius, toast }: Props) {
     }
   }
 
+  const handleSaveIncomeSource = async (rawPayload: {
+    id?: string
+    name: string
+    amount: number
+    frequency: 'monthly' | 'annual'
+    notes?: string | null
+  }) => {
+    const cleanPayload = {
+      id: rawPayload.id ? String(rawPayload.id) : undefined,
+      name: String(rawPayload.name || '').trim(),
+      amount: Number(rawPayload.amount) || 0,
+      frequency: rawPayload.frequency === 'annual' ? ('annual' as const) : ('monthly' as const),
+      notes:
+        typeof rawPayload.notes === 'string' && rawPayload.notes.trim()
+          ? rawPayload.notes.trim()
+          : null,
+    }
+
+    try {
+      await fetchJson('/api/plan/track/planned-incomes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cleanPayload),
+      })
+      await loadData(month)
+    } catch (err) {
+      toast?.('Failed to save planned income.')
+      throw err
+    }
+  }
+
+  const handleDeleteIncomeSource = async (incomeId: string) => {
+    try {
+      await fetchJson(`/api/plan/track/planned-incomes/${incomeId}`, {
+        method: 'DELETE',
+      })
+      await loadData(month)
+    } catch {
+      toast?.('Failed to delete planned income.')
+    }
+  }
+
   const handleUpdateIncome = async (income: number) => {
     try {
       await fetchJson('/api/plan/track/income', {
@@ -351,13 +400,24 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
         <div className="csp-tools-right">
           <Button
+            variant="secondary"
+            size="dense"
+            onClick={handleOpenAddIncomeModal}
+            className="csp-btn-income"
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Plus size={14} color="var(--good, #10b981)" />
+            <span>+ Add Income</span>
+          </Button>
+
+          <Button
             variant="primary"
             size="dense"
             onClick={() => handleOpenAddModal('fixed_costs')}
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
             <Plus size={14} />
-            <span>+ Add Expense (Manual)</span>
+            <span>+ Add Expense</span>
           </Button>
 
           {activeView === 'track' && (
@@ -397,7 +457,9 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           plan={data.plan}
           onRefresh={() => loadData(month)}
           onSaveExpense={handleSaveExpense}
+          onSaveIncome={handleSaveIncomeSource}
           onDeleteExpense={handleDeleteExpense}
+          onDeleteIncome={handleDeleteIncomeSource}
           onUpdateIncome={handleUpdateIncome}
           onAskLucius={onAskLucius}
           toast={toast}
@@ -754,7 +816,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         />
       )}
 
-      {/* Manual Add Expense Modal (Accessible globally in Track) */}
+      {/* Manual Add Expense & Income Modal (Accessible globally in Track) */}
       <AddPlannedExpenseModal
         isOpen={addModalOpen}
         onClose={() => setAddModalOpen(false)}
@@ -763,7 +825,13 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           toast?.('Planned expense added.')
           await loadData(month)
         }}
+        onSaveIncome={async (payload) => {
+          await handleSaveIncomeSource(payload)
+          toast?.('Planned income added.')
+          await loadData(month)
+        }}
         defaultBucket={addModalBucket}
+        initialType={addModalType}
       />
     </div>
   )

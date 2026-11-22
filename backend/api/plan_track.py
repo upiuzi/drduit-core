@@ -50,6 +50,14 @@ class PlannedExpensePayload(BaseModel):
     notes: str | None = Field(default=None, description="Optional notes or details")
 
 
+class PlannedIncomePayload(BaseModel):
+    id: str | None = Field(default=None, description="Optional ID when updating an existing income source")
+    name: str = Field(..., description="Name of the income source (e.g. Gaji Pokok, Freelance, Dividen)")
+    amount: float = Field(..., ge=0, description="Nominal amount in base currency")
+    frequency: str = Field(default="monthly", description="'monthly' or 'annual'")
+    notes: str | None = Field(default=None, description="Optional notes or details")
+
+
 class IncomeUpdatePayload(BaseModel):
     monthly_net_income: float = Field(..., ge=0, description="Monthly Take-Home Pay (Net Income)")
 
@@ -142,6 +150,59 @@ def delete_planned_expense_fallback(
     deleted = _call(csp_track.delete_planned_expense, expense_id=target_id)
     if not deleted:
         raise HTTPException(404, f"Planned expense '{target_id}' not found.")
+    return {"ok": True, "deleted_id": target_id}
+
+
+@router.get("/api/plan/track/planned-incomes")
+@router.get("/api/plan/track/planned-incomes/")
+@compute_only
+def list_planned_incomes():
+    """Returns the list of user-defined planned income sources."""
+    return _call(csp_track.get_planned_incomes)
+
+
+@router.post("/api/plan/track/planned-incomes")
+@router.post("/api/plan/track/planned-incomes/")
+@router.put("/api/plan/track/planned-incomes")
+@router.put("/api/plan/track/planned-incomes/")
+def save_planned_income(body: PlannedIncomePayload):
+    """Adds or updates a planned income source."""
+    payload = body.model_dump(exclude_unset=True)
+    return _call(csp_track.add_or_update_planned_income, payload)
+
+
+@router.put("/api/plan/track/planned-incomes/{income_id}")
+@router.put("/api/plan/track/planned-incomes/{income_id}/")
+def update_planned_income_by_id(income_id: str, body: PlannedIncomePayload):
+    """Updates a planned income source by ID."""
+    payload = body.model_dump(exclude_unset=True)
+    payload["id"] = income_id
+    return _call(csp_track.add_or_update_planned_income, payload)
+
+
+@router.delete("/api/plan/track/planned-incomes/{income_id}")
+@router.delete("/api/plan/track/planned-incomes/{income_id}/")
+def delete_planned_income(income_id: str):
+    """Deletes a planned income source by ID."""
+    deleted = _call(csp_track.delete_planned_income, income_id=income_id)
+    if not deleted:
+        raise HTTPException(404, f"Planned income source '{income_id}' not found.")
+    return {"ok": True, "deleted_id": income_id}
+
+
+@router.delete("/api/plan/track/planned-incomes")
+@router.delete("/api/plan/track/planned-incomes/")
+def delete_planned_income_fallback(
+    income_id: str | None = Query(default=None),
+    id: str | None = Query(default=None),
+):
+    """Fallback deletion via query parameter ?income_id= or ?id=."""
+    target_id = income_id or id
+    if not target_id:
+        raise HTTPException(400, "Missing income_id parameter.")
+    deleted = _call(csp_track.delete_planned_income, income_id=target_id)
+    if not deleted:
+        raise HTTPException(404, f"Planned income source '{target_id}' not found.")
     return {"ok": True, "deleted_id": target_id}
 
 
