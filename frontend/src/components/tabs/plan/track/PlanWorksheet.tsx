@@ -129,6 +129,7 @@ export function PlanWorksheet({
   toast,
 }: Props) {
   const [modalOpen, setModalOpen] = useState(false)
+  const [selectedBucket, setSelectedBucket] = useState<'fixed_costs' | 'investments' | 'savings' | 'guilt_free'>('fixed_costs')
   const [editingItem, setEditingItem] = useState<PlannedExpenseItem | null>(null)
   const [activeFilter, setActiveFilter] = useState<string>('all')
 
@@ -201,13 +202,15 @@ export function PlanWorksheet({
     }
   }
 
-  const handleOpenAdd = () => {
+  const handleOpenAdd = (bucket?: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free') => {
+    setSelectedBucket(bucket || 'fixed_costs')
     setEditingItem(null)
     setModalOpen(true)
   }
 
   const handleOpenEdit = (item: PlannedExpenseItem) => {
     setEditingItem(item)
+    setSelectedBucket(item.bucket)
     setModalOpen(true)
   }
 
@@ -246,123 +249,92 @@ export function PlanWorksheet({
 
   const { fixed_costs, investments, savings, guilt_free } = plan.buckets
 
+  // Overall financial health status calculation: 'healthy' | 'over' | 'not_healthy'
+  const fcPct = fixed_costs.pct_of_income
+  const invPct = investments.pct_of_income
+  const savPct = savings.pct_of_income
+  const deficit = plan.summary.surplus_or_deficit < 0
+
+  let overallStatus: 'healthy' | 'over' | 'not_healthy' = 'healthy'
+  if (fcPct > 65 || deficit) {
+    overallStatus = 'over'
+  } else if (fcPct > 60 || invPct < 10 || savPct < 5) {
+    overallStatus = 'not_healthy'
+  }
+
   return (
     <div className="csp-worksheet-root">
-      {/* ── Net Income Header Card ── */}
-      <div className="csp-income-strip">
-        <div className="csp-income-left">
-          <div className="csp-income-badge">
-            <DollarSign size={14} />
-            <span>Monthly Take-Home Pay (Net Income)</span>
+      {/* ── Top Dashboard: Financial Health Status (Over, Healthy, Not Healthy) ── */}
+      <div className={`csp-quick-dashboard-banner status-${overallStatus}`}>
+        <div className="csp-qd-left">
+          <div className="csp-qd-status-row">
+            <span className={`csp-qd-badge status-${overallStatus}`}>
+              {overallStatus === 'healthy' && '🟢 HEALTHY & BALANCED'}
+              {overallStatus === 'over' && '🔴 OVER BUDGET'}
+              {overallStatus === 'not_healthy' && '🟡 NOT HEALTHY / NEEDS ATTENTION'}
+            </span>
+            <span className="csp-qd-score-pill">
+              Health Score: <strong>{plan.score?.points ?? 100} / 100</strong> ({plan.score?.grade ?? 'Good'})
+            </span>
           </div>
-          <div className="csp-income-amount-wrap">
-            {editingIncome ? (
-              <div className="csp-income-edit-form">
-                <input
-                  type="number"
-                  className="csp-form-input csp-income-input"
-                  value={incomeInput}
-                  onChange={(e) => setIncomeInput(e.target.value)}
-                  placeholder="e.g. 15000000"
-                  autoFocus
-                />
-                <Button variant="primary" size="dense" onClick={handleSaveIncome}>
-                  Save
-                </Button>
-                <Button variant="secondary" size="dense" onClick={() => setEditingIncome(false)}>
-                  Cancel
-                </Button>
-              </div>
-            ) : (
-              <div className="csp-income-display">
-                <span className="csp-income-figure">{fBase(plan.net_income)}</span>
-                <span className="csp-income-per-mo">/ month</span>
-                <button
-                  type="button"
-                  className="csp-edit-income-btn"
-                  onClick={() => {
-                    setIncomeInput(String(plan.net_income || ''))
-                    setEditingIncome(true)
-                  }}
-                  title="Update Net Income"
-                >
-                  <Pencil size={13} />
-                  <span>Edit Income</span>
-                </button>
-              </div>
-            )}
-          </div>
-          <p className="csp-income-caption">
-            Used as the 100% denominator for your 4 Conscious Spending Plan target ratios.
+          <p className="csp-qd-verdict">
+            {plan.score?.verdict || 'Ramit Sethi Conscious Spending Plan status.'}
           </p>
         </div>
 
-        <div className="csp-income-right">
-          <div className="csp-summary-stat">
-            <span className="csp-stat-label">Total Planned Monthly Outflows</span>
-            <span className="csp-stat-val">{fBaseWhole(plan.summary.total_planned_monthly)} /mo</span>
+        <div className="csp-qd-kpis">
+          <div className="csp-qd-kpi-item">
+            <span className="csp-qd-label">Monthly Take-Home Income</span>
+            <div className="csp-qd-val-wrap">
+              {editingIncome ? (
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  <input
+                    type="number"
+                    style={{ width: '130px', padding: '3px 8px', fontSize: '13px' }}
+                    value={incomeInput}
+                    onChange={(e) => setIncomeInput(e.target.value)}
+                    autoFocus
+                  />
+                  <Button variant="primary" size="dense" onClick={handleSaveIncome}>Save</Button>
+                  <Button variant="secondary" size="dense" onClick={() => setEditingIncome(false)}>X</Button>
+                </div>
+              ) : (
+                <>
+                  <span className="csp-qd-val">{fBase(plan.net_income)}</span>
+                  <button
+                    type="button"
+                    className="csp-qd-edit-btn"
+                    onClick={() => {
+                      setIncomeInput(String(plan.net_income || ''))
+                      setEditingIncome(true)
+                    }}
+                    title="Edit Net Income"
+                  >
+                    <Pencil size={11} />
+                  </button>
+                </>
+              )}
+            </div>
           </div>
-          <div className="csp-summary-stat">
-            <span className="csp-stat-label">Remaining Surplus / Deficit</span>
+          <div className="csp-qd-kpi-item">
+            <span className="csp-qd-label">Total Planned Outflows</span>
+            <span className="csp-qd-val">{fBaseWhole(plan.summary.total_planned_monthly)} <span className="csp-sub">/mo</span></span>
+          </div>
+          <div className="csp-qd-kpi-item">
+            <span className="csp-qd-label">Guilt-Free Left (Sisa Jajan)</span>
             <span
-              className="csp-stat-val"
+              className="csp-qd-val"
               style={{
-                color: plan.summary.surplus_or_deficit >= 0 ? 'var(--good, #10b981)' : 'var(--bad, #ef4444)',
+                color: plan.summary.guilt_free_remaining >= 0 ? 'var(--good, #10b981)' : 'var(--bad, #ef4444)',
               }}
             >
-              {plan.summary.surplus_or_deficit >= 0 ? '+' : ''}
-              {fBaseWhole(plan.summary.surplus_or_deficit)} /mo
+              {fBaseWhole(plan.summary.guilt_free_remaining)} <span className="csp-sub">/mo</span>
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Financial Health Scorecard Banner ── */}
-      {plan.score && (
-        <div className={`csp-score-banner csp-score-${plan.score.grade.toLowerCase().replace(/\s+/g, '-')}`}>
-          <div className="csp-score-left">
-            <div className="csp-score-circle">
-              <span className="csp-score-number">{plan.score.points}</span>
-              <span className="csp-score-denom">/100</span>
-            </div>
-            <div className="csp-score-details">
-              <div className="csp-score-badge-wrap">
-                <span className="csp-score-badge">{plan.score.grade} Plan</span>
-                <span className="csp-score-subtext">Ramit Sethi Conscious Spending Score</span>
-              </div>
-              <p className="csp-score-verdict">{plan.score.verdict}</p>
-            </div>
-          </div>
-          <div className="csp-score-metrics">
-            <div className="csp-score-metric-item">
-              <span className="csp-sm-label">Fixed Costs</span>
-              <span className={`csp-sm-val ${fixed_costs.pct_of_income <= 60 ? 'good' : 'danger'}`}>
-                {fixed_costs.pct_of_income}% <span className="csp-sm-target">(50-60%)</span>
-              </span>
-            </div>
-            <div className="csp-score-metric-item">
-              <span className="csp-sm-label">Investments</span>
-              <span className={`csp-sm-val ${investments.pct_of_income >= 10 ? 'good' : 'warning'}`}>
-                {investments.pct_of_income}% <span className="csp-sm-target">(10%+)</span>
-              </span>
-            </div>
-            <div className="csp-score-metric-item">
-              <span className="csp-sm-label">Savings</span>
-              <span className={`csp-sm-val ${savings.pct_of_income >= 5 ? 'good' : 'warning'}`}>
-                {savings.pct_of_income}% <span className="csp-sm-target">(5-10%)</span>
-              </span>
-            </div>
-            <div className="csp-score-metric-item">
-              <span className="csp-sm-label">Guilt-Free</span>
-              <span className={`csp-sm-val ${guilt_free.pct_of_income <= 35 ? 'good' : 'warning'}`}>
-                {guilt_free.pct_of_income}% <span className="csp-sm-target">(20-35%)</span>
-              </span>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ── Ramit Sethi 4-Bucket Ratio Progress Cards ── */}
+      {/* ── Ramit Sethi 4 Pos Cards with Manual Add Button & Item Breakdown ── */}
       <div className="csp-worksheet-cards-grid">
         {/* Fixed Costs Card */}
         <div className={`csp-worksheet-card csp-card-${fixed_costs.status}`}>
@@ -371,7 +343,12 @@ export function PlanWorksheet({
               <span className="csp-bucket-dot" style={{ backgroundColor: fixed_costs.color }} />
               <span className="csp-wcard-name">Fixed Costs</span>
             </div>
-            <span className="csp-target-badge">Target: 50%–60%</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="csp-target-badge">Target: 50%–60%</span>
+              <span className={`csp-pos-status-badge ${fcPct <= 60 ? 'good' : (fcPct <= 65 ? 'warning' : 'danger')}`}>
+                {fcPct <= 60 ? 'HEALTHY' : (fcPct <= 65 ? 'NOT HEALTHY' : 'OVER')}
+              </span>
+            </div>
           </div>
 
           <div className="csp-wcard-figures">
@@ -391,7 +368,6 @@ export function PlanWorksheet({
                   backgroundColor: fixed_costs.color,
                 }}
               />
-              {/* Target zone 50-60% marker */}
               <div
                 className="csp-target-zone-marker"
                 style={{ left: '50%', width: '10%' }}
@@ -405,14 +381,37 @@ export function PlanWorksheet({
             </div>
           </div>
 
-          <div className="csp-wcard-footer">
-            <span>
-              {fixed_costs.items.length} item{fixed_costs.items.length !== 1 ? 's' : ''} planned
-            </span>
-            {plan.unexpected_buffer_enabled && (fixed_costs.unexpected_buffer || 0) > 0 && (
-              <span className="csp-buffer-tag" title="15% buffer for unexpected bills">
-                +{fBaseWhole(fixed_costs.unexpected_buffer || 0)} buffer
-              </span>
+          <Button
+            variant="secondary"
+            size="dense"
+            onClick={() => handleOpenAdd('fixed_costs')}
+            style={{ width: '100%', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+          >
+            <Plus size={13} />
+            <span>Add to Fixed Costs</span>
+          </Button>
+
+          {/* Breakdown list in this pos */}
+          <div className="csp-card-items-wrap">
+            {fixed_costs.items.length === 0 ? (
+              <div className="csp-card-empty-hint">No expenses in Fixed Costs yet.</div>
+            ) : (
+              fixed_costs.items.map((it) => (
+                <div key={it.id} className="csp-card-item-row">
+                  <div className="csp-cir-left">
+                    <span className="csp-cir-title">{it.name}</span>
+                    {it.due_date && <span className="csp-cir-due">Due: {it.due_date}</span>}
+                  </div>
+                  <div className="csp-cir-right">
+                    <span className="csp-cir-amt">{fBase(it.monthly_amount)}/mo</span>
+                    {it.frequency === 'annual' && <span className="csp-cir-freq">({fBase(it.amount)}/yr)</span>}
+                  </div>
+                  <div className="csp-cir-actions">
+                    <button type="button" className="csp-action-btn edit" onClick={() => handleOpenEdit(it)} title="Edit"><Pencil size={11} /></button>
+                    <button type="button" className="csp-action-btn delete" onClick={() => handleDelete(it)} title="Delete"><Trash2 size={11} /></button>
+                  </div>
+                </div>
+              ))
             )}
           </div>
         </div>
@@ -424,7 +423,12 @@ export function PlanWorksheet({
               <span className="csp-bucket-dot" style={{ backgroundColor: investments.color }} />
               <span className="csp-wcard-name">Investments</span>
             </div>
-            <span className="csp-target-badge">Target: 10%+</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="csp-target-badge">Target: 10%+</span>
+              <span className={`csp-pos-status-badge ${invPct >= 10 ? 'good' : 'warning'}`}>
+                {invPct >= 10 ? 'HEALTHY' : 'UNDER TARGET'}
+              </span>
+            </div>
           </div>
 
           <div className="csp-wcard-figures">
@@ -452,11 +456,38 @@ export function PlanWorksheet({
             </div>
           </div>
 
-          <div className="csp-wcard-footer">
-            <span>
-              {investments.items.length} item{investments.items.length !== 1 ? 's' : ''} planned
-            </span>
-            <span>Index funds, crypto, retirement</span>
+          <Button
+            variant="secondary"
+            size="dense"
+            onClick={() => handleOpenAdd('investments')}
+            style={{ width: '100%', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+          >
+            <Plus size={13} />
+            <span>Add to Investments</span>
+          </Button>
+
+          {/* Breakdown list in this pos */}
+          <div className="csp-card-items-wrap">
+            {investments.items.length === 0 ? (
+              <div className="csp-card-empty-hint">No investments planned yet.</div>
+            ) : (
+              investments.items.map((it) => (
+                <div key={it.id} className="csp-card-item-row">
+                  <div className="csp-cir-left">
+                    <span className="csp-cir-title">{it.name}</span>
+                    {it.due_date && <span className="csp-cir-due">Due: {it.due_date}</span>}
+                  </div>
+                  <div className="csp-cir-right">
+                    <span className="csp-cir-amt">{fBase(it.monthly_amount)}/mo</span>
+                    {it.frequency === 'annual' && <span className="csp-cir-freq">({fBase(it.amount)}/yr)</span>}
+                  </div>
+                  <div className="csp-cir-actions">
+                    <button type="button" className="csp-action-btn edit" onClick={() => handleOpenEdit(it)} title="Edit"><Pencil size={11} /></button>
+                    <button type="button" className="csp-action-btn delete" onClick={() => handleDelete(it)} title="Delete"><Trash2 size={11} /></button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -467,7 +498,12 @@ export function PlanWorksheet({
               <span className="csp-bucket-dot" style={{ backgroundColor: savings.color }} />
               <span className="csp-wcard-name">Savings Goals</span>
             </div>
-            <span className="csp-target-badge">Target: 5%–10%</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="csp-target-badge">Target: 5%–10%</span>
+              <span className={`csp-pos-status-badge ${savPct >= 5 ? 'good' : 'warning'}`}>
+                {savPct >= 5 ? 'HEALTHY' : 'UNDER TARGET'}
+              </span>
+            </div>
           </div>
 
           <div className="csp-wcard-figures">
@@ -495,11 +531,38 @@ export function PlanWorksheet({
             </div>
           </div>
 
-          <div className="csp-wcard-footer">
-            <span>
-              {savings.items.length} item{savings.items.length !== 1 ? 's' : ''} planned
-            </span>
-            <span>Emergency fund, vacations, gifts</span>
+          <Button
+            variant="secondary"
+            size="dense"
+            onClick={() => handleOpenAdd('savings')}
+            style={{ width: '100%', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+          >
+            <Plus size={13} />
+            <span>Add to Savings</span>
+          </Button>
+
+          {/* Breakdown list in this pos */}
+          <div className="csp-card-items-wrap">
+            {savings.items.length === 0 ? (
+              <div className="csp-card-empty-hint">No savings goals planned yet.</div>
+            ) : (
+              savings.items.map((it) => (
+                <div key={it.id} className="csp-card-item-row">
+                  <div className="csp-cir-left">
+                    <span className="csp-cir-title">{it.name}</span>
+                    {it.due_date && <span className="csp-cir-due">Due: {it.due_date}</span>}
+                  </div>
+                  <div className="csp-cir-right">
+                    <span className="csp-cir-amt">{fBase(it.monthly_amount)}/mo</span>
+                    {it.frequency === 'annual' && <span className="csp-cir-freq">({fBase(it.amount)}/yr)</span>}
+                  </div>
+                  <div className="csp-cir-actions">
+                    <button type="button" className="csp-action-btn edit" onClick={() => handleOpenEdit(it)} title="Edit"><Pencil size={11} /></button>
+                    <button type="button" className="csp-action-btn delete" onClick={() => handleDelete(it)} title="Delete"><Trash2 size={11} /></button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -510,7 +573,12 @@ export function PlanWorksheet({
               <span className="csp-bucket-dot" style={{ backgroundColor: guilt_free.color }} />
               <span className="csp-wcard-name">Guilt-Free Spending</span>
             </div>
-            <span className="csp-target-badge">Target: 20%–35%</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <span className="csp-target-badge">Target: 20%–35%</span>
+              <span className={`csp-pos-status-badge ${guilt_free.pct_of_income <= 35 ? 'good' : 'danger'}`}>
+                {guilt_free.pct_of_income <= 35 ? 'HEALTHY' : 'OVER'}
+              </span>
+            </div>
           </div>
 
           <div className="csp-wcard-figures">
@@ -538,11 +606,38 @@ export function PlanWorksheet({
             </div>
           </div>
 
-          <div className="csp-wcard-footer">
-            <span>
-              {guilt_free.items.length} item{guilt_free.items.length !== 1 ? 's' : ''} planned
-            </span>
-            <span>Allowance: {fBaseWhole(plan.summary.guilt_free_allowance)} /mo</span>
+          <Button
+            variant="secondary"
+            size="dense"
+            onClick={() => handleOpenAdd('guilt_free')}
+            style={{ width: '100%', marginTop: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
+          >
+            <Plus size={13} />
+            <span>Add to Guilt-Free</span>
+          </Button>
+
+          {/* Breakdown list in this pos */}
+          <div className="csp-card-items-wrap">
+            {guilt_free.items.length === 0 ? (
+              <div className="csp-card-empty-hint">No guilt-free items planned yet.</div>
+            ) : (
+              guilt_free.items.map((it) => (
+                <div key={it.id} className="csp-card-item-row">
+                  <div className="csp-cir-left">
+                    <span className="csp-cir-title">{it.name}</span>
+                    {it.due_date && <span className="csp-cir-due">Due: {it.due_date}</span>}
+                  </div>
+                  <div className="csp-cir-right">
+                    <span className="csp-cir-amt">{fBase(it.monthly_amount)}/mo</span>
+                    {it.frequency === 'annual' && <span className="csp-cir-freq">({fBase(it.amount)}/yr)</span>}
+                  </div>
+                  <div className="csp-cir-actions">
+                    <button type="button" className="csp-action-btn edit" onClick={() => handleOpenEdit(it)} title="Edit"><Pencil size={11} /></button>
+                    <button type="button" className="csp-action-btn delete" onClick={() => handleDelete(it)} title="Delete"><Trash2 size={11} /></button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       </div>
@@ -843,6 +938,7 @@ export function PlanWorksheet({
           await onRefresh()
         }}
         initialData={editingItem}
+        defaultBucket={selectedBucket}
       />
     </div>
   )

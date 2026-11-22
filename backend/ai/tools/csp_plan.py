@@ -36,11 +36,12 @@ async def get_csp_plan_tool(input_data: dict) -> tuple[str, dict | None]:
 @tool(
     "add_csp_planned_expense",
     description=(
-        "Add or update a planned monthly or annual expense in the user's Conscious Spending Plan "
-        "(Track tab). For annual expenses (e.g., rent/kontrakan 28jt per year, annual car insurance, "
-        "or tuition), specify frequency='annual' so it is automatically prorated into monthly "
-        "fixed costs (e.g. 28jt/12 = 2.33jt/mo). Returns the saved item, updated bucket totals, "
-        "percentages, financial health score, and diagnosis."
+        "CRITICAL: ALWAYS call this tool when the user asks to add, record, or plan an expense in TRACK "
+        "or Conscious Spending Plan (e.g. 'tambah data track', 'catat ke track', 'pengeluaran 28jt per tahun', 'kontrakan 25 januari 2027'). "
+        "NEVER route Track requests to budget plan, envelope budgeting, or ledger! "
+        "Records planned monthly or annual expenses in Track. For annual expenses (e.g. kontrakan 28jt/tahun, "
+        "car insurance, tuition), specify frequency='annual' so it is automatically prorated into monthly fixed costs (/12 = 2.33jt/mo). "
+        "Returns the saved item, updated bucket totals, percentages, financial health score (Healthy, Over, etc.), and diagnosis."
     ),
     input_schema={
         "type": "object",

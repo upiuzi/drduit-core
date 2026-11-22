@@ -30,6 +30,38 @@ interface Props {
     notes?: string | null
   }) => Promise<void>
   initialData?: PlannedExpenseItem | null
+  defaultBucket?: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free'
+}
+
+function parseInputAmount(val: string): number {
+  let s = (val || '').trim().toLowerCase()
+  let mult = 1
+  if (s.includes('jt') || s.includes('juta')) {
+    mult = 1_000_000
+    s = s.replace(/(jt|juta)/g, '')
+  } else if (s.includes('rb') || s.includes('ribu') || s.endsWith('k')) {
+    mult = 1_000
+    s = s.replace(/(rb|ribu|k)/g, '')
+  } else if (s.endsWith('m') && !s.endsWith('am') && !s.endsWith('pm')) {
+    mult = 1_000_000
+    s = s.slice(0, -1)
+  }
+  s = s.replace(/^(rp|idr|\$)/g, '').trim()
+  if (s.split('.').length > 2) {
+    s = s.replace(/\./g, '')
+  } else if (s.split(',').length > 2) {
+    s = s.replace(/,/g, '')
+  } else if (s.includes('.') && s.includes(',')) {
+    if (s.indexOf('.') < s.indexOf(',')) {
+      s = s.replace(/\./g, '').replace(/,/g, '.')
+    } else {
+      s = s.replace(/,/g, '')
+    }
+  } else {
+    s = s.replace(/,/g, '.')
+  }
+  const num = parseFloat(s)
+  return isNaN(num) ? 0 : Math.round(num * mult * 100) / 100
 }
 
 const BUCKET_OPTIONS: {
@@ -69,7 +101,7 @@ const BUCKET_OPTIONS: {
   },
 ]
 
-export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData }: Props) {
+export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, defaultBucket }: Props) {
   const [name, setName] = useState('')
   const [amount, setAmount] = useState<string>('')
   const [frequency, setFrequency] = useState<'monthly' | 'annual'>('monthly')
@@ -91,16 +123,16 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData }:
       setName('')
       setAmount('')
       setFrequency('monthly')
-      setBucket('fixed_costs')
+      setBucket(defaultBucket || 'fixed_costs')
       setDueDate('')
       setNotes('')
     }
     setError(null)
-  }, [initialData, isOpen])
+  }, [initialData, defaultBucket, isOpen])
 
   if (!isOpen) return null
 
-  const numAmount = parseFloat(amount) || 0
+  const numAmount = parseInputAmount(amount)
   const monthlyEquivalent = frequency === 'annual' ? Math.round(numAmount / 12) : numAmount
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -206,22 +238,20 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData }:
                 <input
                   id="expense-amount"
                   className="csp-form-input csp-input-with-prefix"
-                  type="number"
-                  step="any"
-                  min="0"
-                  placeholder={frequency === 'annual' ? 'e.g. 28000000 for 28jt / year' : 'e.g. 2500000'}
+                  type="text"
+                  placeholder={frequency === 'annual' ? 'e.g. 28jt or 28000000 / year' : 'e.g. 2.5jt or 2500000'}
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   required
                 />
               </div>
 
-              {/* Prorated Info Box */}
-              {frequency === 'annual' && numAmount > 0 && (
+              {/* Live Preview */}
+              {numAmount > 0 && (
                 <div className="csp-prorated-callout">
-                  <span>💡 <strong>Prorated Monthly:</strong></span>{' '}
+                  <span>💡 <strong>Calculated:</strong></span>{' '}
                   <span className="csp-prorated-value">{fBaseWhole(monthlyEquivalent)} / month</span>{' '}
-                  <span>({fBaseWhole(numAmount)} ÷ 12 months)</span>
+                  {frequency === 'annual' && <span>({fBaseWhole(numAmount)} / year ÷ 12)</span>}
                 </div>
               )}
             </div>
