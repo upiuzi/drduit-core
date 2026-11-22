@@ -291,7 +291,7 @@ PROVIDER_CATALOG: list = [
             "gpt-4o-mini",
             "gpt-4o",
             "claude-3-5-sonnet",
-            "gemini-2.5-flash",
+            "gemini-2.0-flash",
             "deepseek-chat",
         ],
     },
@@ -307,7 +307,7 @@ PROVIDER_CATALOG: list = [
             "gpt-4o-mini",
             "gpt-4o",
             "claude-3-5-sonnet",
-            "gemini-2.5-flash",
+            "gemini-2.0-flash",
         ],
     },
     {
@@ -356,13 +356,10 @@ PROVIDER_CATALOG: list = [
         "base_url": "https://generativelanguage.googleapis.com/v1beta/openai/",
         "needs_api_key": True,
         "editable_base_url": False,
-        # Refreshed 2026-10-04: gemini-2.0-flash is gone from LiteLLM's list. The GA Pro stays
-        # first (what first run prefills); 3.1 Pro is still a preview.
         "model_hints": [
-            "gemini-2.5-pro",
-            "gemini-3.1-pro-preview",
-            "gemini-3.8-flash",
-            "gemini-3.5-flash-lite",
+            "gemini-2.0-flash",
+            "gemini-1.5-pro",
+            "gemini-1.5-flash",
         ],
     },
     {
@@ -554,7 +551,16 @@ _RETIRED_MODEL_MAP: dict[str, str] = {
     "antigravity_cli:gemini-2.5-flash": "antigravity_cli:gemini-3.8-flash-medium",
     "antigravity_cli:gemini-2.5-flash-lite": "antigravity_cli:gemini-3.8-flash-low",
     "antigravity_cli:gemini-2.5-pro": "antigravity_cli:gemini-3.8-flash-high",
+    "antigravity_cli:gemini-2.5": "antigravity_cli:gemini-3.8-flash-medium",
     "antigravity_cli:gemini-3.7-flash": "antigravity_cli:gemini-3.8-flash-medium",
+    "antigravity_cli:gemini-2.0-flash": "antigravity_cli:gemini-3.8-flash-medium",
+    "antigravity_cli:gemini-2.0-flash-lite": "antigravity_cli:gemini-3.8-flash-low",
+    "gemini-2.5-flash": "gemini-3.8-flash-medium",
+    "gemini-2.5-flash-lite": "gemini-3.8-flash-low",
+    "gemini-2.5-pro": "gemini-3.8-flash-high",
+    "gemini-2.5": "gemini-3.8-flash-medium",
+    "gemini-3.7-flash": "gemini-3.8-flash-medium",
+    "gemini-2.0-flash": "gemini-3.8-flash-medium",
 }
 
 

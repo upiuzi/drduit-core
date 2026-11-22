@@ -168,6 +168,25 @@ _NO_JUDGE = (
 )
 
 
+# Legacy or retired models that might still be stored in old sessions or configs.
+_CLI_RETIRED_MODELS: dict[str, str] = {
+    "gemini-2.5-flash": "gemini-3.8-flash-medium",
+    "gemini-2.5-flash-lite": "gemini-3.8-flash-low",
+    "gemini-2.5-pro": "gemini-3.8-flash-high",
+    "gemini-2.5": "gemini-3.8-flash-medium",
+    "gemini-3.7-flash": "gemini-3.8-flash-medium",
+    "gemini-2.0-flash": "gemini-3.8-flash-medium",
+}
+
+
+def normalize_cli_model(model: str) -> str:
+    """Normalize and remap retired/legacy model identifiers to current valid agy models."""
+    clean = (model or "").strip()
+    if clean.startswith("antigravity_cli:"):
+        clean = clean.split(":", 1)[1]
+    return _CLI_RETIRED_MODELS.get(clean, clean)
+
+
 # The same reason refuses a turn whose tool list must be a real ceiling (an unattended turn reading
 # untrusted text): the tool loop never sees what this CLI runs itself.
 _NO_ENFORCED_OFFER = (
@@ -216,6 +235,7 @@ class AntigravityCliProvider(AIProvider):
 
     def _argv(self, model: str, effort: str) -> list[str]:
         # The prompt is NEVER an argv element: stream-json input reads it from stdin.
+        clean_model = normalize_cli_model(model)
         cmd = [
             self._resolve_binary(),
             "--input-format",
@@ -225,9 +245,9 @@ class AntigravityCliProvider(AIProvider):
             "--disable-slash-commands",
             "--dangerously-skip-permissions",
         ]
-        if model.strip():
-            cmd.extend(["--model", model.strip()])
-        cli_eff = _cli_effort(model, effort)
+        if clean_model:
+            cmd.extend(["--model", clean_model])
+        cli_eff = _cli_effort(clean_model, effort)
         if cli_eff:
             cmd.extend(["--effort", cli_eff])
         return cmd
