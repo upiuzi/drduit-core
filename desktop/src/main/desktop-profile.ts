@@ -11,7 +11,7 @@ export interface DesktopProfile {
 
 export function desktopProfile(isPackaged: boolean, env: NodeJS.ProcessEnv): DesktopProfile {
   if (!isPackaged && env.ONW_DESKTOP_PROFILE === 'dev') {
-    return { name: 'Open Net Worth Dev', settingsFolder: 'Open Net Worth Dev', bookFolder: '.open-net-worth-dev' };
+    return { name: 'Dr Duit Dev', settingsFolder: 'Dr Duit Dev', bookFolder: '.open-net-worth-dev' };
   }
-  return { name: 'Open Net Worth', settingsFolder: null, bookFolder: '.open-net-worth' };
+  return { name: 'Dr Duit', settingsFolder: null, bookFolder: '.open-net-worth' };
 }

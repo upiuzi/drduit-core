@@ -840,9 +840,9 @@ function installTray(): void {
     const icon = process.platform === 'linux' ? source.resize({ width: 24, height: 24 }) : source;
     icon.setTemplateImage(process.platform === 'darwin');
     tray = new Tray(icon);
-    tray.setToolTip('Open Net Worth');
+    tray.setToolTip('Dr Duit');
   }
   // Native import and the local intake review only exist for a local book; a server connection
   // hides them, as the File menu already disables them.
-  tray.setContextMenu(Menu.buildFromTemplate([{ label: 'Open Open Net Worth', click: showMain }, { label: 'Open in browser', click: () => nativeAction(() => books!.exclusive(openBrowser)) }, ...(main?.serverOrigin ? [] : [{ label: 'Import statement or receipt…', click: importAction }, { label: 'Review documents', click: () => command({ type: 'open-inbox' }) }]), ...(updates?.pending ? [{ type: 'separator' as const }, { label: updates.menuLabel, click: () => nativeAction(() => updates!.checkNow()) }] : []), { type: 'separator' }, { label: 'Quit Open Net Worth', click: () => app.quit() }]));
+  tray.setContextMenu(Menu.buildFromTemplate([{ label: 'Open Dr Duit', click: showMain }, { label: 'Open in browser', click: () => nativeAction(() => books!.exclusive(openBrowser)) }, ...(main?.serverOrigin ? [] : [{ label: 'Import statement or receipt…', click: importAction }, { label: 'Review documents', click: () => command({ type: 'open-inbox' }) }]), ...(updates?.pending ? [{ type: 'separator' as const }, { label: updates.menuLabel, click: () => nativeAction(() => updates!.checkNow()) }] : []), { type: 'separator' }, { label: 'Quit Dr Duit', click: () => app.quit() }]));
 }

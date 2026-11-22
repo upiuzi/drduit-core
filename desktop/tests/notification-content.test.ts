@@ -25,7 +25,7 @@ test('a backlog collapses into one summary naming the newest alerts', () => {
 });
 
 test('an alert without a title still says something useful, and long text is clipped', () => {
-  assert.deepEqual(notificationContent([{ id: 'x', read: false, target: 'activity' }]), [{ title: 'Open Net Worth', body: 'You have new activity to review.', target: 'activity' }]);
+  assert.deepEqual(notificationContent([{ id: 'x', read: false, target: 'activity' }]), [{ title: 'Dr Duit', body: 'You have new activity to review.', target: 'activity' }]);
   const [long] = notificationContent([row('1', 'T', 'word '.repeat(100))]);
   assert.ok(long.body.length <= 180 && long.body.endsWith('…'));
 });

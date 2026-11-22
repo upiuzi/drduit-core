@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 // Squirrel.Mac's installer (ShipIt) is the launchd job `<bundle id>.ShipIt`. After a quit with an
 // update downloaded it spends several seconds verifying the new bundle, then CANCELS the update if
 // the app is running again — so an app reopened in that window would quietly stay on the old version.
-export const MAC_BUNDLE_ID = 'app.opennetworth.desktop';
+export const MAC_BUNDLE_ID = 'app.drduit.desktop';
 export const SHIPIT_LABEL = `${MAC_BUNDLE_ID}.ShipIt`;
 export const UPDATE_HANDOFF_FLAG = '--onw-update-handoff';
 const REOPEN_WAIT_LIMIT = 240;

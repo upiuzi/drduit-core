@@ -12,7 +12,7 @@ const MAC_ONLY = { skip: process.platform === 'win32' && 'POSIX paths and /bin/s
 const BUNDLE = '/Applications/Open Net Worth.app';
 const LISTED = `{
 \t"LimitLoadToSessionType" = "Aqua";
-\t"Label" = "app.opennetworth.desktop.ShipIt";
+\t"Label" = "app.drduit.desktop.ShipIt";
 \t"OnDemand" = true;
 \t"LastExitStatus" = 0;
 \t"PID" = 91854;
@@ -60,7 +60,7 @@ test('notifications stay on unless switched off', () => {
 
 test('a pending install is found only while the installer runs for this bundle', async () => {
   const home = await mkdtemp(join(tmpdir(), 'onw-handoff-'));
-  const update = join(home, 'Library', 'Caches', 'app.opennetworth.desktop.ShipIt', 'update.abc', 'Open Net Worth.app');
+  const update = join(home, 'Library', 'Caches', 'app.drduit.desktop.ShipIt', 'update.abc', 'Open Net Worth.app');
   await mkdir(join(update, 'Contents'), { recursive: true });
   await writeFile(join(update, 'Contents', 'Info.plist'), PLIST);
   await writeFile(shipItStatePath(home), state(BUNDLE, update));

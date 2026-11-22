@@ -18,7 +18,7 @@ const TOOLS = {
   },
 };
 const CACHE = join(__dirname, '..', '.cache', 'appimage');
-const EXECUTABLE = 'open-net-worth';
+const EXECUTABLE = 'dr-duit';
 
 // Chromium's sandbox needs unprivileged user namespaces (the setuid helper cannot work inside a
 // read-only, nosuid AppImage mount). Where the OS forbids them — Ubuntu 24.04's AppArmor default
@@ -31,7 +31,7 @@ userns_blocked() {
   [ "$(cat /proc/sys/user/max_user_namespaces 2>/dev/null)" = 0 ]
 }
 if userns_blocked; then
-  echo "open-net-worth: this system blocks unprivileged user namespaces, starting without the Chromium sandbox" >&2
+  echo "dr-duit: this system blocks unprivileged user namespaces, starting without the Chromium sandbox" >&2
   set -- --no-sandbox "$@"
 fi
 exec "$here/usr/lib/${EXECUTABLE}/${EXECUTABLE}" "$@"

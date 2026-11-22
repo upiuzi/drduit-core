@@ -11,7 +11,7 @@ export type BannerTarget = 'activity' | 'intel';
 export interface Banner extends ActivityRow { target: BannerTarget }
 export interface NotificationContent { title: string; body: string; target: BannerTarget }
 
-const APP = 'Open Net Worth';
+const APP = 'Dr Duit';
 // Above this many new alerts at once, one summary instead of a stack of banners.
 export const MAX_INDIVIDUAL = 3;
 // On the first poll after launch or a book switch, an alert older than this is history, not news.

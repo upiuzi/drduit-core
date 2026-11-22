@@ -108,7 +108,7 @@ export interface HelpActions {
 // in the app menu there, and here everywhere else.
 export function helpMenu(platform: NodeJS.Platform, { send, checkForUpdates, serverMode, openLogs, revealBook, restartServer, reportProblem }: HelpActions): MenuItemConstructorOptions {
   return { role: 'help', submenu: [
-    { label: 'Open Net Worth Help', click: () => send({ type: 'open-help' }) },
+    { label: 'Dr Duit Help', click: () => send({ type: 'open-help' }) },
     { label: 'Keyboard Shortcuts', accelerator: 'CmdOrCtrl+Shift+/', click: () => send({ type: 'show-shortcuts' }) },
     { type: 'separator' },
     { label: 'Troubleshooting', submenu: [

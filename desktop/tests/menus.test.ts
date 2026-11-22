@@ -66,7 +66,7 @@ test('Help opens the docs and shortcuts, and keeps Check for Updates off macOS o
   const sent: DesktopCommand[] = [];
   const menu = help('win32', false, command => sent.push(command));
   assert.equal(menu.role, 'help');
-  click(named(menu, 'Open Net Worth Help'));
+  click(named(menu, 'Dr Duit Help'));
   click(named(menu, 'Keyboard Shortcuts'));
   assert.deepEqual(sent, [{ type: 'open-help' }, { type: 'show-shortcuts' }]);
   assert.ok(named(menu, 'Check for Updates…'));

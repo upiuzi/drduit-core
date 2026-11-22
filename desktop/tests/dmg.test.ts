@@ -12,7 +12,7 @@ test('DMG staging preserves signed application symlink targets', { skip: process
   let stagingVerified = false;
   try {
     const source = join(directory, 'package');
-    const app = join(source, 'Open Net Worth.app');
+    const app = join(source, 'Dr Duit.app');
     const bin = join(app, 'Contents', 'Resources', 'runtime', 'python', 'bin');
     await mkdir(bin, { recursive: true });
     await writeFile(join(bin, 'python3.12'), 'signed interpreter');
@@ -23,7 +23,7 @@ test('DMG staging preserves signed application symlink targets', { skip: process
     const inspectStaging = async (command: string, args: string[]) => {
       assert.equal(command, '/usr/bin/hdiutil');
       const staging = args[args.indexOf('-srcfolder') + 1];
-      const stagedApp = join(staging, 'Open Net Worth.app');
+      const stagedApp = join(staging, 'Dr Duit.app');
       const stagedBin = join(stagedApp, 'Contents', 'Resources', 'runtime', 'python', 'bin');
       assert.equal(await readlink(join(stagedBin, 'python3')), 'python3.12');
       assert.equal(await readlink(join(stagedApp, 'Contents', 'Frameworks', 'QA.framework', 'Versions', 'Current')), 'A');
@@ -36,7 +36,7 @@ test('DMG staging preserves signed application symlink targets', { skip: process
     const MakerDMG = require('../resources/maker-dmg.cjs');
     const maker = new MakerDMG({ version: '0.1.0' });
     await maker.prepareConfig('arm64');
-    const artifacts = await maker.make({ dir: source, makeDir: join(directory, 'output'), appName: 'Open Net Worth', targetArch: 'arm64' });
+    const artifacts = await maker.make({ dir: source, makeDir: join(directory, 'output'), appName: 'Dr Duit', targetArch: 'arm64' });
     assert.equal(stagingVerified, true);
     assert.equal(artifacts.length, 1);
   } finally { childProcess.execFile = originalExecFile; await rm(directory, { recursive: true, force: true }); }
@@ -49,7 +49,7 @@ test('a busy hdiutil is retried, any other failure is not', { skip: process.plat
   const modulePath = require.resolve('../resources/maker-dmg.cjs');
   try {
     const source = join(directory, 'package');
-    await mkdir(join(source, 'Open Net Worth.app'), { recursive: true });
+    await mkdir(join(source, 'Dr Duit.app'), { recursive: true });
     const failures: string[] = [];
     let calls = 0;
     const flaky = async () => {
@@ -63,7 +63,7 @@ test('a busy hdiutil is retried, any other failure is not', { skip: process.plat
     const MakerDMG = require(modulePath);
     const maker = new MakerDMG({ version: '0.1.0', busyRetryDelayMs: 1 });
     await maker.prepareConfig('arm64');
-    const args = { dir: source, makeDir: join(directory, 'output'), appName: 'Open Net Worth', targetArch: 'arm64' };
+    const args = { dir: source, makeDir: join(directory, 'output'), appName: 'Dr Duit', targetArch: 'arm64' };
 
     failures.push('hdiutil: create failed - Resource busy', 'hdiutil: create failed - Resource busy');
     assert.equal((await maker.make(args)).length, 1);
