@@ -62,6 +62,12 @@ describe('usePlanSubTab', () => {
     expect(screen.getByTestId('tab').textContent).toBe('budget')
   })
 
+  it('recognizes track as a valid sub-tab and mirrors it', () => {
+    sessionStorage.setItem('pl-subtab', 'budget')
+    render(<Harness initialSub="track" onRender={() => {}} />)
+    expect(screen.getByTestId('tab').textContent).toBe('track')
+  })
+
   it('starts a fresh visit on Budget, ignoring the old forever-remembered tab', () => {
     localStorage.setItem('pl-subtab', 'outlook')
     render(<Harness onRender={() => {}} />)

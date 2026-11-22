@@ -29,6 +29,7 @@ import { METHODS } from './budgetLens/methodsData'
 import { useBudgetLens } from './budgetLens/useBudgetLens'
 import { CashFlowTab } from './cashflow'
 import { OutlookTab } from './outlook'
+import { TrackTab } from './track/TrackTab'
 import { usePlanSubTab } from './usePlanSubTab'
 import { OutlookSetupModal } from './OutlookSetupModal'
 import { PlanEmptyBook } from './PlanEmptyBook'
@@ -684,7 +685,14 @@ export function Plan({
         {/* Screen-awareness title for the Uzi snapshot (reuses the existing dock). */}
         <span
           data-ctx-title={
-            'Plan — ' + (tab === 'budget' ? 'Budget' : tab === 'cashflow' ? 'Cash Flow' : 'Outlook')
+            'Plan — ' +
+            (tab === 'budget'
+              ? 'Budget'
+              : tab === 'track'
+                ? 'Track'
+                : tab === 'cashflow'
+                  ? 'Cash Flow'
+                  : 'Outlook')
           }
           style={{ display: 'none' }}
           aria-hidden="true"
@@ -726,6 +734,7 @@ export function Plan({
               onChange={setTab}
               tabs={[
                 { key: 'budget', label: 'Budget' },
+                { key: 'track', label: 'Track' },
                 { key: 'cashflow', label: 'Cash Flow' },
                 { key: 'outlook', label: 'Outlook' },
               ]}
@@ -766,6 +775,9 @@ export function Plan({
                 categoriesVersion={catVersion}
               />
             )}
+          </div>
+          <div style={tab === 'track' ? undefined : { display: 'none' }}>
+            <TrackTab onAskLucius={onAskLucius} toast={showToast} />
           </div>
           <div style={tab === 'cashflow' ? undefined : { display: 'none' }}>
             {accountsQuery.initialLoading ? (

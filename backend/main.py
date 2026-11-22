@@ -181,6 +181,7 @@ from backend.api.paper_trading import router as paper_trading_router
 from backend.api.payees import router as payees_router
 from backend.api.plaid_api import router as plaid_router
 from backend.api.plan_outlook import router as plan_outlook_router
+from backend.api.plan_track import router as plan_track_router
 from backend.api.plan_state import router as plan_state_router
 from backend.api.planning import router as planning_router
 from backend.api.portability import router as portability_router
@@ -1254,6 +1255,7 @@ app.include_router(activity_router)
 app.include_router(inbox_router)
 app.include_router(plan_state_router)
 app.include_router(plan_outlook_router)
+app.include_router(plan_track_router)
 app.include_router(planning_router)
 app.include_router(portability_router)
 app.include_router(move_router)

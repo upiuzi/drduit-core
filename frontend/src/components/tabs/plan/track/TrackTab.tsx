@@ -1,0 +1,658 @@
+import React, { useState, useEffect, useCallback } from 'react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  SlidersHorizontal,
+  Sparkles,
+  Shield,
+  TrendingUp,
+  Wallet,
+  Tags,
+} from '../../../../ui/icons'
+import { Button } from '../../../ui'
+import { fBase, fBaseWhole } from '../../../../utils/format'
+import { fetchJson } from '../../../../hooks/serverState'
+import {
+  CustomizeCategoriesModal,
+  type CategoryCatalogItem,
+} from './CustomizeCategoriesModal'
+import { TransactionsDrawer, type TrackTransaction } from './TransactionsDrawer'
+import './track.css'
+
+interface BucketCategory {
+  id: string
+  label: string
+  color: string
+  spent: number
+  count: number
+  pct_of_income: number
+}
+
+interface BucketDetail {
+  key: string
+  label: string
+  description: string
+  target_min: number
+  target_max: number
+  color: string
+  actual_spent: number
+  actual_pct: number
+  status: 'good' | 'warning' | 'danger' | 'neutral'
+  categories: BucketCategory[]
+  transactions_count: number
+}
+
+interface CspTrackResponse {
+  month: string
+  base_currency: string
+  net_income: number
+  net_income_source: string
+  total_spent: number
+  unallocated: number
+  guilt_free_allowance: number
+  guilt_free_spent: number
+  guilt_free_remaining: number
+  guilt_free_status: 'good' | 'warning' | 'danger'
+  unexpected_buffer: number
+  unexpected_buffer_enabled: boolean
+  buckets: {
+    fixed_costs: BucketDetail
+    investments: BucketDetail
+    savings: BucketDetail
+    guilt_free: BucketDetail
+  }
+  recent_transactions: TrackTransaction[]
+  category_mappings: Record<string, string>
+  categories_catalog: CategoryCatalogItem[]
+}
+
+interface Props {
+  onAskLucius?: (prompt: string) => void
+  toast?: (msg: string) => void
+}
+
+function getInitialMonth(): string {
+  const now = new Date()
+  const y = now.getFullYear()
+  const m = String(now.getMonth() + 1).padStart(2, '0')
+  return `${y}-${m}`
+}
+
+function formatMonthTitle(ym: string): string {
+  const [y, m] = ym.split('-').map(Number)
+  const d = new Date(y, m - 1, 1)
+  return d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
+}
+
+export function TrackTab({ onAskLucius, toast }: Props) {
+  const [month, setMonth] = useState<string>(getInitialMonth)
+  const [data, setData] = useState<CspTrackResponse | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  // Modals state
+  const [customizeOpen, setCustomizeOpen] = useState(false)
+  const [drawerOpen, setDrawerOpen] = useState(false)
+  const [activeDrawerBucket, setActiveDrawerBucket] = useState<{
+    label: string
+    color: string
+    txns: TrackTransaction[]
+  } | null>(null)
+
+  const [activeTxnFilter, setActiveTxnFilter] = useState<string>('all')
+
+  const loadData = useCallback(async (targetMonth: string) => {
+    setLoading(true)
+    setError(null)
+    try {
+      const res = await fetchJson<CspTrackResponse>(`/api/plan/track?month=${targetMonth}`)
+      setData(res)
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'Gagal memuat data Conscious Spending Plan')
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useEffect(() => {
+    void loadData(month)
+  }, [month, loadData])
+
+  const handlePrevMonth = () => {
+    const [y, m] = month.split('-').map(Number)
+    const prev = new Date(y, m - 2, 1)
+    const nextY = prev.getFullYear()
+    const nextM = String(prev.getMonth() + 1).padStart(2, '0')
+    setMonth(`${nextY}-${nextM}`)
+  }
+
+  const handleNextMonth = () => {
+    const [y, m] = month.split('-').map(Number)
+    const next = new Date(y, m, 1)
+    const nextY = next.getFullYear()
+    const nextM = String(next.getMonth() + 1).padStart(2, '0')
+    setMonth(`${nextY}-${nextM}`)
+  }
+
+  const handleThisMonth = () => {
+    setMonth(getInitialMonth())
+  }
+
+  const handleSaveConfig = async (payload: {
+    category_mappings: Record<string, string>
+    unexpected_buffer_enabled: boolean
+    custom_monthly_income: number | null
+  }) => {
+    try {
+      await fetchJson('/api/plan/track/config', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      toast?.('Pengaturan Conscious Spending Plan berhasil disimpan!')
+      await loadData(month)
+    } catch {
+      toast?.('Gagal menyimpan pengaturan.')
+    }
+  }
+
+  const openDrawerForBucket = (bucketKey: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free') => {
+    if (!data) return
+    const b = data.buckets[bucketKey]
+    const txns = data.recent_transactions.filter((t) => t.bucket === bucketKey)
+    setActiveDrawerBucket({
+      label: b.label,
+      color: b.color,
+      txns,
+    })
+    setDrawerOpen(true)
+  }
+
+  if (loading && !data) {
+    return (
+      <div className="csp-track-container" style={{ textAlign: 'center', padding: '60px 20px' }}>
+        <p style={{ color: 'var(--faint)' }}>Memuat data Conscious Spending Plan...</p>
+      </div>
+    )
+  }
+
+  if (error || !data) {
+    return (
+      <div className="csp-track-container" style={{ textAlign: 'center', padding: '40px 20px' }}>
+        <p style={{ color: '#dc2626' }}>{error || 'Terjadi kesalahan saat memuat data.'}</p>
+        <Button variant="secondary" size="dense" onClick={() => void loadData(month)}>
+          Coba Lagi
+        </Button>
+      </div>
+    )
+  }
+
+  const {
+    net_income,
+    total_spent,
+    unallocated,
+    guilt_free_allowance,
+    guilt_free_spent,
+    guilt_free_remaining,
+    guilt_free_status,
+    unexpected_buffer,
+    unexpected_buffer_enabled,
+    buckets,
+    recent_transactions,
+    category_mappings,
+    categories_catalog,
+  } = data
+
+  const guiltFreeProgressPct =
+    guilt_free_allowance > 0
+      ? Math.min(100, Math.round((guilt_free_spent / guilt_free_allowance) * 100))
+      : 100
+
+  const filteredTxns =
+    activeTxnFilter === 'all'
+      ? recent_transactions
+      : recent_transactions.filter((t) => t.bucket === activeTxnFilter)
+
+  return (
+    <div className="csp-track-container">
+      {/* ── Toolbar: Month Navigation & Actions ── */}
+      <div className="csp-toolbar">
+        <div className="csp-month-picker">
+          <button className="csp-btn-icon" onClick={handlePrevMonth} aria-label="Bulan sebelumnya">
+            <ChevronLeft size={16} />
+          </button>
+          <span className="csp-month-label">{formatMonthTitle(month)}</span>
+          <button className="csp-btn-icon" onClick={handleNextMonth} aria-label="Bulan berikutnya">
+            <ChevronRight size={16} />
+          </button>
+          {month !== getInitialMonth() && (
+            <Button variant="secondary" size="dense" onClick={handleThisMonth}>
+              Bulan Ini
+            </Button>
+          )}
+        </div>
+
+        <div className="csp-tools-right">
+          <Button
+            variant="secondary"
+            size="dense"
+            onClick={() => setCustomizeOpen(true)}
+            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+          >
+            <SlidersHorizontal size={14} />
+            <span>Atur Kategori & Target</span>
+          </Button>
+
+          {onAskLucius && (
+            <Button
+              variant="secondary"
+              size="dense"
+              onClick={() =>
+                onAskLucius(
+                  `Evaluasi Conscious Spending Plan saya untuk bulan ${formatMonthTitle(month)}: Net Income ${fBaseWhole(net_income)}, Fixed Costs ${buckets.fixed_costs.actual_pct}%, Investments ${buckets.investments.actual_pct}%, Savings ${buckets.savings.actual_pct}%, dan sisa Guilt-Free Spending ${fBaseWhole(guilt_free_remaining)}. Apa saran Ramit Sethi untuk kondisi ini?`,
+                )
+              }
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <Sparkles size={14} />
+              <span>Tanya Lucius</span>
+            </Button>
+          )}
+        </div>
+      </div>
+
+      {/* ── Hero Card: Sisa Uang Jajan Bebas Rasa Bersalah ── */}
+      <div className="csp-hero-card">
+        <div className="csp-hero-header">
+          <div className="csp-hero-title-group">
+            <div className="csp-hero-tag">
+              <Sparkles size={14} />
+              <span>Conscious Spending Plan (Ramit Sethi)</span>
+            </div>
+            <h2 className="csp-hero-title">Sisa Uang Jajan Bebas Rasa Bersalah</h2>
+          </div>
+
+          <div className={`csp-hero-status-pill ${guilt_free_status}`}>
+            {guilt_free_status === 'good' && '🟢 Bebas Jajan Tanpa Khawatir'}
+            {guilt_free_status === 'warning' && '🟡 Uang Jajan Menipis'}
+            {guilt_free_status === 'danger' && '🔴 Melampaui Alokasi'}
+          </div>
+        </div>
+
+        <div
+          className={`csp-hero-big-number ${guilt_free_remaining < 0 ? 'negative' : ''}`}
+        >
+          {fBaseWhole(guilt_free_remaining)}
+        </div>
+
+        <div className="csp-hero-progress-track">
+          <div
+            className="csp-hero-progress-bar"
+            style={{
+              width: `${guiltFreeProgressPct}%`,
+              background:
+                guilt_free_status === 'danger'
+                  ? '#dc2626'
+                  : guilt_free_status === 'warning'
+                    ? '#f59e0b'
+                    : '#8b5cf6',
+            }}
+          />
+        </div>
+
+        <div className="csp-hero-stats-row">
+          <span className="csp-hero-stat">
+            Alokasi Jajan Tersedia: <b>{fBase(guilt_free_allowance)}</b>
+          </span>
+          <span>•</span>
+          <span className="csp-hero-stat">
+            Sudah Terpakai: <b>{fBase(guilt_free_spent)}</b> ({guiltFreeProgressPct}%)
+          </span>
+          <span>•</span>
+          <span className="csp-hero-stat">
+            Take-Home Pay: <b>{fBase(net_income)}</b>
+          </span>
+        </div>
+
+        <p className="csp-hero-quote">
+          "Spend extravagantly on the things you love, and cut costs mercilessly on the things you
+          don't." — Ramit Sethi
+        </p>
+      </div>
+
+      {/* ── The 4 Buckets Grid ── */}
+      <div className="csp-buckets-grid">
+        {/* 1. Fixed Costs */}
+        <div className="csp-bucket-card">
+          <div className="csp-bucket-card-head">
+            <div className="csp-bucket-badge">
+              <span className="csp-bucket-dot" style={{ background: buckets.fixed_costs.color }} />
+              <span>{buckets.fixed_costs.label}</span>
+            </div>
+            <span className="csp-bucket-target-pill">Target: 50–60%</span>
+          </div>
+
+          <div className="csp-bucket-amount">{fBaseWhole(buckets.fixed_costs.actual_spent)}</div>
+
+          <div className="csp-bucket-progress-wrap">
+            <div className="csp-bucket-pct-row">
+              <span style={{ color: buckets.fixed_costs.color }}>{buckets.fixed_costs.actual_pct}% dari income</span>
+              <span style={{ color: 'var(--faint)' }}>Maks 60%</span>
+            </div>
+            <div className="csp-bucket-track">
+              <div
+                className="csp-bucket-bar"
+                style={{
+                  width: `${Math.min(100, (buckets.fixed_costs.actual_pct / 60) * 100)}%`,
+                  background:
+                    buckets.fixed_costs.actual_pct > 60
+                      ? '#dc2626'
+                      : buckets.fixed_costs.color,
+                }}
+              />
+            </div>
+          </div>
+
+          <p className="csp-bucket-desc">
+            Sewa/KPR, listrik, wifi, belanja dapur, transport dasar, asuransi & cicilan.
+            {unexpected_buffer_enabled && unexpected_buffer > 0 && (
+              <span style={{ display: 'block', marginTop: '4px', color: '#3b86dd', fontWeight: 600 }}>
+                +15% Unexpected Buffer: {fBase(unexpected_buffer)}
+              </span>
+            )}
+          </p>
+
+          <div className="csp-bucket-cats">
+            {buckets.fixed_costs.categories.slice(0, 3).map((c) => (
+              <div key={c.id || c.label} className="csp-bucket-cat-row">
+                <span className="csp-bucket-cat-name" title={c.label}>
+                  {c.label}
+                </span>
+                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="csp-bucket-footer-btn"
+            onClick={() => openDrawerForBucket('fixed_costs')}
+          >
+            Lihat Transaksi ({buckets.fixed_costs.transactions_count})
+          </button>
+        </div>
+
+        {/* 2. Investments */}
+        <div className="csp-bucket-card">
+          <div className="csp-bucket-card-head">
+            <div className="csp-bucket-badge">
+              <span className="csp-bucket-dot" style={{ background: buckets.investments.color }} />
+              <span>{buckets.investments.label}</span>
+            </div>
+            <span className="csp-bucket-target-pill">Target: 10%+</span>
+          </div>
+
+          <div className="csp-bucket-amount">{fBaseWhole(buckets.investments.actual_spent)}</div>
+
+          <div className="csp-bucket-progress-wrap">
+            <div className="csp-bucket-pct-row">
+              <span style={{ color: buckets.investments.color }}>{buckets.investments.actual_pct}% dari income</span>
+              <span style={{ color: 'var(--faint)' }}>Min 10%</span>
+            </div>
+            <div className="csp-bucket-track">
+              <div
+                className="csp-bucket-bar"
+                style={{
+                  width: `${Math.min(100, (buckets.investments.actual_pct / 10) * 100)}%`,
+                  background: buckets.investments.color,
+                }}
+              />
+            </div>
+          </div>
+
+          <p className="csp-bucket-desc">
+            Reksadana, saham index fund, obligasi, crypto, dan dana pensiun hari tua.
+          </p>
+
+          <div className="csp-bucket-cats">
+            {buckets.investments.categories.slice(0, 3).map((c) => (
+              <div key={c.id || c.label} className="csp-bucket-cat-row">
+                <span className="csp-bucket-cat-name" title={c.label}>
+                  {c.label}
+                </span>
+                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="csp-bucket-footer-btn"
+            onClick={() => openDrawerForBucket('investments')}
+          >
+            Lihat Transaksi ({buckets.investments.transactions_count})
+          </button>
+        </div>
+
+        {/* 3. Savings Goals */}
+        <div className="csp-bucket-card">
+          <div className="csp-bucket-card-head">
+            <div className="csp-bucket-badge">
+              <span className="csp-bucket-dot" style={{ background: buckets.savings.color }} />
+              <span>{buckets.savings.label}</span>
+            </div>
+            <span className="csp-bucket-target-pill">Target: 5–10%</span>
+          </div>
+
+          <div className="csp-bucket-amount">{fBaseWhole(buckets.savings.actual_spent)}</div>
+
+          <div className="csp-bucket-progress-wrap">
+            <div className="csp-bucket-pct-row">
+              <span style={{ color: buckets.savings.color }}>{buckets.savings.actual_pct}% dari income</span>
+              <span style={{ color: 'var(--faint)' }}>Target 5–10%</span>
+            </div>
+            <div className="csp-bucket-track">
+              <div
+                className="csp-bucket-bar"
+                style={{
+                  width: `${Math.min(100, (buckets.savings.actual_pct / 10) * 100)}%`,
+                  background: buckets.savings.color,
+                }}
+              />
+            </div>
+          </div>
+
+          <p className="csp-bucket-desc">
+            Dana darurat, tabungan liburan, DP rumah, renovasi, dan target jangka pendek.
+          </p>
+
+          <div className="csp-bucket-cats">
+            {buckets.savings.categories.slice(0, 3).map((c) => (
+              <div key={c.id || c.label} className="csp-bucket-cat-row">
+                <span className="csp-bucket-cat-name" title={c.label}>
+                  {c.label}
+                </span>
+                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="csp-bucket-footer-btn"
+            onClick={() => openDrawerForBucket('savings')}
+          >
+            Lihat Transaksi ({buckets.savings.transactions_count})
+          </button>
+        </div>
+
+        {/* 4. Guilt-Free Spending */}
+        <div className="csp-bucket-card">
+          <div className="csp-bucket-card-head">
+            <div className="csp-bucket-badge">
+              <span className="csp-bucket-dot" style={{ background: buckets.guilt_free.color }} />
+              <span>{buckets.guilt_free.label}</span>
+            </div>
+            <span className="csp-bucket-target-pill">Target: 20–35%</span>
+          </div>
+
+          <div className="csp-bucket-amount">{fBaseWhole(buckets.guilt_free.actual_spent)}</div>
+
+          <div className="csp-bucket-progress-wrap">
+            <div className="csp-bucket-pct-row">
+              <span style={{ color: buckets.guilt_free.color }}>{buckets.guilt_free.actual_pct}% dari income</span>
+              <span style={{ color: 'var(--faint)' }}>Maks 35%</span>
+            </div>
+            <div className="csp-bucket-track">
+              <div
+                className="csp-bucket-bar"
+                style={{
+                  width: `${Math.min(100, (buckets.guilt_free.actual_pct / 35) * 100)}%`,
+                  background:
+                    buckets.guilt_free.actual_pct > 35
+                      ? '#dc2626'
+                      : buckets.guilt_free.color,
+                }}
+              />
+            </div>
+          </div>
+
+          <p className="csp-bucket-desc">
+            Kulineran, ngopi, shopping, hobi, streaming, nonton, dan kesenangan pribadimu.
+          </p>
+
+          <div className="csp-bucket-cats">
+            {buckets.guilt_free.categories.slice(0, 3).map((c) => (
+              <div key={c.id || c.label} className="csp-bucket-cat-row">
+                <span className="csp-bucket-cat-name" title={c.label}>
+                  {c.label}
+                </span>
+                <span className="csp-bucket-cat-val">{fBase(c.spent)}</span>
+              </div>
+            ))}
+          </div>
+
+          <button
+            className="csp-bucket-footer-btn"
+            onClick={() => openDrawerForBucket('guilt_free')}
+          >
+            Lihat Transaksi ({buckets.guilt_free.transactions_count})
+          </button>
+        </div>
+      </div>
+
+      {/* ── Summary Strip: Take-Home vs Total Spent vs Net Savings ── */}
+      <div className="csp-summary-strip">
+        <div className="csp-summary-box">
+          <span className="csp-summary-label">Take-Home Pay (Pemasukan Bersih)</span>
+          <span className="csp-summary-value">{fBaseWhole(net_income)}</span>
+        </div>
+        <div className="csp-summary-box">
+          <span className="csp-summary-label">Total Pengeluaran Bulan Ini</span>
+          <span className="csp-summary-value">{fBaseWhole(total_spent)}</span>
+        </div>
+        <div className="csp-summary-box">
+          <span className="csp-summary-label">Sisa Kas Belum Teralokasi</span>
+          <span
+            className="csp-summary-value"
+            style={{ color: unallocated >= 0 ? '#10b981' : '#dc2626' }}
+          >
+            {fBaseWhole(unallocated)}
+          </span>
+        </div>
+      </div>
+
+      {/* ── Recent CSP Transactions ── */}
+      <div className="csp-txns-section">
+        <div className="csp-txns-head">
+          <h4>Daftar Transaksi Bulan Ini</h4>
+          <div style={{ display: 'flex', gap: '6px' }}>
+            {[
+              { id: 'all', label: 'Semua' },
+              { id: 'fixed_costs', label: 'Fixed Costs' },
+              { id: 'investments', label: 'Investasi' },
+              { id: 'savings', label: 'Tabungan' },
+              { id: 'guilt_free', label: 'Guilt-Free' },
+            ].map((f) => (
+              <button
+                key={f.id}
+                onClick={() => setActiveTxnFilter(f.id)}
+                style={{
+                  padding: '4px 10px',
+                  borderRadius: '16px',
+                  border: '1px solid var(--border)',
+                  background: activeTxnFilter === f.id ? 'var(--text)' : 'transparent',
+                  color: activeTxnFilter === f.id ? 'var(--card-bg)' : 'var(--faint)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {filteredTxns.length === 0 ? (
+          <p style={{ textAlign: 'center', color: 'var(--faint)', padding: '24px 0', fontSize: '13px' }}>
+            Tidak ada transaksi untuk filter ini pada bulan yang dipilih.
+          </p>
+        ) : (
+          <div className="csp-txns-list">
+            {filteredTxns.slice(0, 15).map((t) => {
+              const bucketColor =
+                t.bucket === 'fixed_costs'
+                  ? buckets.fixed_costs.color
+                  : t.bucket === 'investments'
+                    ? buckets.investments.color
+                    : t.bucket === 'savings'
+                      ? buckets.savings.color
+                      : buckets.guilt_free.color
+              return (
+                <div key={t.id} className="csp-txn-item">
+                  <div className="csp-txn-left">
+                    <span className="csp-txn-payee">{t.payee}</span>
+                    <span className="csp-txn-meta">
+                      <span>{t.date}</span>
+                      <span>•</span>
+                      <span>{t.category_label}</span>
+                      {t.notes && <span>• {t.notes}</span>}
+                    </span>
+                  </div>
+                  <div className="csp-txn-right">
+                    <span
+                      className="csp-bucket-tag"
+                      style={{ background: bucketColor }}
+                    >
+                      {t.bucket.replace('_', ' ')}
+                    </span>
+                    <span className="csp-txn-amount">{fBase(t.amount)}</span>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* ── Modals ── */}
+      <CustomizeCategoriesModal
+        open={customizeOpen}
+        onClose={() => setCustomizeOpen(false)}
+        categories={categories_catalog}
+        currentMappings={category_mappings}
+        unexpectedBufferEnabled={unexpected_buffer_enabled}
+        customIncome={net_income}
+        onSave={handleSaveConfig}
+      />
+
+      {activeDrawerBucket && (
+        <TransactionsDrawer
+          open={drawerOpen}
+          onClose={() => setDrawerOpen(false)}
+          bucketLabel={activeDrawerBucket.label}
+          bucketColor={activeDrawerBucket.color}
+          transactions={activeDrawerBucket.txns}
+        />
+      )}
+    </div>
+  )
+}

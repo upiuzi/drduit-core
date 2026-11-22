@@ -1,0 +1,510 @@
+/* track.css — Conscious Spending Plan (Ramit Sethi) tracking styles */
+
+.csp-track-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 16px 0 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ── Masthead Toolbar & Month Picker ── */
+.csp-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  padding: 10px 16px;
+}
+
+.csp-month-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.csp-month-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text, #111827);
+  min-width: 130px;
+  text-align: center;
+}
+
+.csp-btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e5e7eb);
+  background: transparent;
+  color: var(--text, #111827);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-btn-icon:hover {
+  background: var(--bg-hover, #f3f4f6);
+  border-color: var(--border-hover, #d1d5db);
+}
+
+.csp-tools-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ── Hero Guilt-Free Card ── */
+.csp-hero-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.08) 0%, rgba(59, 130, 246, 0.05) 100%);
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  border-radius: 16px;
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 4px 20px -4px rgba(139, 92, 246, 0.1);
+}
+
+.csp-hero-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.csp-hero-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csp-hero-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #8b5cf6;
+}
+
+.csp-hero-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text, #111827);
+  margin: 0;
+}
+
+.csp-hero-status-pill {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.csp-hero-status-pill.good {
+  background: rgba(16, 185, 129, 0.15);
+  color: #059669;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.csp-hero-status-pill.warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.csp-hero-status-pill.danger {
+  background: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.csp-hero-big-number {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text, #111827);
+  line-height: 1.1;
+}
+
+.csp-hero-big-number.negative {
+  color: #dc2626;
+}
+
+.csp-hero-stats-row {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  color: var(--faint, #6b7280);
+}
+
+.csp-hero-stat b {
+  color: var(--text, #111827);
+}
+
+.csp-hero-progress-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.csp-hero-progress-bar {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.4s ease;
+}
+
+.csp-hero-quote {
+  font-size: 12.5px;
+  font-style: italic;
+  color: var(--faint, #6b7280);
+  border-left: 2px solid #8b5cf6;
+  padding-left: 10px;
+  margin: 0;
+}
+
+/* ── 4 Buckets Grid ── */
+.csp-buckets-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+@media (max-width: 1024px) {
+  .csp-buckets-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .csp-buckets-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.csp-bucket-card {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 14px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.csp-bucket-card:hover {
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+}
+
+.csp-bucket-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.csp-bucket-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text, #111827);
+}
+
+.csp-bucket-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.csp-bucket-target-pill {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--bg-hover, #f3f4f6);
+  color: var(--faint, #6b7280);
+}
+
+.csp-bucket-amount {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text, #111827);
+  letter-spacing: -0.01em;
+}
+
+.csp-bucket-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.csp-bucket-pct-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.csp-bucket-track {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-hover, #f3f4f6);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.csp-bucket-bar {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s ease;
+}
+
+.csp-bucket-desc {
+  font-size: 11.5px;
+  color: var(--faint, #6b7280);
+  line-height: 1.4;
+  margin: 0;
+  min-height: 32px;
+}
+
+.csp-bucket-cats {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--border-light, #f1f3f5);
+  padding-top: 10px;
+}
+
+.csp-bucket-cat-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.csp-bucket-cat-name {
+  color: var(--text, #374151);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 140px;
+}
+
+.csp-bucket-cat-val {
+  font-weight: 600;
+  color: var(--text, #111827);
+}
+
+.csp-bucket-footer-btn {
+  width: 100%;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border, #e5e7eb);
+  background: transparent;
+  color: var(--primary, #3b82f6);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.csp-bucket-footer-btn:hover {
+  background: var(--bg-hover, #f3f4f6);
+  border-color: var(--primary, #3b82f6);
+}
+
+/* ── Summary & Recent Transactions ── */
+.csp-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+@media (max-width: 640px) {
+  .csp-summary-strip {
+    grid-template-columns: 1fr;
+  }
+}
+
+.csp-summary-box {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csp-summary-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--faint, #6b7280);
+}
+
+.csp-summary-value {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text, #111827);
+}
+
+.csp-txns-section {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 14px;
+  padding: 20px;
+}
+
+.csp-txns-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+
+.csp-txns-head h4 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text, #111827);
+}
+
+.csp-txns-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.csp-txn-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-light, #f3f4f6);
+  font-size: 13px;
+}
+
+.csp-txn-item:last-child {
+  border-bottom: none;
+}
+
+.csp-txn-left {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.csp-txn-payee {
+  font-weight: 600;
+  color: var(--text, #111827);
+}
+
+.csp-txn-meta {
+  font-size: 11.5px;
+  color: var(--faint, #6b7280);
+  display: flex;
+  gap: 8px;
+}
+
+.csp-txn-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.csp-txn-amount {
+  font-weight: 700;
+  color: var(--text, #111827);
+}
+
+.csp-bucket-tag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 12px;
+  color: #ffffff;
+}
+
+/* ── Modal & Drawer Styles ── */
+.csp-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+  backdrop-filter: blur(2px);
+}
+
+.csp-modal-content {
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--border, #e5e7eb);
+  border-radius: 16px;
+  width: 100%;
+  max-width: 620px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.csp-modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border, #e5e7eb);
+}
+
+.csp-modal-head h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text, #111827);
+}
+
+.csp-modal-body {
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.csp-modal-footer {
+  padding: 12px 20px;
+  border-top: 1px solid var(--border, #e5e7eb);
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  background: var(--bg-hover, #fafafa);
+}

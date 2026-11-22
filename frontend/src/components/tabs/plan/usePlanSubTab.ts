@@ -4,9 +4,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
-type PlanTab = 'budget' | 'cashflow' | 'outlook'
+type PlanTab = 'budget' | 'track' | 'cashflow' | 'outlook'
 const isPlanTab = (s: unknown): s is PlanTab =>
-  s === 'budget' || s === 'cashflow' || s === 'outlook'
+  s === 'budget' || s === 'track' || s === 'cashflow' || s === 'outlook'
 
 const KEY = 'pl-subtab'
 function remembered(): string | null {
