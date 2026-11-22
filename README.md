@@ -208,6 +208,167 @@ Good to know:
 - **Working on the code?** From a checkout, add `-f compose.build.yml --build` to build the image
   locally.
 
+### Option D — VPS Ubuntu (Self-Hosted + Autostart)
+
+Panduan instalasi langkah-demi-langkah pada VPS Ubuntu (22.04 LTS atau 24.04 LTS) hingga berjalan otomatis di background sebagai systemd service (`autostart`).
+
+#### 1. Persiapan Server & Dependensi Sistem
+
+Login ke VPS Ubuntu via SSH, perbarui sistem, dan install paket pendukung:
+
+```bash
+sudo apt update && sudo apt upgrade -y
+sudo apt install -y git curl build-essential libssl-dev pkg-config
+```
+
+#### 2. Install Python 3.12+ dan Node.js 22+
+
+Aplikasi membutuhkan **Python 3.12+** dan **Node.js 22+**:
+
+- **Install Python 3.12+:**
+  ```bash
+  # Pada Ubuntu 24.04: Python 3.12 sudah default
+  sudo apt install -y python3 python3-pip python3-venv
+
+  # Atau menggunakan uv (direkomendasikan & lebih cepat):
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+  source ~/.bashrc
+  uv python install 3.12
+  ```
+
+- **Install Node.js 22 LTS (via NodeSource):**
+  ```bash
+  curl -fsSL https://deb.nodesource.com/setup_22.x | sudo -E bash -
+  sudo apt install -y nodejs
+  node -v # Pastikan >= v22.x.x
+  npm -v
+  ```
+
+#### 3. Clone Repository & Setup Otomatis
+
+Clone repository proyek dan jalankan `make setup` untuk membuat virtualenv, mengunduh dependencies backend/frontend, build asset web, dan inisialisasi database:
+
+```bash
+git clone https://github.com/upiuzi/drduit-core.git
+cd drduit-core
+make setup
+```
+
+Setelah `make setup` selesai, CLI `onw` akan terinstall di `.venv/bin/onw`.
+
+> [!TIP]
+> Agar perintah `onw` dapat dipanggil langsung dari mana saja, tambahkan path virtualenv ke shell profile:
+> ```bash
+> echo 'export PATH="$HOME/drduit-core/.venv/bin:$PATH"' >> ~/.bashrc
+> source ~/.bashrc
+> ```
+
+#### 4. Konfigurasi Jaringan & Firewall VPS
+
+Agar aplikasi bisa diakses dari browser komputer/HP Anda melalui IP publik VPS:
+
+- Buka port di firewall (contoh port default `8080`):
+  ```bash
+  sudo ufw allow 8080/tcp
+  sudo ufw reload
+  ```
+
+- Jika mengakses langsung tanpa reverse proxy (menggunakan IP publik `http://IP_VPS:8080`):
+  Aplikasi secara default mengikat ke `127.0.0.1`. Untuk VPS, tentukan `HOST=0.0.0.0`.
+
+#### 5. Menjalankan Autostart (Systemd Service)
+
+Gunakan fitur `onw autostart` bawaan untuk mengonfigurasi `systemd`. Ini memastikan aplikasi:
+- Berjalan otomatis saat VPS menyala/booting.
+- Auto-restart jika terjadi crash.
+- Tetap berjalan di background meski sesi SSH ditutup.
+
+Jalankan perintah ini dari direktori proyek:
+
+```bash
+HOST=0.0.0.0 PORT=8080 onw autostart on
+```
+*(Atau jalankan: `HOST=0.0.0.0 PORT=8080 make autostart`)*
+
+Aktifkan **linger** agar service user terus berjalan saat logout SSH:
+```bash
+sudo loginctl enable-linger $USER
+```
+
+#### 6. Memeriksa Status & Log
+
+- **Cek Status Service:**
+  ```bash
+  onw autostart status
+  # atau
+  systemctl --user status drduit.service
+  ```
+  *(Jika login sebagai `root`, cek dengan `systemctl status drduit.service`)*
+
+- **Melihat Log Aplikasi:**
+  ```bash
+  onw logs -f
+  # atau
+  journalctl --user -u drduit.service -f
+  ```
+
+- **Restart / Stop Service:**
+  ```bash
+  onw restart         # Restart service
+  onw autostart off   # Hentikan dan matikan autostart
+  ```
+
+#### 7. Akses Aplikasi di Browser
+
+Buka browser Anda dan akses:
+```
+http://IP_VPS_ANDA:8080
+```
+Ikuti wizard pertama untuk membuat akun, memilih mata uang dasar (misalnya IDR), dan menghubungkan provider AI (Anthropic / OpenAI / Ollama lokal).
+
+---
+
+#### 8. (Opsional) Domain & Nginx Reverse Proxy dengan HTTPS
+
+Jika Anda ingin mengakses menggunakan domain (misal `duit.domainanda.com`) dengan SSL gratis:
+
+1. **Install Nginx & Certbot:**
+   ```bash
+   sudo apt install -y nginx certbot python3-certbot-nginx
+   ```
+
+2. **Buat file konfigurasi Nginx:**
+   ```bash
+   sudo nano /etc/nginx/sites-available/drduit
+   ```
+   Isi konfigurasi berikut:
+   ```nginx
+   server {
+       server_name duit.domainanda.com;
+
+       location / {
+           proxy_pass http://127.0.0.1:8080;
+           proxy_set_header Host $host;
+           proxy_set_header X-Real-IP $remote_addr;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+           proxy_http_version 1.1;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection "upgrade";
+       }
+   }
+   ```
+
+3. **Aktifkan site dan pasang SSL:**
+   ```bash
+   sudo ln -s /etc/nginx/sites-available/drduit /etc/nginx/sites-enabled/
+   sudo nginx -t && sudo systemctl reload nginx
+   sudo certbot --nginx -d duit.domainanda.com
+   ```
+
+> [!IMPORTANT]
+> Saat menggunakan reverse proxy, pastikan Anda menyetel password login di **Settings → Security** dan menambahkan `AUTH_TRUST_LOOPBACK=false` di environment agar akses dari luar selalu terproteksi password.
+
 ## Coming from YNAB or Lunch Money?
 
 Add the **YNAB** or **Lunch Money** connector with a personal access token and your transactions
@@ -355,8 +516,4 @@ Found a vulnerability? See [`SECURITY.md`](SECURITY.md) — please do not open a
 ## License
 
 AGPL-3.0 — see [`LICENSE`](LICENSE). Third-party dependency licenses are in [`NOTICE`](NOTICE).
-# drduit-core
-# drduit-core
-# drduit-core
-# drduit-core
-# drduit-core
+
