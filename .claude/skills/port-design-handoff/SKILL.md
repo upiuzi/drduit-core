@@ -66,8 +66,11 @@ endpoints (often far more complete than expected); (c) CSS architecture + `scrip
    foundation contracts (import names/types) + the data adapter. They self-verify in their worktree
    and commit; you merge each lane's SHA (disjoint files → clean merges).
 
-### CSS discipline gotchas (these WILL bite)
+### CSS discipline & UI System invariants (these WILL bite)
 
+- **Wide fluid layout (never boxed)**: Tabs and sub-tabs must span the full container width (`width: 100%; max-width: none; margin: 0;`). Never introduce arbitrary width caps like `max-width: 1200px; margin: 0 auto;` on sub-tab containers — doing so creates boxed gutters that clash with sibling tabs like Cashflow and Budget. Sub-tabs in Plan use `.pl-sub`.
+- **System Theme Tokens**: Strictly use `:root` theme tokens (`var(--surface)` for cards, `var(--line)` for borders, `var(--ink)` for titles/amounts, `var(--muted)` for descriptions, `var(--bg-2)` for insets).
+- **Tabular Numerics**: Every currency amount, percentage, count, date, or metric MUST declare `font-variant-numeric: tabular-nums;`.
 - Copy the prototype `.css` to `frontend/src/components/tabs/<name>/<name>.css`, **strip the
   standalone-shell scaffolding** (`html/body`, `*{}`, `.onw-*` nav rail, `.<pfx>-content`,
   duplicate `:root` token defs), scope any `.ui-*` DS overrides under the page class, leave it

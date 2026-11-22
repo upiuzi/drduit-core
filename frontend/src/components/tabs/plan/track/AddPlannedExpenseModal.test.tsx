@@ -125,7 +125,7 @@ describe('AddPlannedExpenseModal - unit tests for all form controls', () => {
     })
 
     // Assert the exact argument passed to onSave is cleanly JSON-serializable
-    const lastArg = onSave.mock.calls[0][0]
+    const lastArg = onSave.mock.calls[0]![0]
     expect(JSON.parse(JSON.stringify(lastArg))).toEqual({
       name: 'Kontrakan Rumah Tahunan',
       amount: 28000000,
@@ -230,7 +230,7 @@ describe('AddPlannedExpenseModal - unit tests for all form controls', () => {
 
     // Simulate clicking button which passed event { target: <span> }
     const spanEl = document.createElement('span')
-    const simulatedEvent: any = { target: spanEl, currentTarget: spanEl }
+    const simulatedEvent: Record<string, unknown> = { target: spanEl, currentTarget: spanEl }
     simulatedEvent.circularRef = simulatedEvent
 
     render(
@@ -238,7 +238,7 @@ describe('AddPlannedExpenseModal - unit tests for all form controls', () => {
         isOpen={true}
         onClose={onClose}
         onSave={onSave}
-        defaultBucket={simulatedEvent}
+        defaultBucket={simulatedEvent as unknown as 'fixed_costs'}
       />,
     )
 
@@ -255,7 +255,7 @@ describe('AddPlannedExpenseModal - unit tests for all form controls', () => {
       expect(onSave).toHaveBeenCalled()
     })
 
-    const payload = onSave.mock.calls[0][0]
+    const payload = onSave.mock.calls[0]![0]
     expect(typeof payload.bucket).toBe('string')
     expect(payload.bucket).toBe('fixed_costs')
     expect(() => JSON.stringify(payload)).not.toThrow()

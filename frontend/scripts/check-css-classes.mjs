@@ -58,6 +58,8 @@ const CSS_FILES = [
   join(ROOT, 'frontend/src/components/tabs/accounts/statementImport.css'),
   // Plan redesign module CSS (pl-*/cfx-* classes)
   join(ROOT, 'frontend/src/components/tabs/plan/plan.css'),
+  // Conscious Spending Plan Track redesign module CSS (csp-* classes)
+  join(ROOT, 'frontend/src/components/tabs/plan/track/track.css'),
   // Pluggable budget-engines lens switcher + 50/30/20 pane (bgl-* classes)
   join(ROOT, 'frontend/src/components/tabs/plan/budgetLens/budgetLens.css'),
   // The budgeting-method menu, Compare modal and first-run chooser (Budget Onboarding cards port).

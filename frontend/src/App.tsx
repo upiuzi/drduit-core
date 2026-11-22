@@ -1,7 +1,6 @@
 import { useState, useEffect, useSyncExternalStore } from 'react'
 import { RouterProvider } from '@tanstack/react-router'
 import { Login } from './components/Login'
-import { Register } from './components/Register'
 import { NoPasswordYet } from './components/NoPasswordYet'
 import { useBrand } from './brand-context'
 import { authFetch, setUnauthorizedHandler } from './api/client'

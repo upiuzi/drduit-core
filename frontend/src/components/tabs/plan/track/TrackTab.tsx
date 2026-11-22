@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import {
   ChevronLeft,
   ChevronRight,
@@ -85,7 +85,9 @@ function getInitialMonth(): string {
 }
 
 function formatMonthTitle(ym: string): string {
-  const [y, m] = ym.split('-').map(Number)
+  const parts = ym.split('-').map(Number)
+  const y = parts[0] ?? new Date().getFullYear()
+  const m = parts[1] ?? 1
   const d = new Date(y, m - 1, 1)
   return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 }
@@ -138,7 +140,9 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   }, [month, loadData])
 
   const handlePrevMonth = () => {
-    const [y, m] = month.split('-').map(Number)
+    const parts = month.split('-').map(Number)
+    const y = parts[0] ?? new Date().getFullYear()
+    const m = parts[1] ?? 1
     const prev = new Date(y, m - 2, 1)
     const nextY = prev.getFullYear()
     const nextM = String(prev.getMonth() + 1).padStart(2, '0')
@@ -146,7 +150,9 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   }
 
   const handleNextMonth = () => {
-    const [y, m] = month.split('-').map(Number)
+    const parts = month.split('-').map(Number)
+    const y = parts[0] ?? new Date().getFullYear()
+    const m = parts[1] ?? 1
     const next = new Date(y, m, 1)
     const nextY = next.getFullYear()
     const nextM = String(next.getMonth() + 1).padStart(2, '0')
@@ -301,7 +307,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
       : recent_transactions.filter((t) => t.bucket === activeTxnFilter)
 
   return (
-    <div className="csp-track-container">
+    <div className="pl-sub csp-track-container">
       {/* ── Toolbar: View Switcher, Month Navigation & Actions ── */}
       <div className="csp-toolbar">
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>

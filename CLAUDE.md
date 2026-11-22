@@ -371,8 +371,12 @@ discovery and resolving its `tool_permissions` owner; untagged = the `core` buck
 ## Coding standards
 
 Functions ≤ ~60 lines, files ≤ ~400 lines. Typed exceptions from `core/errors.py`; structured
-`logging`, never `print`. No comments unless the WHY is non-obvious. CSS: never introduce a
-`className` without its definition in `frontend/src/index.css` (`npm run lint:classes`).
+`logging`, never `print`. No comments unless the WHY is non-obvious. UI & CSS: all tabs/screens
+must follow fluid edge-to-edge layout (`width: 100%`, never boxed with `max-width: 1200px` /
+`margin: 0 auto`); use system theme tokens (`var(--surface)`, `var(--line)`, `var(--ink)`,
+`var(--muted)`, `var(--bg-2)`); tabular numerics (`font-variant-numeric: tabular-nums`) on all
+financial numbers; never introduce a `className` without its definition (`npm run lint:classes`).
+See skill **`ui-system`**.
 Screen data: read through `useQueryCache` — it revalidates on every tool write, from any surface
 (`dispatch` → `GET /api/events`, ADR `2026-09-29-every-write-refreshes-every-open-screen`); a
 screen holding fetched data in local state must add `useDataVersion('*')` to its fetch deps.

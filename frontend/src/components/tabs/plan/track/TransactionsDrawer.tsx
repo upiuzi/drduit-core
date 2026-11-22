@@ -1,4 +1,3 @@
-import React from 'react'
 import { X } from '../../../../ui/icons'
 import { fBase } from '../../../../utils/format'
 

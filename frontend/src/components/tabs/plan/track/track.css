@@ -4,9 +4,8 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  padding: 16px 0 40px;
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: 0 0 40px;
+  width: 100%;
 }
 
 /* ── Masthead Toolbar & Month Picker ── */
@@ -16,10 +15,11 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 12px;
+  border-radius: var(--radius-xl, 14px);
   padding: 10px 16px;
+  width: 100%;
 }
 
 .csp-month-picker {
@@ -31,9 +31,10 @@
 .csp-month-label {
   font-size: 15px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--ink);
   min-width: 140px;
   text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-btn-icon {
@@ -65,14 +66,14 @@
 /* ── Hero Guilt-Free Card ── */
 .csp-hero-card {
   position: relative;
-  background: linear-gradient(135deg, color-mix(in srgb, var(--violet, #8b5cf6) 12%, var(--panel)) 0%, color-mix(in srgb, var(--primary, #3b86dd) 8%, var(--panel)) 100%);
-  border: 1px solid color-mix(in srgb, var(--violet, #8b5cf6) 30%, var(--line));
-  border-radius: 16px;
-  padding: 24px 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl, 16px);
+  padding: 22px 24px 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  box-shadow: 0 4px 20px -4px rgba(0, 0, 0, 0.25);
+  width: 100%;
 }
 
 .csp-hero-header {
@@ -93,18 +94,19 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-size: 11.5px;
+  font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--violet, #9a7fd0);
+  letter-spacing: 0.08em;
+  color: var(--faint);
 }
 
 .csp-hero-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--ink);
   margin: 0;
+  letter-spacing: -0.01em;
 }
 
 .csp-hero-status-pill {
@@ -136,11 +138,12 @@
 }
 
 .csp-hero-big-number {
-  font-size: 38px;
+  font-size: 32px;
   font-weight: 800;
   letter-spacing: -0.02em;
-  color: var(--text);
+  color: var(--ink);
   line-height: 1.1;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-hero-big-number.negative {
@@ -151,18 +154,20 @@
   display: flex;
   gap: 20px;
   flex-wrap: wrap;
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--muted);
 }
 
 .csp-hero-stat b {
-  color: var(--text);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-hero-progress-track {
   width: 100%;
   height: 8px;
-  background: var(--line-strong);
+  background: var(--bg-2);
+  border: 1px solid var(--line);
   border-radius: 4px;
   overflow: hidden;
   position: relative;
@@ -178,7 +183,7 @@
   font-size: 12.5px;
   font-style: italic;
   color: var(--muted);
-  border-left: 2px solid var(--violet, #9a7fd0);
+  border-left: 2px solid var(--primary, #3b86dd);
   padding-left: 10px;
   margin: 0;
 }
@@ -188,6 +193,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 16px;
+  width: 100%;
 }
 
 @media (max-width: 1024px) {
@@ -203,10 +209,10 @@
 }
 
 .csp-bucket-card {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 18px;
+  border-radius: var(--radius-xl, 14px);
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -232,7 +238,7 @@
   gap: 6px;
   font-size: 13.5px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--ink);
 }
 
 .csp-bucket-dot {
@@ -255,8 +261,9 @@
 .csp-bucket-amount {
   font-size: 22px;
   font-weight: 800;
-  color: var(--text);
+  color: var(--ink);
   letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-bucket-progress-wrap {
@@ -270,6 +277,7 @@
   justify-content: space-between;
   font-size: 12px;
   font-weight: 600;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-bucket-track {
@@ -319,7 +327,8 @@
 
 .csp-bucket-cat-val {
   font-weight: 600;
-  color: var(--text);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-bucket-sub-amount {
@@ -329,6 +338,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-bucket-actions-row {
@@ -401,11 +411,12 @@
 .csp-summary-strip {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  background: var(--panel);
+  gap: 16px;
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 16px;
+  border-radius: var(--radius-xl, 14px);
+  padding: 18px 22px;
+  width: 100%;
 }
 
 @media (max-width: 640px) {
@@ -431,14 +442,16 @@
 .csp-summary-value {
   font-size: 20px;
   font-weight: 800;
-  color: var(--text);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-txns-section {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 20px;
+  border-radius: var(--radius-xl, 14px);
+  padding: 20px 22px;
+  width: 100%;
 }
 
 .csp-txns-head {
@@ -452,7 +465,7 @@
   margin: 0;
   font-size: 15px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--ink);
 }
 
 .csp-txns-list {
@@ -481,7 +494,7 @@
 
 .csp-txn-payee {
   font-weight: 600;
-  color: var(--text);
+  color: var(--ink);
 }
 
 .csp-txn-meta {
@@ -499,7 +512,8 @@
 
 .csp-txn-amount {
   font-weight: 700;
-  color: var(--text);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-bucket-tag {
@@ -524,7 +538,7 @@
 }
 
 .csp-modal-content {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: 16px;
   width: 100%;
@@ -550,7 +564,7 @@
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: var(--text);
+  color: var(--ink);
 }
 
 .csp-modal-body {
@@ -604,7 +618,7 @@
 }
 
 .csp-view-btn.active {
-  background: var(--panel);
+  background: var(--surface);
   color: var(--ink);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
 }
@@ -626,6 +640,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  width: 100%;
 }
 
 /* ── Income Strip ── */
@@ -635,10 +650,11 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 20px;
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-xl, 14px);
   padding: 20px 24px;
+  width: 100%;
 }
 
 .csp-income-left {
@@ -670,6 +686,7 @@
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-income-per-mo {
@@ -750,6 +767,7 @@
   font-size: 18px;
   font-weight: 700;
   color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Worksheet 4-Bucket Cards Grid ── */
@@ -757,12 +775,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
+  width: 100%;
 }
 
 .csp-worksheet-card {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-xl, 14px);
   padding: 18px 20px;
   display: flex;
   flex-direction: column;
@@ -821,12 +840,14 @@
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-wcard-nominal {
   font-size: 14px;
   font-weight: 600;
-  color: var(--text);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-ratio-bar-wrap {
@@ -873,6 +894,7 @@
   justify-content: space-between;
   font-size: 10.5px;
   color: var(--faint);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-wcard-footer {
@@ -896,13 +918,14 @@
 
 /* ── Diagnoses & Advice Banner ── */
 .csp-diagnoses-container {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-xl, 14px);
   padding: 18px 22px;
   display: flex;
   flex-direction: column;
   gap: 14px;
+  width: 100%;
 }
 
 .csp-diagnoses-header {
@@ -942,17 +965,17 @@
 }
 
 .csp-diag-danger {
-  background: color-mix(in srgb, var(--bad, #ef4444) 8%, var(--panel));
+  background: color-mix(in srgb, var(--bad, #ef4444) 8%, var(--surface));
   border-color: color-mix(in srgb, var(--bad, #ef4444) 25%, var(--line));
 }
 
 .csp-diag-warning {
-  background: color-mix(in srgb, var(--warning, #f59e0b) 8%, var(--panel));
+  background: color-mix(in srgb, var(--warning, #f59e0b) 8%, var(--surface));
   border-color: color-mix(in srgb, var(--warning, #f59e0b) 25%, var(--line));
 }
 
 .csp-diag-good {
-  background: color-mix(in srgb, var(--good, #10b981) 8%, var(--panel));
+  background: color-mix(in srgb, var(--good, #10b981) 8%, var(--surface));
   border-color: color-mix(in srgb, var(--good, #10b981) 25%, var(--line));
 }
 
@@ -989,12 +1012,13 @@
 
 /* ── Planned Table Section ── */
 .csp-planned-table-section {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 14px;
+  border-radius: var(--radius-xl, 14px);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  width: 100%;
 }
 
 .csp-table-toolbar {
@@ -1128,7 +1152,8 @@
 .csp-planned-table td {
   padding: 12px 16px;
   border-bottom: 1px solid var(--line);
-  color: var(--text);
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-planned-table tr:last-child td {
@@ -1172,11 +1197,13 @@
 .csp-nominal-figure {
   font-weight: 600;
   color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-monthly-figure {
   font-weight: 700;
   color: var(--primary, #3b86dd);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-freq-sub {
@@ -1208,6 +1235,7 @@
   gap: 5px;
   font-size: 12px;
   color: var(--faint);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-row-actions {
@@ -1245,7 +1273,7 @@
 .csp-modal-card {
   width: 100%;
   max-width: 540px;
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line-strong);
   border-radius: 16px;
   box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.4);
@@ -1277,7 +1305,7 @@
 }
 
 .csp-freq-btn.active {
-  background: var(--panel);
+  background: var(--surface);
   color: var(--ink);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
@@ -1303,7 +1331,7 @@
   margin-top: 8px;
   padding: 8px 12px;
   border-radius: 8px;
-  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--panel));
+  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--surface));
   border: 1px solid color-mix(in srgb, var(--primary, #3b86dd) 25%, var(--line));
   font-size: 12px;
   color: var(--text);
@@ -1316,6 +1344,7 @@
 .csp-prorated-value {
   font-weight: 700;
   color: var(--primary, #3b86dd);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-bucket-options-grid {
@@ -1345,12 +1374,12 @@
 
 .csp-bucket-option-btn:hover {
   border-color: var(--line-strong);
-  background: var(--panel);
+  background: var(--surface);
 }
 
 .csp-bucket-option-btn.selected {
   border-color: var(--primary, #3b86dd);
-  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--panel));
+  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--surface));
 }
 
 .csp-bucket-option-top {
@@ -1386,12 +1415,13 @@
   flex-wrap: wrap;
   gap: 20px;
   padding: 18px 24px;
-  border-radius: 14px;
-  background: var(--panel);
+  border-radius: var(--radius-xl, 14px);
+  background: var(--surface);
   border: 1px solid var(--line);
   box-shadow: 0 2px 12px -2px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .csp-score-banner::before {
@@ -1458,6 +1488,7 @@
   font-weight: 800;
   color: var(--ink);
   line-height: 1;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-score-denom {
@@ -1549,6 +1580,7 @@
   display: flex;
   align-items: baseline;
   gap: 4px;
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-sm-val.good {
@@ -1571,7 +1603,7 @@
 
 /* ── Excel Quick Add Row ── */
 .csp-quick-add-tr {
-  background: color-mix(in srgb, var(--primary, #3b86dd) 6%, var(--panel)) !important;
+  background: color-mix(in srgb, var(--primary, #3b86dd) 6%, var(--surface)) !important;
   border-bottom: 2px solid color-mix(in srgb, var(--primary, #3b86dd) 25%, var(--line));
 }
 
@@ -1589,7 +1621,7 @@
 
 .csp-quick-cell-input:focus {
   border-color: var(--primary, #3b86dd);
-  background: var(--panel);
+  background: var(--surface);
 }
 
 .csp-quick-cell-select {
@@ -1612,17 +1644,19 @@
   font-size: 12px;
   font-weight: 600;
   color: var(--primary, #3b86dd);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Upcoming Planned in Month View ── */
 .csp-upcoming-banner {
-  background: var(--panel);
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: 12px;
-  padding: 14px 18px;
+  border-radius: var(--radius-xl, 14px);
+  padding: 16px 20px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
 .csp-upcoming-head {
@@ -1658,11 +1692,13 @@
 .csp-upcoming-amt {
   font-weight: 600;
   color: var(--primary, #3b86dd);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-upcoming-due {
   font-size: 11px;
   color: var(--faint);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Top Health Status Dashboard (Over / Healthy / Not Healthy) ── */
@@ -1672,13 +1708,14 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 16px;
-  padding: 16px 20px;
-  border-radius: 14px;
-  background: var(--panel);
+  padding: 18px 22px;
+  border-radius: var(--radius-xl, 14px);
+  background: var(--surface);
   border: 1px solid var(--line);
   box-shadow: 0 2px 10px -2px rgba(0, 0, 0, 0.15);
   position: relative;
   overflow: hidden;
+  width: 100%;
 }
 
 .csp-quick-dashboard-banner::before {
@@ -1747,6 +1784,7 @@
 .csp-qd-score-pill {
   font-size: 12px;
   color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-qd-verdict {
@@ -1792,6 +1830,7 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-qd-edit-btn {
@@ -1816,6 +1855,7 @@
   font-size: 11px;
   font-weight: 500;
   color: var(--muted);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Pos Status Badges & Card Items ── */
@@ -1892,6 +1932,7 @@
 .csp-cir-due {
   font-size: 10px;
   color: var(--faint);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-cir-right {
@@ -1904,6 +1945,7 @@
 .csp-cir-amt {
   font-weight: 700;
   color: var(--ink);
+  font-variant-numeric: tabular-nums;
 }
 
 .csp-cir-freq {
@@ -1919,13 +1961,14 @@
 
 /* ── In-page Quick Manual Add Strip ── */
 .csp-manual-add-strip {
-  background: var(--surface2, var(--panel));
+  background: var(--surface);
   border: 1px solid var(--line);
-  border-radius: var(--radius-lg, 12px);
-  padding: 16px 20px;
+  border-radius: var(--radius-xl, 14px);
+  padding: 18px 22px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  width: 100%;
 }
 
 .csp-mas-top {
@@ -1965,10 +2008,11 @@
 .csp-mas-preview {
   font-size: 12px;
   color: var(--ink);
-  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--surface, #1e2229));
+  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--surface));
   padding: 6px 12px;
   border-radius: var(--radius-sm, 6px);
   border: 1px solid color-mix(in srgb, var(--primary, #3b86dd) 25%, var(--line));
+  font-variant-numeric: tabular-nums;
 }
 
 

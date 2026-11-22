@@ -1,15 +1,12 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import {
   Plus,
   Trash2,
   Pencil,
   AlertTriangle,
   CircleCheck,
-  Info,
   CalendarDays,
   Sparkles,
-  DollarSign,
-  TrendingUp,
 } from '../../../../ui/icons'
 import { Button } from '../../../ui'
 import { fBase, fBaseWhole } from '../../../../utils/format'
