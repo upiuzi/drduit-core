@@ -20,7 +20,7 @@ test('the first-launch chooser shows the cloud row only when the switch is on', 
   assert.ok(off.includes('<span class="title">On your own server</span>'));
   assert.ok(off.includes('data-action="use-default">Continue</button>'));
   const on = welcomePage('/b', 'folder', 'dark', '', true);
-  assert.ok(on.includes('<span class="title">Open Net Worth Private Cloud</span>'));
+  assert.ok(/<span class="title">(?:Open Net Worth|Dr Duit) Private Cloud<\/span>/.test(on));
   assert.match(on, /onwHosted\.signIn\(\)/);
 });
 
@@ -29,7 +29,7 @@ test('the Connection dialog shows the cloud row and the move link only when the 
   assert.equal(CLOUD.test(off), false);
   assert.ok(off.includes('<span class="title">On this computer</span>') && off.includes('<span class="title">On your own server</span>'));
   const on = connectionPage(null, 'light', false, true, { folder: '/b' }, true);
-  assert.ok(on.includes('<span class="title">Open Net Worth Private Cloud</span>'));
+  assert.ok(/<span class="title">(?:Open Net Worth|Dr Duit) Private Cloud<\/span>/.test(on));
   assert.ok(on.includes('Move this book to your Private Cloud'));
 });
 

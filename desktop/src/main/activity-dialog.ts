@@ -49,7 +49,7 @@ export class ActivityDialog {
     const isolated = session.fromPartition('onw-activity-settings');
     isolated.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
     isolated.setPermissionCheckHandler(() => false);
-    const owned = new BrowserWindow({ width: 720, height: 610, minWidth: 560, minHeight: 560, show: false, parent: this.actions.parent().window, modal: true, title: 'Background and startup — Open Net Worth', backgroundColor: nativeTheme.shouldUseDarkColors ? '#0e1014' : '#ffffff', webPreferences: { preload: join(__dirname, '..', 'activity-preload.js'), session: isolated, nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, devTools: false } });
+    const owned = new BrowserWindow({ width: 720, height: 610, minWidth: 560, minHeight: 560, show: false, parent: this.actions.parent().window, modal: true, title: 'Background and startup — Dr Duit', backgroundColor: nativeTheme.shouldUseDarkColors ? '#0e1014' : '#ffffff', webPreferences: { preload: join(__dirname, '..', 'activity-preload.js'), session: isolated, nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, devTools: false } });
     this.window = owned;
     owned.webContents.on('will-navigate', event => event.preventDefault());
     owned.webContents.on('will-attach-webview', event => event.preventDefault());

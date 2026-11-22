@@ -72,7 +72,7 @@ refresh();fields.description.focus();`;
 // `overlay`: drawn over the main window (a click on the scrim closes it); otherwise it fills a window of its own.
 export function reportPage(draft: ReportPayload, theme: 'dark' | 'light', overlay = false): string {
   const logs = draft.logs !== null;
-  return `<!doctype html><html lang="en" data-theme="${theme}"${overlay ? ' class="overlay"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:; script-src 'nonce-onw-report';"><title>Send feedback — Open Net Worth</title><style>${assets.css}
+  return `<!doctype html><html lang="en" data-theme="${theme}"${overlay ? ' class="overlay"' : ''}><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src data:; font-src data:; script-src 'nonce-onw-report';"><title>Send feedback — Dr Duit</title><style>${assets.css}
 ${STYLE}</style></head><body><div id="scrim" class="scrim"><div class="card" role="dialog" aria-modal="true" aria-labelledby="title">
 <div class="scroll"><main><div id="form"><div class="head"><div><h1 id="title">Send feedback</h1><p class="sub">Report a bug, suggest an idea, or share what’s working well.</p></div>${CLOSE}</div>
 <textarea id="description" rows="5" maxlength="${LIMITS.description}" aria-label="Your feedback" aria-required="true" placeholder="“My card balance didn’t update after I imported a statement.”"></textarea>

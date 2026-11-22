@@ -69,21 +69,27 @@ SESSIONS_DIR = DATA_DIR / "sessions"
 # creation closes that gap without touching a directory an operator already has (a
 # pre-2026-08-23 install, or one that deliberately customized permissions) — chmod
 # fires only on the "we just made this" path, never on an existing root.
+def _safe_exists(p: Path) -> bool:
+    try:
+        return p.exists()
+    except (PermissionError, OSError):
+        return False
+
 _drduit_home = Path.home() / ".drduit"
 _legacy_home = Path.home() / ".open-net-worth"
-_home_root = _legacy_home if _legacy_home.exists() and not _drduit_home.exists() else _drduit_home
-_creating_home_root = not _home_root.exists()
+_home_root = _legacy_home if _safe_exists(_legacy_home) and not _safe_exists(_drduit_home) else _drduit_home
+_creating_home_root = not _safe_exists(_home_root)
 
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 CACHE_DIR.mkdir(parents=True, exist_ok=True)
 SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
 
-if _creating_home_root and _home_root.is_dir():
+if _creating_home_root and _safe_exists(_home_root) and _home_root.is_dir():
     platform_fs.restrict_to_owner(_home_root)
 
 _legacy_db = DATA_DIR / "onw.db"
 _drduit_db = DATA_DIR / "drduit.db"
-DB_FILE = _legacy_db if _legacy_db.exists() and not _drduit_db.exists() else _drduit_db
+DB_FILE = _legacy_db if _safe_exists(_legacy_db) and not _safe_exists(_drduit_db) else _drduit_db
 
 # Same QA data-safety guard as above, for the ONW_DATABASE_URL override: a QA
 # boot that isolates DATA_DIR but sets ONW_DATABASE_URL to the live sqlite file

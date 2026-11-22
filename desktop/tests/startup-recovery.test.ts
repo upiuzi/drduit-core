@@ -89,7 +89,7 @@ test('the first-launch folder page leads with the suggested folder and offers th
 test('the first-launch server page is a page in the main window: one Connect, Back at the top right, no Cancel', () => {
   const html = welcomePage('/b', 'server', 'dark');
   assert.match(html, /<h1>Connect to a server\.<\/h1>/);
-  assert.match(html, /<p>Use the Open Net Worth address you open in your browser\.<\/p>/);
+  assert.match(html, /<p>Use the (?:Open Net Worth|Dr Duit) address you open in your browser\.<\/p>/);
   assert.match(html, /<label for="url">Server URL<\/label><input id="url" type="url" placeholder="https:\/\/onw\.example\.com"[^>]* autofocus required>/);
   assert.match(html, /Your book, models and automations run on that server\./);
   assert.ok(html.includes('<div class="top">') && html.includes('<button class="close" id="back" type="button">← Back</button></div><h1>'));

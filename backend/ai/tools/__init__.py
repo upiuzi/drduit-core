@@ -45,6 +45,7 @@ from backend.ai.tools import (  # noqa: E402  (after the re-exports above)
     connector_fetch,
     connectors,
     conversations,
+    csp_plan,
     describe,
     docs,
     email_ingest,

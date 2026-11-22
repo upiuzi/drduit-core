@@ -35,6 +35,25 @@ class CspConfigUpdate(BaseModel):
     )
 
 
+class PlannedExpensePayload(BaseModel):
+    id: str | None = Field(default=None, description="Optional ID when updating an existing item")
+    name: str = Field(..., description="Name of the expense (e.g. Rent, Kontrakan, Electricity)")
+    amount: float = Field(..., ge=0, description="Nominal amount in base currency")
+    frequency: str = Field(default="monthly", description="'monthly' or 'annual'")
+    bucket: str | None = Field(
+        default=None,
+        description="Target bucket ('fixed_costs' | 'investments' | 'savings' | 'guilt_free')",
+    )
+    category_id: str | None = Field(default=None, description="Optional category reference")
+    category_label: str | None = Field(default=None, description="Optional category display label")
+    due_date: str | None = Field(default=None, description="Optional due date (YYYY-MM-DD)")
+    notes: str | None = Field(default=None, description="Optional notes or details")
+
+
+class IncomeUpdatePayload(BaseModel):
+    monthly_net_income: float = Field(..., ge=0, description="Monthly Take-Home Pay (Net Income)")
+
+
 def _call(fn, *args, **kwargs) -> Any:
     try:
         return fn(*args, **kwargs)
@@ -61,3 +80,35 @@ def update_track_config(body: CspConfigUpdate):
     """Updates user customizations for Conscious Spending Plan category mapping and settings."""
     payload = body.model_dump(exclude_unset=True)
     return _call(csp_track.update_csp_config, payload)
+
+
+@router.get("/api/plan/track/plan")
+@compute_only
+def get_csp_plan():
+    """Returns the Conscious Spending Plan worksheet (planned expenses, ratios, and diagnosis)."""
+    return _call(csp_track.get_csp_plan)
+
+
+@router.post("/api/plan/track/planned-expenses")
+def save_planned_expense(body: PlannedExpensePayload):
+    """Adds or updates a planned expense (monthly or annual) in the CSP worksheet."""
+    payload = body.model_dump(exclude_unset=True)
+    return _call(csp_track.add_or_update_planned_expense, payload)
+
+
+@router.delete("/api/plan/track/planned-expenses/{expense_id}")
+def delete_planned_expense(expense_id: str):
+    """Deletes a planned expense by ID."""
+    deleted = _call(csp_track.delete_planned_expense, expense_id=expense_id)
+    if not deleted:
+        raise HTTPException(404, f"Planned expense '{expense_id}' not found.")
+    return {"ok": True, "deleted_id": expense_id}
+
+
+@router.post("/api/plan/track/income")
+def set_csp_income(body: IncomeUpdatePayload):
+    """Updates take-home pay (net income) for the Conscious Spending Plan."""
+    return _call(
+        csp_track.update_csp_config,
+        {"custom_monthly_income": body.monthly_net_income},
+    )

@@ -514,3 +514,812 @@
   gap: 10px;
   background: var(--bg-2);
 }
+
+/* ══════════════════════════════════════════════════════════════════════
+   Plan Worksheet & Ramit Sethi Ratios Styling
+   ══════════════════════════════════════════════════════════════════════ */
+
+.csp-view-toggle {
+  display: inline-flex;
+  align-items: center;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 3px;
+  gap: 2px;
+}
+
+.csp-view-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--faint);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-view-btn:hover {
+  color: var(--text);
+}
+
+.csp-view-btn.active {
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+}
+
+.csp-pill-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1px 7px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 999px;
+  background: var(--violet, #8b5cf6);
+  color: #fff;
+}
+
+/* ── Worksheet Root ── */
+.csp-worksheet-root {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* ── Income Strip ── */
+.csp-income-strip {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 24px;
+}
+
+.csp-income-left {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.csp-income-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary, #3b86dd);
+}
+
+.csp-income-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.csp-income-figure {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.csp-income-per-mo {
+  font-size: 14px;
+  color: var(--faint);
+  font-weight: 500;
+}
+
+.csp-edit-income-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-left: 8px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+  color: var(--faint);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-edit-income-btn:hover {
+  background: var(--line);
+  color: var(--ink);
+}
+
+.csp-income-caption {
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--faint);
+}
+
+.csp-income-edit-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.csp-income-input {
+  max-width: 220px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.csp-income-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.csp-summary-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  text-align: right;
+}
+
+@media (max-width: 768px) {
+  .csp-summary-stat {
+    text-align: left;
+  }
+}
+
+.csp-stat-label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--faint);
+}
+
+.csp-stat-val {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+/* ── Worksheet 4-Bucket Cards Grid ── */
+.csp-worksheet-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.csp-worksheet-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  transition: border-color 0.15s ease, transform 0.15s ease;
+}
+
+.csp-worksheet-card:hover {
+  border-color: var(--line-strong);
+}
+
+.csp-worksheet-card.csp-card-danger {
+  border-color: color-mix(in srgb, var(--bad, #ef4444) 35%, var(--line));
+}
+
+.csp-worksheet-card.csp-card-warning {
+  border-color: color-mix(in srgb, var(--warning, #f59e0b) 35%, var(--line));
+}
+
+.csp-wcard-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.csp-wcard-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.csp-wcard-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.csp-target-badge {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  color: var(--faint);
+  border: 1px solid var(--line);
+}
+
+.csp-wcard-figures {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.csp-wcard-main-pct {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.csp-wcard-nominal {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.csp-ratio-bar-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.csp-ratio-bar-track {
+  position: relative;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--bg-2);
+  overflow: hidden;
+}
+
+.csp-ratio-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.csp-target-zone-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border-left: 1.5px dashed var(--line-strong);
+  border-right: 1.5px dashed var(--line-strong);
+  pointer-events: none;
+}
+
+.csp-target-min-marker {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--line-strong);
+  pointer-events: none;
+}
+
+.csp-ratio-bar-legend {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10.5px;
+  color: var(--faint);
+}
+
+.csp-wcard-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--faint);
+  padding-top: 4px;
+  border-top: 1px dashed var(--line);
+}
+
+.csp-buffer-tag {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--primary, #3b86dd) 15%, transparent);
+  color: var(--primary, #3b86dd);
+  font-weight: 600;
+}
+
+/* ── Diagnoses & Advice Banner ── */
+.csp-diagnoses-container {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.csp-diagnoses-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.csp-diagnoses-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--violet, #8b5cf6);
+}
+
+.csp-diagnoses-title-group h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.csp-diagnoses-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.csp-diag-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+}
+
+.csp-diag-danger {
+  background: color-mix(in srgb, var(--bad, #ef4444) 8%, var(--panel));
+  border-color: color-mix(in srgb, var(--bad, #ef4444) 25%, var(--line));
+}
+
+.csp-diag-warning {
+  background: color-mix(in srgb, var(--warning, #f59e0b) 8%, var(--panel));
+  border-color: color-mix(in srgb, var(--warning, #f59e0b) 25%, var(--line));
+}
+
+.csp-diag-good {
+  background: color-mix(in srgb, var(--good, #10b981) 8%, var(--panel));
+  border-color: color-mix(in srgb, var(--good, #10b981) 25%, var(--line));
+}
+
+.csp-diag-icon {
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.csp-diag-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+
+.csp-diag-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.csp-diag-msg {
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.csp-diag-action {
+  font-size: 12px;
+  color: var(--faint);
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* ── Planned Table Section ── */
+.csp-planned-table-section {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.csp-table-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.csp-table-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.csp-table-title-wrap h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.csp-count-pill {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  color: var(--faint);
+  border: 1px solid var(--line);
+}
+
+.csp-table-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.csp-filter-chips {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.csp-filter-chip {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-filter-chip:hover {
+  color: var(--text);
+  background: var(--bg-2);
+}
+
+.csp-filter-chip.active {
+  background: var(--bg-2);
+  border-color: var(--line);
+  color: var(--ink);
+}
+
+.csp-empty-worksheet {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 48px 24px;
+  gap: 12px;
+}
+
+.csp-empty-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--bg-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--faint);
+}
+
+.csp-empty-worksheet h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.csp-empty-worksheet p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--faint);
+  max-width: 440px;
+  line-height: 1.5;
+}
+
+.csp-table-wrap {
+  overflow-x: auto;
+}
+
+.csp-planned-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.csp-planned-table th {
+  text-align: left;
+  padding: 10px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--faint);
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.csp-planned-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text);
+}
+
+.csp-planned-table tr:last-child td {
+  border-bottom: none;
+}
+
+.csp-expense-name-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.csp-item-title {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.csp-item-notes {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.csp-freq-tag {
+  display: inline-flex;
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.csp-freq-tag.annual {
+  background: color-mix(in srgb, var(--violet, #8b5cf6) 15%, transparent);
+  color: var(--violet, #8b5cf6);
+}
+
+.csp-freq-tag.monthly {
+  background: var(--bg-2);
+  color: var(--faint);
+}
+
+.csp-nominal-figure {
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.csp-monthly-figure {
+  font-weight: 700;
+  color: var(--primary, #3b86dd);
+}
+
+.csp-freq-sub {
+  font-size: 11px;
+  color: var(--faint);
+  font-weight: 400;
+}
+
+.csp-bucket-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 600;
+  border: 1px solid transparent;
+}
+
+.csp-badge-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.csp-due-date-cell {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.csp-row-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.csp-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--faint);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-action-btn:hover {
+  background: var(--bg-2);
+  color: var(--ink);
+  border-color: var(--line);
+}
+
+.csp-action-btn.delete:hover {
+  background: color-mix(in srgb, var(--bad, #ef4444) 15%, transparent);
+  color: var(--bad, #ef4444);
+}
+
+/* ── Modal Specific Styles ── */
+.csp-modal-card {
+  width: 100%;
+  max-width: 540px;
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  box-shadow: 0 16px 48px -8px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.csp-freq-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  background: var(--bg-2);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+
+.csp-freq-btn {
+  padding: 8px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  border: none;
+  background: transparent;
+  color: var(--faint);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-freq-btn.active {
+  background: var(--panel);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.csp-input-prefix-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.csp-input-prefix {
+  position: absolute;
+  left: 12px;
+  color: var(--faint);
+  pointer-events: none;
+}
+
+.csp-input-with-prefix {
+  padding-left: 32px !important;
+}
+
+.csp-prorated-callout {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--panel));
+  border: 1px solid color-mix(in srgb, var(--primary, #3b86dd) 25%, var(--line));
+  font-size: 12px;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.csp-prorated-value {
+  font-weight: 700;
+  color: var(--primary, #3b86dd);
+}
+
+.csp-bucket-options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+@media (max-width: 520px) {
+  .csp-bucket-options-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.csp-bucket-option-btn {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+  background: var(--bg-2);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.csp-bucket-option-btn:hover {
+  border-color: var(--line-strong);
+  background: var(--panel);
+}
+
+.csp-bucket-option-btn.selected {
+  border-color: var(--primary, #3b86dd);
+  background: color-mix(in srgb, var(--primary, #3b86dd) 10%, var(--panel));
+}
+
+.csp-bucket-option-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.csp-bucket-name {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--ink);
+  flex: 1;
+}
+
+.csp-bucket-target-badge {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: var(--faint);
+}
+
+.csp-bucket-desc {
+  font-size: 11px;
+  color: var(--faint);
+  line-height: 1.35;
+}
+

@@ -474,15 +474,15 @@ async function openBookFolder(restore = false): Promise<{ cancelled: boolean; op
       confirm: async (folder, nested) => {
         if (firstLaunch && !folder.existing && !nested) return true;
         if (firstLaunch) {
-          const inside = nested ? 'The folder you chose has other files, so your book lives in its own "Open Net Worth" folder inside it.\n\n' : '';
+          const inside = nested ? 'The folder you chose has other files, so your book lives in its own "Dr Duit" folder inside it.\n\n' : '';
           const choice = folder.existing
-            ? await dialog.showMessageBox(main!.window, { type: 'question', title: 'Open Net Worth', message: 'Open this book?', detail: `${folder.root}\n\n${inside}This folder already holds an Open Net Worth book. It opens as it is; nothing in it is replaced.`, buttons: ['Open book', 'Cancel'], defaultId: 0, cancelId: 1 })
-            : await dialog.showMessageBox(main!.window, { type: 'question', title: 'Open Net Worth', message: 'Create your book in a new folder?', detail: `${folder.root}\n\n${inside.trim()}`, buttons: ['Create book', 'Cancel'], defaultId: 0, cancelId: 1 });
+            ? await dialog.showMessageBox(main!.window, { type: 'question', title: 'Dr Duit', message: 'Open this book?', detail: `${folder.root}\n\n${inside}This folder already holds a Dr Duit book. It opens as it is; nothing in it is replaced.`, buttons: ['Open book', 'Cancel'], defaultId: 0, cancelId: 1 })
+            : await dialog.showMessageBox(main!.window, { type: 'question', title: 'Dr Duit', message: 'Create your book in a new folder?', detail: `${folder.root}\n\n${inside.trim()}`, buttons: ['Create book', 'Cancel'], defaultId: 0, cancelId: 1 });
           return choice.response === 0;
         }
-        const inside = nested ? 'The folder you chose has other files, so your book lives in its own "Open Net Worth" folder inside it.\n\n' : '';
+        const inside = nested ? 'The folder you chose has other files, so your book lives in its own "Dr Duit" folder inside it.\n\n' : '';
         const detail = `${folder.root}\n\n${inside}${folder.existing || nested ? '' : 'A new book will be created in this empty folder.\n\n'}${firstLaunch ? 'This will be your book folder. Your other books stay where they are.' : 'The app will reload using this folder. Your current book stays where it is. Unsaved changes and unfinished reviews will close.'}`;
-        const result = await dialog.showMessageBox(main!.window, { type: 'question', title: 'Open Net Worth', message: folder.existing ? 'Open this book?' : 'Create a book here?', detail, buttons: [folder.existing ? 'Open book' : 'Create book', 'Cancel'], defaultId: 0, cancelId: 1 });
+        const result = await dialog.showMessageBox(main!.window, { type: 'question', title: 'Dr Duit', message: folder.existing ? 'Open this book?' : 'Create a book here?', detail, buttons: [folder.existing ? 'Open book' : 'Create book', 'Cancel'], defaultId: 0, cancelId: 1 });
         return result.response === 0;
       },
     }, folder => firstLaunch ? initialChoice!.select(folder, restore) : openConfirmedBook(folder), qaMode ? process.env.ONW_DESKTOP_ROOT : undefined);
@@ -729,7 +729,7 @@ async function saveDesktopSettings(patch: SettingsPatch): Promise<void> {
 }
 
 async function showError(message: string): Promise<void> {
-  if (main) await dialog.showMessageBox(main.window, { type: 'error', title: 'Open Net Worth', message });
+  if (main) await dialog.showMessageBox(main.window, { type: 'error', title: 'Dr Duit', message });
 }
 
 function nativeAction(action: () => Promise<unknown>): void {
@@ -819,7 +819,7 @@ async function openLogsFolder(): Promise<void> {
 
 async function restartLocalBackend(): Promise<void> {
   if (!main || main.serverOrigin || starting || quitting || choosingBook || initialActionPending || firstLaunch) return;
-  const answer = await dialog.showMessageBox(main.window, { type: 'question', title: 'Open Net Worth', message: 'Restart the local server?', detail: 'The app will reload. Unsaved changes and unfinished reviews will close.', buttons: ['Restart', 'Cancel'], defaultId: 0, cancelId: 1 });
+  const answer = await dialog.showMessageBox(main.window, { type: 'question', title: 'Dr Duit', message: 'Restart the local server?', detail: 'The app will reload. Unsaved changes and unfinished reviews will close.', buttons: ['Restart', 'Cancel'], defaultId: 0, cancelId: 1 });
   if (answer.response === 0) await startBackend();
 }
 

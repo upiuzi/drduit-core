@@ -15,6 +15,7 @@ so users can spend guilt-free once necessities, investments, and savings goals a
 from __future__ import annotations
 
 import re
+import uuid
 from datetime import datetime
 from typing import Any
 
@@ -395,6 +396,381 @@ def get_csp_tracking(month: str | None = None) -> dict[str, Any]:
         "recent_transactions": month_txns[:30],
         "category_mappings": overrides,
         "categories_catalog": categories_catalog,
+        "plan": get_csp_plan(),
+    }
+
+
+def get_planned_expenses() -> list[dict[str, Any]]:
+    """Returns the list of user-defined planned expenses with computed prorated monthly amounts."""
+    store = _get_settings_store()
+    settings = store.get() or {}
+    raw_list = settings.get("planned_expenses", [])
+    if not isinstance(raw_list, list):
+        return []
+
+    overrides = settings.get("category_mappings", {})
+    cleaned = []
+    for item in raw_list:
+        if not isinstance(item, dict):
+            continue
+        item_id = str(item.get("id") or f"plan_{uuid.uuid4().hex[:8]}")
+        name = str(item.get("name") or "Unnamed Planned Expense").strip()
+        try:
+            amt = float(item.get("amount") or 0.0)
+        except (ValueError, TypeError):
+            amt = 0.0
+        freq = str(item.get("frequency") or "monthly").lower().strip()
+        if freq not in ("monthly", "annual"):
+            freq = "monthly"
+
+        # Prorating: annual is divided by 12 to get monthly equivalent
+        if freq == "annual":
+            monthly_amt = round(amt / 12.0, 2)
+            annual_amt = round(amt, 2)
+        else:
+            monthly_amt = round(amt, 2)
+            annual_amt = round(amt * 12.0, 2)
+
+        bucket = str(item.get("bucket") or "").lower().strip()
+        if bucket not in BUCKETS:
+            bucket = classify_category(item.get("category_id"), name, overrides)
+
+        cleaned.append({
+            "id": item_id,
+            "name": name,
+            "amount": amt,
+            "frequency": freq,
+            "monthly_amount": monthly_amt,
+            "annual_amount": annual_amt,
+            "bucket": bucket,
+            "category_id": item.get("category_id"),
+            "category_label": item.get("category_label"),
+            "due_date": item.get("due_date"),
+            "notes": item.get("notes") or "",
+        })
+    return cleaned
+
+
+def add_or_update_planned_expense(payload: dict[str, Any]) -> dict[str, Any]:
+    """Adds a new planned expense or updates an existing one in the CSP worksheet."""
+    store = _get_settings_store()
+    current = store.get() or {}
+    expenses = current.get("planned_expenses", [])
+    if not isinstance(expenses, list):
+        expenses = []
+
+    name = str(payload.get("name") or "").strip()
+    if not name:
+        raise ValueError("Expense name is required.")
+
+    try:
+        amt = float(payload.get("amount", 0.0))
+    except (ValueError, TypeError):
+        amt = 0.0
+    if amt < 0:
+        raise ValueError("Amount cannot be negative.")
+
+    freq = str(payload.get("frequency") or "monthly").lower().strip()
+    if freq not in ("monthly", "annual"):
+        freq = "monthly"
+
+    overrides = current.get("category_mappings", {})
+    bucket = str(payload.get("bucket") or "").lower().strip()
+    if bucket not in BUCKETS:
+        bucket = classify_category(payload.get("category_id"), name, overrides)
+
+    if freq == "annual":
+        monthly_amt = round(amt / 12.0, 2)
+        annual_amt = round(amt, 2)
+    else:
+        monthly_amt = round(amt, 2)
+        annual_amt = round(amt * 12.0, 2)
+
+    item_id = payload.get("id")
+    target_idx = None
+    if item_id:
+        for idx, ex in enumerate(expenses):
+            if isinstance(ex, dict) and ex.get("id") == item_id:
+                target_idx = idx
+                break
+    else:
+        for idx, ex in enumerate(expenses):
+            if isinstance(ex, dict) and str(ex.get("name", "")).strip().lower() == name.lower():
+                target_idx = idx
+                item_id = ex.get("id")
+                break
+
+    if not item_id:
+        item_id = f"plan_{uuid.uuid4().hex[:8]}"
+
+    record = {
+        "id": item_id,
+        "name": name,
+        "amount": amt,
+        "frequency": freq,
+        "monthly_amount": monthly_amt,
+        "annual_amount": annual_amt,
+        "bucket": bucket,
+        "category_id": payload.get("category_id"),
+        "category_label": payload.get("category_label"),
+        "due_date": payload.get("due_date"),
+        "notes": payload.get("notes") or "",
+    }
+
+    if target_idx is not None:
+        expenses[target_idx] = record
+    else:
+        expenses.append(record)
+
+    current["planned_expenses"] = expenses
+    store.save(current)
+    return record
+
+
+def delete_planned_expense(expense_id: str | None = None, name: str | None = None) -> bool:
+    """Deletes a planned expense by id or name."""
+    store = _get_settings_store()
+    current = store.get() or {}
+    expenses = current.get("planned_expenses", [])
+    if not isinstance(expenses, list):
+        return False
+
+    initial_len = len(expenses)
+    if expense_id:
+        expenses = [e for e in expenses if isinstance(e, dict) and e.get("id") != expense_id]
+    elif name:
+        target_name = name.strip().lower()
+        expenses = [
+            e for e in expenses
+            if isinstance(e, dict) and str(e.get("name", "")).strip().lower() != target_name
+        ]
+
+    if len(expenses) != initial_len:
+        current["planned_expenses"] = expenses
+        store.save(current)
+        return True
+    return False
+
+
+def get_csp_plan() -> dict[str, Any]:
+    """Computes the Conscious Spending Plan Worksheet: planned items, live bucket ratios,
+
+    unexpected expense buffer, and Ramit Sethi diagnosis recommendations.
+    """
+    base = base_currency()
+    store = _get_settings_store()
+    settings = store.get() or {}
+    custom_income = settings.get("custom_monthly_income")
+    unexpected_buffer_enabled = bool(settings.get("unexpected_buffer_enabled", True))
+
+    # Determine Net Income
+    net_income = 0.0
+    income_source = "zero"
+    if custom_income and float(custom_income) > 0:
+        net_income = float(custom_income)
+        income_source = "custom"
+    else:
+        profile = profile_service.read_profile() or {}
+        p_inc = profile.get("monthly_net_income")
+        if p_inc and float(p_inc) > 0:
+            net_income = float(p_inc)
+            income_source = "profile"
+
+    items = get_planned_expenses()
+
+    # Buckets structure
+    bucket_map: dict[str, dict[str, Any]] = {
+        k: {
+            **meta,
+            "items": [],
+            "monthly_subtotal": 0.0,
+            "monthly_total": 0.0,
+            "pct_of_income": 0.0,
+            "status": "neutral",
+        }
+        for k, meta in BUCKETS.items()
+    }
+
+    for it in items:
+        b_key = it["bucket"]
+        if b_key not in bucket_map:
+            b_key = "fixed_costs"
+        bucket_map[b_key]["items"].append(it)
+        bucket_map[b_key]["monthly_subtotal"] += it["monthly_amount"]
+
+    # Round subtotals
+    for b in bucket_map.values():
+        b["monthly_subtotal"] = round(b["monthly_subtotal"], 2)
+        b["monthly_total"] = b["monthly_subtotal"]
+
+    # Fixed Costs 15% unexpected buffer
+    fixed_subtotal = bucket_map["fixed_costs"]["monthly_subtotal"]
+    unexpected_buffer = round(fixed_subtotal * 0.15, 2) if unexpected_buffer_enabled else 0.0
+    bucket_map["fixed_costs"]["unexpected_buffer"] = unexpected_buffer
+    bucket_map["fixed_costs"]["monthly_total"] = round(fixed_subtotal + unexpected_buffer, 2)
+
+    # If income is not set, fallback to total planned monthly expenses so percentages don't divide by 0
+    total_planned = sum(b["monthly_total"] for b in bucket_map.values())
+    if net_income <= 0 and total_planned > 0:
+        net_income = total_planned
+        income_source = "planned_fallback"
+
+    # Compute percentages & health status
+    for k, b in bucket_map.items():
+        pct = round((b["monthly_total"] / net_income * 100.0), 1) if net_income > 0 else 0.0
+        b["pct_of_income"] = pct
+
+        if k == "fixed_costs":
+            if pct <= b["target_max"]:
+                b["status"] = "good"
+            elif pct <= b["target_max"] + 5.0:
+                b["status"] = "warning"
+            else:
+                b["status"] = "danger"
+        elif k == "investments":
+            if pct >= b["target_min"]:
+                b["status"] = "good"
+            elif pct > 0:
+                b["status"] = "warning"
+            else:
+                b["status"] = "danger"
+        elif k == "savings":
+            if pct >= b["target_min"]:
+                b["status"] = "good"
+            elif pct > 0:
+                b["status"] = "warning"
+            else:
+                b["status"] = "neutral"
+        elif k == "guilt_free":
+            if pct <= b["target_max"]:
+                b["status"] = "good"
+            elif pct <= b["target_max"] + 5.0:
+                b["status"] = "warning"
+            else:
+                b["status"] = "danger"
+
+    total_planned_monthly = round(total_planned, 2)
+    surplus_or_deficit = round(net_income - total_planned_monthly, 2)
+
+    # Guilt-Free Allowance: Net Income - (Fixed Costs Total + Investments + Savings)
+    guilt_free_allowance = max(
+        0.0,
+        round(
+            net_income
+            - (
+                bucket_map["fixed_costs"]["monthly_total"]
+                + bucket_map["investments"]["monthly_total"]
+                + bucket_map["savings"]["monthly_total"]
+            ),
+            2,
+        ),
+    )
+    guilt_free_remaining = round(guilt_free_allowance - bucket_map["guilt_free"]["monthly_total"], 2)
+
+    # Diagnoses & Action Recommendations
+    diagnoses: list[dict[str, Any]] = []
+
+    fixed_pct = bucket_map["fixed_costs"]["pct_of_income"]
+    fixed_total = bucket_map["fixed_costs"]["monthly_total"]
+    if fixed_pct > 60.0 and net_income > 0:
+        target_fixed = round(net_income * 0.60, 2)
+        excess = round(fixed_total - target_fixed, 2)
+        income_needed = round((fixed_total / 0.60) - net_income, 2)
+        diagnoses.append({
+            "bucket": "fixed_costs",
+            "severity": "danger",
+            "title": "Fixed Costs Exceed Target (50%–60%)",
+            "message": (
+                f"Fixed costs are at {fixed_pct:.1f}% ({base} {fixed_total:,.0f}/mo). "
+                "Ramit Sethi recommends keeping fixed costs strictly between 50%–60% of take-home pay."
+            ),
+            "action": (
+                f"To reach the 60% ceiling, you need to cut fixed costs by {base} {excess:,.0f}/mo, "
+                f"or increase monthly take-home income by {base} {income_needed:,.0f}/mo."
+            ),
+        })
+    elif fixed_pct < 50.0 and net_income > 0 and fixed_total > 0:
+        diagnoses.append({
+            "bucket": "fixed_costs",
+            "severity": "good",
+            "title": "Fixed Costs Well-Controlled",
+            "message": f"Fixed costs are lean at {fixed_pct:.1f}%.",
+            "action": "You have generous headroom to aggressively invest or boost guilt-free spending.",
+        })
+    elif 50.0 <= fixed_pct <= 60.0:
+        diagnoses.append({
+            "bucket": "fixed_costs",
+            "severity": "good",
+            "title": "Fixed Costs in Sweet Spot",
+            "message": f"Fixed costs are ideally balanced at {fixed_pct:.1f}% of take-home pay.",
+            "action": "Maintain this baseline as your income grows.",
+        })
+
+    invest_pct = bucket_map["investments"]["pct_of_income"]
+    invest_total = bucket_map["investments"]["monthly_total"]
+    if invest_pct < 10.0 and net_income > 0:
+        target_invest = round(net_income * 0.10, 2)
+        gap = round(target_invest - invest_total, 2)
+        diagnoses.append({
+            "bucket": "investments",
+            "severity": "warning",
+            "title": "Investments Below Target (10%+)",
+            "message": f"Currently investing {invest_pct:.1f}% ({base} {invest_total:,.0f}/mo).",
+            "action": f"Allocate at least {base} {gap:,.0f} more per month towards index funds or retirement.",
+        })
+    elif invest_pct >= 10.0:
+        diagnoses.append({
+            "bucket": "investments",
+            "severity": "good",
+            "title": "Investments on Track",
+            "message": f"Investing {invest_pct:.1f}% compounds into serious long-term wealth.",
+            "action": "Continue regular automatic contributions.",
+        })
+
+    savings_pct = bucket_map["savings"]["pct_of_income"]
+    savings_total = bucket_map["savings"]["monthly_total"]
+    if savings_pct < 5.0 and net_income > 0:
+        target_save = round(net_income * 0.05, 2)
+        gap = round(target_save - savings_total, 2)
+        diagnoses.append({
+            "bucket": "savings",
+            "severity": "warning",
+            "title": "Savings Goals Below Target (5%–10%)",
+            "message": f"Allocating {savings_pct:.1f}% ({base} {savings_total:,.0f}/mo) to savings goals.",
+            "action": f"Add {base} {gap:,.0f}/mo for emergency cushion or large upcoming purchases.",
+        })
+
+    if surplus_or_deficit < 0:
+        diagnoses.append({
+            "bucket": "overall",
+            "severity": "danger",
+            "title": "Monthly Deficit Detected",
+            "message": f"Your planned monthly expenses exceed net income by {base} {abs(surplus_or_deficit):,.0f}.",
+            "action": "Cut discretionary spending or renegotiate fixed costs to balance the plan.",
+        })
+    elif surplus_or_deficit > 0:
+        diagnoses.append({
+            "bucket": "overall",
+            "severity": "good",
+            "title": "Surplus Available",
+            "message": f"You have {base} {surplus_or_deficit:,.0f}/mo unallocated buffer in your plan.",
+            "action": "Direct this surplus toward your emergency fund or investment accounts.",
+        })
+
+    return {
+        "base_currency": base,
+        "net_income": round(net_income, 2),
+        "net_income_source": income_source,
+        "unexpected_buffer_enabled": unexpected_buffer_enabled,
+        "planned_expenses": items,
+        "buckets": bucket_map,
+        "summary": {
+            "total_planned_monthly": total_planned_monthly,
+            "surplus_or_deficit": surplus_or_deficit,
+            "guilt_free_allowance": guilt_free_allowance,
+            "guilt_free_remaining": guilt_free_remaining,
+        },
+        "diagnoses": diagnoses,
     }
 
 

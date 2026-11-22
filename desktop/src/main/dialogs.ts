@@ -11,7 +11,7 @@ export async function chooseImportFiles(window: BrowserWindow): Promise<ImportSe
 }
 
 export async function saveExport(window: BrowserWindow, backend: BackendSupervisor): Promise<{ cancelled: boolean }> {
-  const chosen = await dialog.showSaveDialog(window, { title: 'Export your Open Net Worth book', defaultPath: `open-net-worth-export-${new Date().toISOString().slice(0, 10)}.zip`, filters: [{ name: 'Book export', extensions: ['zip'] }] });
+  const chosen = await dialog.showSaveDialog(window, { title: 'Export your Dr Duit book', defaultPath: `dr-duit-export-${new Date().toISOString().slice(0, 10)}.zip`, filters: [{ name: 'Book export', extensions: ['zip'] }] });
   if (chosen.canceled || !chosen.filePath) return { cancelled: true };
   const response = await backend.request('/api/data/export', { signal: AbortSignal.timeout(120_000) });
   if (!response.body) throw new Error('The export could not be downloaded.');

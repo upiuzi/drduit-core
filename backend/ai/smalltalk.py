@@ -136,12 +136,12 @@ _LEXICON = frozenset(
 
 
 def _normalize(raw: str) -> str:
-    """Lowercase, drop apostrophes, replace non-alpha with spaces, drop 'lucius'
-    tokens, collapse whitespace — so "Hey Lucius! 👋" and "What's up?" both hit the
+    """Lowercase, drop apostrophes, replace non-alpha with spaces, drop 'lucius' / 'uzi'
+    tokens, collapse whitespace — so "Hey Uzi! 👋" and "What's up?" both hit the
     lexicon."""
     lowered = raw.lower().replace("'", "").replace("’", "")
     kept = "".join(ch if ch.isalpha() or ch.isspace() else " " for ch in lowered)
-    tokens = [t for t in kept.split() if t != "lucius"]
+    tokens = [t for t in kept.split() if t not in ("lucius", "uzi")]
     return " ".join(tokens)
 
 

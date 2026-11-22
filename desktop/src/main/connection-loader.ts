@@ -102,7 +102,7 @@ export class ConnectionLoader {
         return choice.response === 1 ? pickFolder() : null;
       },
       confirm: async (folder, nested) => {
-        const inside = nested ? 'The folder you chose has other files, so your book lives in its own "Open Net Worth" folder inside it.\n\n' : '';
+        const inside = nested ? 'The folder you chose has other files, so your book lives in its own "Dr Duit" folder inside it.\n\n' : '';
         const away = fromServer ? ' Your server book stays on its server.' : '';
         const choice = await dialog.showMessageBox(this.context.dialogParent(), { type: 'question', title: 'Use on this computer', message: folder.existing ? 'Open this book?' : 'Start a new book here?', detail: `${folder.root}\n\n${inside}${folder.existing || nested ? '' : 'A new book will be created in this empty folder.\n\n'}The app will reload using this folder.${away} Anything you haven’t saved will be closed.`, buttons: [folder.existing ? 'Open book' : 'Create book', 'Cancel'], defaultId: 0, cancelId: 1 });
         return choice.response === 0;

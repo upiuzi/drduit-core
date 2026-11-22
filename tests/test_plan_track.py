@@ -24,6 +24,12 @@ class TestCspTrack(unittest.TestCase):
         self.app = FastAPI()
         self.app.include_router(plan_track_router)
         self.client = TestClient(self.app)
+        csp_track._get_settings_store().save({
+            "planned_expenses": [],
+            "category_mappings": {},
+            "unexpected_buffer_enabled": True,
+            "custom_monthly_income": None,
+        })
 
     def test_classify_category_defaults(self):
         # Fixed costs
@@ -99,6 +105,101 @@ class TestCspTrack(unittest.TestCase):
         )
         self.assertEqual(post_res.status_code, 200)
         self.assertTrue(post_res.json()["unexpected_buffer_enabled"])
+
+    def test_planned_expenses_crud_and_prorating(self):
+        # 1. Add annual rent of 28,000,000
+        rent = csp_track.add_or_update_planned_expense({
+            "name": "Kontrakan Rumah",
+            "amount": 28000000,
+            "frequency": "annual",
+            "bucket": "fixed_costs",
+            "due_date": "2027-01-25",
+        })
+        self.assertEqual(rent["name"], "Kontrakan Rumah")
+        self.assertEqual(rent["amount"], 28000000.0)
+        self.assertEqual(rent["frequency"], "annual")
+        self.assertEqual(rent["monthly_amount"], 2333333.33)
+        self.assertEqual(rent["annual_amount"], 28000000.0)
+        self.assertEqual(rent["bucket"], "fixed_costs")
+
+        # 2. Add monthly electricity
+        pln = csp_track.add_or_update_planned_expense({
+            "name": "Listrik PLN",
+            "amount": 500000,
+            "frequency": "monthly",
+            "bucket": "fixed_costs",
+        })
+        self.assertEqual(pln["monthly_amount"], 500000.0)
+        self.assertEqual(pln["annual_amount"], 6000000.0)
+
+        # 3. List planned expenses
+        items = csp_track.get_planned_expenses()
+        names = [it["name"] for it in items]
+        self.assertIn("Kontrakan Rumah", names)
+        self.assertIn("Listrik PLN", names)
+
+        # 4. Set income to 4,000,000 to trigger Fixed Costs > 60%
+        csp_track.update_csp_config({
+            "custom_monthly_income": 4000000,
+            "unexpected_buffer_enabled": True,
+        })
+        plan = csp_track.get_csp_plan()
+        self.assertEqual(plan["net_income"], 4000000.0)
+        fc = plan["buckets"]["fixed_costs"]
+        # Subtotal: 2,333,333.33 + 500,000 = 2,833,333.33
+        # Buffer (15%): 425,000.00
+        # Total: 3,258,333.33 -> 81.5% of income
+        self.assertAlmostEqual(fc["monthly_subtotal"], 2833333.33, places=1)
+        self.assertGreater(fc["pct_of_income"], 60.0)
+        self.assertEqual(fc["status"], "danger")
+
+        # Diagnosis should flag danger and prescribe cut or income increase
+        danger_diags = [d for d in plan["diagnoses"] if d["bucket"] == "fixed_costs" and d["severity"] == "danger"]
+        self.assertEqual(len(danger_diags), 1)
+        self.assertIn("cut fixed costs", danger_diags[0]["action"].lower())
+
+        # 5. Delete expense
+        deleted = csp_track.delete_planned_expense(expense_id=rent["id"])
+        self.assertTrue(deleted)
+        remaining_names = [it["name"] for it in csp_track.get_planned_expenses()]
+        self.assertNotIn("Kontrakan Rumah", remaining_names)
+
+    def test_api_planned_expenses_routes(self):
+        # 1. POST planned expense
+        post_res = self.client.post(
+            "/api/plan/track/planned-expenses",
+            json={
+                "name": "Gym Membership",
+                "amount": 400000,
+                "frequency": "monthly",
+                "bucket": "fixed_costs",
+            },
+        )
+        self.assertEqual(post_res.status_code, 200)
+        saved = post_res.json()
+        self.assertEqual(saved["name"], "Gym Membership")
+        self.assertEqual(saved["monthly_amount"], 400000.0)
+        expense_id = saved["id"]
+
+        # 2. POST income
+        inc_res = self.client.post(
+            "/api/plan/track/income",
+            json={"monthly_net_income": 10000000},
+        )
+        self.assertEqual(inc_res.status_code, 200)
+
+        # 3. GET plan
+        plan_res = self.client.get("/api/plan/track/plan")
+        self.assertEqual(plan_res.status_code, 200)
+        plan_data = plan_res.json()
+        self.assertEqual(plan_data["net_income"], 10000000.0)
+        self.assertIn("buckets", plan_data)
+        self.assertIn("diagnoses", plan_data)
+
+        # 4. DELETE planned expense
+        del_res = self.client.delete(f"/api/plan/track/planned-expenses/{expense_id}")
+        self.assertEqual(del_res.status_code, 200)
+        self.assertTrue(del_res.json()["ok"])
 
 
 if __name__ == "__main__":

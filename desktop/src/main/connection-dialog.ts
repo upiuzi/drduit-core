@@ -66,7 +66,7 @@ export class ConnectionDialog {
     isolated.setPermissionRequestHandler((_contents, _permission, callback) => callback(false));
     isolated.setPermissionCheckHandler(() => false);
     const parent = this.actions.parent();
-    this.window = new BrowserWindow({ width: 760, height: 600, minWidth: 560, show: false, parent, modal: true, title: 'Connection — Open Net Worth', backgroundColor: nativeTheme.shouldUseDarkColors ? '#0e1014' : '#ffffff', webPreferences: { preload: join(__dirname, '..', 'client-preload.js'), session: isolated, nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, devTools: false } });
+    this.window = new BrowserWindow({ width: 760, height: 600, minWidth: 560, show: false, parent, modal: true, title: 'Connection — Dr Duit', backgroundColor: nativeTheme.shouldUseDarkColors ? '#0e1014' : '#ffffff', webPreferences: { preload: join(__dirname, '..', 'client-preload.js'), session: isolated, nodeIntegration: false, contextIsolation: true, sandbox: true, webSecurity: true, devTools: false } });
     const owned = this.window;
     owned.once('ready-to-show', () => setTimeout(() => { if (!owned.isDestroyed() && !owned.isVisible()) owned.show(); }, 300));
     owned.webContents.on('will-navigate', event => event.preventDefault());
@@ -98,7 +98,7 @@ export class ConnectionDialog {
       localRunning: () => this.actions.localRunning(),
       ask: async (parent, options) => (await dialog.showMessageBox(parent, options)).response,
       connect: origin => this.actions.connectServer(origin),
-      lost: async error => { await dialog.showMessageBox(this.actions.parent(), { type: 'error', title: 'Open Net Worth', message: error instanceof Error ? error.message : 'Your previous connection has been kept.' }); },
+      lost: async error => { await dialog.showMessageBox(this.actions.parent(), { type: 'error', title: 'Dr Duit', message: error instanceof Error ? error.message : 'Your previous connection has been kept.' }); },
     });
     if (connected) this.window?.destroy();
   }

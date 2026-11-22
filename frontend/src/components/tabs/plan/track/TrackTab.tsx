@@ -13,6 +13,7 @@ import {
   type CategoryCatalogItem,
 } from './CustomizeCategoriesModal'
 import { TransactionsDrawer, type TrackTransaction } from './TransactionsDrawer'
+import { PlanWorksheet, type CspPlanData } from './PlanWorksheet'
 import './track.css'
 
 interface BucketCategory {
@@ -60,6 +61,7 @@ interface CspTrackResponse {
   recent_transactions: TrackTransaction[]
   category_mappings: Record<string, string>
   categories_catalog: CategoryCatalogItem[]
+  plan?: CspPlanData
 }
 
 interface Props {
@@ -85,6 +87,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   const [data, setData] = useState<CspTrackResponse | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [activeView, setActiveView] = useState<'track' | 'worksheet'>('track')
 
   // Modals state
   const [customizeOpen, setCustomizeOpen] = useState(false)
@@ -152,6 +155,51 @@ export function TrackTab({ onAskLucius, toast }: Props) {
     }
   }
 
+  const handleSaveExpense = async (payload: {
+    id?: string
+    name: string
+    amount: number
+    frequency: 'monthly' | 'annual'
+    bucket: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free'
+    due_date?: string | null
+    notes?: string | null
+  }) => {
+    try {
+      await fetchJson('/api/plan/track/planned-expenses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      })
+      await loadData(month)
+    } catch {
+      toast?.('Failed to save planned expense.')
+    }
+  }
+
+  const handleDeleteExpense = async (expenseId: string) => {
+    try {
+      await fetchJson(`/api/plan/track/planned-expenses/${expenseId}`, {
+        method: 'DELETE',
+      })
+      await loadData(month)
+    } catch {
+      toast?.('Failed to delete planned expense.')
+    }
+  }
+
+  const handleUpdateIncome = async (income: number) => {
+    try {
+      await fetchJson('/api/plan/track/income', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ monthly_net_income: income }),
+      })
+      await loadData(month)
+    } catch {
+      toast?.('Failed to update income.')
+    }
+  }
+
   const openDrawerForBucket = (bucketKey: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free') => {
     if (!data) return
     const b = data.buckets[bucketKey]
@@ -211,33 +259,59 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
   return (
     <div className="csp-track-container">
-      {/* ── Toolbar: Month Navigation & Actions ── */}
+      {/* ── Toolbar: View Switcher, Month Navigation & Actions ── */}
       <div className="csp-toolbar">
-        <div className="csp-month-picker">
-          <button className="csp-btn-icon" onClick={handlePrevMonth} aria-label="Previous month">
-            <ChevronLeft size={16} />
-          </button>
-          <span className="csp-month-label">{formatMonthTitle(month)}</span>
-          <button className="csp-btn-icon" onClick={handleNextMonth} aria-label="Next month">
-            <ChevronRight size={16} />
-          </button>
-          {month !== getInitialMonth() && (
-            <Button variant="secondary" size="dense" onClick={handleThisMonth}>
-              This Month
-            </Button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div className="csp-view-toggle">
+            <button
+              type="button"
+              className={`csp-view-btn ${activeView === 'track' ? 'active' : ''}`}
+              onClick={() => setActiveView('track')}
+            >
+              Spending Track
+            </button>
+            <button
+              type="button"
+              className={`csp-view-btn ${activeView === 'worksheet' ? 'active' : ''}`}
+              onClick={() => setActiveView('worksheet')}
+            >
+              Plan Worksheet & Ratios
+              {data.plan?.planned_expenses?.length ? (
+                <span className="csp-pill-badge">{data.plan.planned_expenses.length}</span>
+              ) : null}
+            </button>
+          </div>
+
+          {activeView === 'track' && (
+            <div className="csp-month-picker">
+              <button className="csp-btn-icon" onClick={handlePrevMonth} aria-label="Previous month">
+                <ChevronLeft size={16} />
+              </button>
+              <span className="csp-month-label">{formatMonthTitle(month)}</span>
+              <button className="csp-btn-icon" onClick={handleNextMonth} aria-label="Next month">
+                <ChevronRight size={16} />
+              </button>
+              {month !== getInitialMonth() && (
+                <Button variant="secondary" size="dense" onClick={handleThisMonth}>
+                  This Month
+                </Button>
+              )}
+            </div>
           )}
         </div>
 
         <div className="csp-tools-right">
-          <Button
-            variant="secondary"
-            size="dense"
-            onClick={() => setCustomizeOpen(true)}
-            style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
-          >
-            <SlidersHorizontal size={14} />
-            <span>Configure Buckets & Targets</span>
-          </Button>
+          {activeView === 'track' && (
+            <Button
+              variant="secondary"
+              size="dense"
+              onClick={() => setCustomizeOpen(true)}
+              style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
+            >
+              <SlidersHorizontal size={14} />
+              <span>Configure Buckets & Targets</span>
+            </Button>
+          )}
 
           {onAskLucius && (
             <Button
@@ -245,19 +319,33 @@ export function TrackTab({ onAskLucius, toast }: Props) {
               size="dense"
               onClick={() =>
                 onAskLucius(
-                  `Evaluate my Conscious Spending Plan for ${formatMonthTitle(month)}: Net Income ${fBaseWhole(net_income)}, Fixed Costs ${buckets.fixed_costs.actual_pct}%, Investments ${buckets.investments.actual_pct}%, Savings ${buckets.savings.actual_pct}%, and remaining Guilt-Free Spending ${fBaseWhole(guilt_free_remaining)}. What would Ramit Sethi advise for my current allocation?`,
+                  activeView === 'worksheet' && data.plan
+                    ? `Evaluasi Conscious Spending Plan saya: Take-Home Income ${fBaseWhole(data.plan.net_income)}/bulan. Fixed Costs ${data.plan.buckets.fixed_costs.pct_of_income}% (${fBaseWhole(data.plan.buckets.fixed_costs.monthly_total)}), Investments ${data.plan.buckets.investments.pct_of_income}%, Savings ${data.plan.buckets.savings.pct_of_income}%, Guilt-Free ${data.plan.buckets.guilt_free.pct_of_income}%. Total pengeluaran bulanan ${fBaseWhole(data.plan.summary.total_planned_monthly)}. Apakah ada pengeluaran yang perlu di-cut atau income yang perlu ditambah agar sesuai aturan Ramit Sethi?`
+                    : `Evaluate my Conscious Spending Plan for ${formatMonthTitle(month)}: Net Income ${fBaseWhole(net_income)}, Fixed Costs ${buckets.fixed_costs.actual_pct}%, Investments ${buckets.investments.actual_pct}%, Savings ${buckets.savings.actual_pct}%, and remaining Guilt-Free Spending ${fBaseWhole(guilt_free_remaining)}. What would Ramit Sethi advise for my current allocation?`,
                 )
               }
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
               <Sparkles size={14} />
-              <span>Ask Lucius</span>
+              <span>Ask Uzi</span>
             </Button>
           )}
         </div>
       </div>
 
-      {/* ── Hero Card: Guilt-Free Spending Balance ── */}
+      {activeView === 'worksheet' && data.plan ? (
+        <PlanWorksheet
+          plan={data.plan}
+          onRefresh={() => loadData(month)}
+          onSaveExpense={handleSaveExpense}
+          onDeleteExpense={handleDeleteExpense}
+          onUpdateIncome={handleUpdateIncome}
+          onAskLucius={onAskLucius}
+          toast={toast}
+        />
+      ) : (
+        <>
+          {/* ── Hero Card: Guilt-Free Spending Balance ── */}
       <div className="csp-hero-card">
         <div className="csp-hero-header">
           <div className="csp-hero-title-group">
@@ -628,6 +716,8 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           </div>
         )}
       </div>
+    </>
+  )}
 
       {/* ── Modals ── */}
       <CustomizeCategoriesModal

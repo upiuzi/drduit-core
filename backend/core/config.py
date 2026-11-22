@@ -140,9 +140,15 @@ _BACKEND = Path(__file__).resolve().parent.parent
 # The demo dataset that used to live beside them under `examples/`
 # is GENERATED now (backend/scripts/demo/), not checked in — see ADR
 # 2026-08-23-the-demo-book-is-generated-not-a-fixture.
+def _safe_exists(p: Path) -> bool:
+    try:
+        return p.exists()
+    except (PermissionError, OSError):
+        return False
+
 _drduit_instance = Path.home() / ".drduit"
 _legacy_instance = Path.home() / ".open-net-worth"
-_INSTANCE_ROOT = _legacy_instance if _legacy_instance.exists() and not _drduit_instance.exists() else _drduit_instance
+_INSTANCE_ROOT = _legacy_instance if _safe_exists(_legacy_instance) and not _safe_exists(_drduit_instance) else _drduit_instance
 
 
 _DEFAULT_DATA_DIR = _INSTANCE_ROOT / "data"
@@ -157,7 +163,7 @@ _DEFAULT_BACKUPS_DIR = _INSTANCE_ROOT / "backups"
 # data directory on purpose: it is the thing that says where that directory IS.
 _drduit_pointer = Path.home() / ".config" / "drduit" / "location.json"
 _legacy_pointer = Path.home() / ".config" / "open-net-worth" / "location.json"
-POINTER_FILE = _drduit_pointer if _drduit_pointer.exists() or not _legacy_pointer.exists() else _legacy_pointer
+POINTER_FILE = _drduit_pointer if _safe_exists(_drduit_pointer) or not _safe_exists(_legacy_pointer) else _legacy_pointer
 
 
 def read_pointer() -> Optional[Path]:
