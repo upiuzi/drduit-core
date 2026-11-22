@@ -42,7 +42,7 @@ export function TransactionsDrawer({
                 background: bucketColor,
               }}
             />
-            <h3>Transaksi {bucketLabel}</h3>
+            <h3>{bucketLabel} Transactions</h3>
             <span
               style={{
                 fontSize: '12px',
@@ -53,7 +53,7 @@ export function TransactionsDrawer({
                 border: '1px solid var(--line)',
               }}
             >
-              {transactions.length} transaksi
+              {transactions.length} transactions
             </span>
           </div>
           <button className="csp-btn-icon" onClick={onClose} aria-label="Close">
@@ -67,11 +67,11 @@ export function TransactionsDrawer({
               style={{
                 textAlign: 'center',
                 padding: '40px 20px',
-                color: 'var(--faint)',
+                color: 'var(--muted)',
                 fontSize: '13px',
               }}
             >
-              Belum ada transaksi di bucket ini pada bulan yang dipilih.
+              No transactions in this bucket for the selected month.
             </div>
           ) : (
             <div className="csp-txns-list">
@@ -109,7 +109,7 @@ export function TransactionsDrawer({
               color: 'var(--text)',
             }}
           >
-            Tutup
+            Close
           </button>
         </div>
       </div>

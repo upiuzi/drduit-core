@@ -4,10 +4,6 @@ import {
   ChevronRight,
   SlidersHorizontal,
   Sparkles,
-  Shield,
-  TrendingUp,
-  Wallet,
-  Tags,
 } from '../../../../ui/icons'
 import { Button } from '../../../ui'
 import { fBase, fBaseWhole } from '../../../../utils/format'
@@ -81,7 +77,7 @@ function getInitialMonth(): string {
 function formatMonthTitle(ym: string): string {
   const [y, m] = ym.split('-').map(Number)
   const d = new Date(y, m - 1, 1)
-  return d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' })
+  return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 }
 
 export function TrackTab({ onAskLucius, toast }: Props) {
@@ -108,7 +104,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
       const res = await fetchJson<CspTrackResponse>(`/api/plan/track?month=${targetMonth}`)
       setData(res)
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : 'Gagal memuat data Conscious Spending Plan')
+      setError(err instanceof Error ? err.message : 'Failed to load Conscious Spending Plan data')
     } finally {
       setLoading(false)
     }
@@ -149,10 +145,10 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       })
-      toast?.('Pengaturan Conscious Spending Plan berhasil disimpan!')
+      toast?.('Conscious Spending Plan settings saved successfully!')
       await loadData(month)
     } catch {
-      toast?.('Gagal menyimpan pengaturan.')
+      toast?.('Failed to save settings.')
     }
   }
 
@@ -171,7 +167,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   if (loading && !data) {
     return (
       <div className="csp-track-container" style={{ textAlign: 'center', padding: '60px 20px' }}>
-        <p style={{ color: 'var(--faint)' }}>Memuat data Conscious Spending Plan...</p>
+        <p style={{ color: 'var(--faint)' }}>Loading Conscious Spending Plan...</p>
       </div>
     )
   }
@@ -179,9 +175,9 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   if (error || !data) {
     return (
       <div className="csp-track-container" style={{ textAlign: 'center', padding: '40px 20px' }}>
-        <p style={{ color: '#dc2626' }}>{error || 'Terjadi kesalahan saat memuat data.'}</p>
+        <p style={{ color: 'var(--bad)' }}>{error || 'An error occurred while loading data.'}</p>
         <Button variant="secondary" size="dense" onClick={() => void loadData(month)}>
-          Coba Lagi
+          Try Again
         </Button>
       </div>
     )
@@ -218,16 +214,16 @@ export function TrackTab({ onAskLucius, toast }: Props) {
       {/* ── Toolbar: Month Navigation & Actions ── */}
       <div className="csp-toolbar">
         <div className="csp-month-picker">
-          <button className="csp-btn-icon" onClick={handlePrevMonth} aria-label="Bulan sebelumnya">
+          <button className="csp-btn-icon" onClick={handlePrevMonth} aria-label="Previous month">
             <ChevronLeft size={16} />
           </button>
           <span className="csp-month-label">{formatMonthTitle(month)}</span>
-          <button className="csp-btn-icon" onClick={handleNextMonth} aria-label="Bulan berikutnya">
+          <button className="csp-btn-icon" onClick={handleNextMonth} aria-label="Next month">
             <ChevronRight size={16} />
           </button>
           {month !== getInitialMonth() && (
             <Button variant="secondary" size="dense" onClick={handleThisMonth}>
-              Bulan Ini
+              This Month
             </Button>
           )}
         </div>
@@ -240,7 +236,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
             style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
           >
             <SlidersHorizontal size={14} />
-            <span>Atur Kategori & Target</span>
+            <span>Configure Buckets & Targets</span>
           </Button>
 
           {onAskLucius && (
@@ -249,19 +245,19 @@ export function TrackTab({ onAskLucius, toast }: Props) {
               size="dense"
               onClick={() =>
                 onAskLucius(
-                  `Evaluasi Conscious Spending Plan saya untuk bulan ${formatMonthTitle(month)}: Net Income ${fBaseWhole(net_income)}, Fixed Costs ${buckets.fixed_costs.actual_pct}%, Investments ${buckets.investments.actual_pct}%, Savings ${buckets.savings.actual_pct}%, dan sisa Guilt-Free Spending ${fBaseWhole(guilt_free_remaining)}. Apa saran Ramit Sethi untuk kondisi ini?`,
+                  `Evaluate my Conscious Spending Plan for ${formatMonthTitle(month)}: Net Income ${fBaseWhole(net_income)}, Fixed Costs ${buckets.fixed_costs.actual_pct}%, Investments ${buckets.investments.actual_pct}%, Savings ${buckets.savings.actual_pct}%, and remaining Guilt-Free Spending ${fBaseWhole(guilt_free_remaining)}. What would Ramit Sethi advise for my current allocation?`,
                 )
               }
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
               <Sparkles size={14} />
-              <span>Tanya Lucius</span>
+              <span>Ask Lucius</span>
             </Button>
           )}
         </div>
       </div>
 
-      {/* ── Hero Card: Sisa Uang Jajan Bebas Rasa Bersalah ── */}
+      {/* ── Hero Card: Guilt-Free Spending Balance ── */}
       <div className="csp-hero-card">
         <div className="csp-hero-header">
           <div className="csp-hero-title-group">
@@ -269,13 +265,13 @@ export function TrackTab({ onAskLucius, toast }: Props) {
               <Sparkles size={14} />
               <span>Conscious Spending Plan (Ramit Sethi)</span>
             </div>
-            <h2 className="csp-hero-title">Sisa Uang Jajan Bebas Rasa Bersalah</h2>
+            <h2 className="csp-hero-title">Guilt-Free Spending Balance</h2>
           </div>
 
           <div className={`csp-hero-status-pill ${guilt_free_status}`}>
-            {guilt_free_status === 'good' && '🟢 Bebas Jajan Tanpa Khawatir'}
-            {guilt_free_status === 'warning' && '🟡 Uang Jajan Menipis'}
-            {guilt_free_status === 'danger' && '🔴 Melampaui Alokasi'}
+            {guilt_free_status === 'good' && '🟢 Guilt-Free & On Track'}
+            {guilt_free_status === 'warning' && '🟡 Running Low'}
+            {guilt_free_status === 'danger' && '🔴 Over Allocation'}
           </div>
         </div>
 
@@ -292,21 +288,21 @@ export function TrackTab({ onAskLucius, toast }: Props) {
               width: `${guiltFreeProgressPct}%`,
               background:
                 guilt_free_status === 'danger'
-                  ? '#dc2626'
+                  ? 'var(--bad)'
                   : guilt_free_status === 'warning'
-                    ? '#f59e0b'
-                    : '#8b5cf6',
+                    ? 'var(--warn)'
+                    : 'var(--violet, #8b5cf6)',
             }}
           />
         </div>
 
         <div className="csp-hero-stats-row">
           <span className="csp-hero-stat">
-            Alokasi Jajan Tersedia: <b>{fBase(guilt_free_allowance)}</b>
+            Available Allowance: <b>{fBase(guilt_free_allowance)}</b>
           </span>
           <span>•</span>
           <span className="csp-hero-stat">
-            Sudah Terpakai: <b>{fBase(guilt_free_spent)}</b> ({guiltFreeProgressPct}%)
+            Spent: <b>{fBase(guilt_free_spent)}</b> ({guiltFreeProgressPct}%)
           </span>
           <span>•</span>
           <span className="csp-hero-stat">
@@ -336,8 +332,8 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
           <div className="csp-bucket-progress-wrap">
             <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.fixed_costs.color }}>{buckets.fixed_costs.actual_pct}% dari income</span>
-              <span style={{ color: 'var(--faint)' }}>Maks 60%</span>
+              <span style={{ color: buckets.fixed_costs.color }}>{buckets.fixed_costs.actual_pct}% of income</span>
+              <span style={{ color: 'var(--muted)' }}>Max 60%</span>
             </div>
             <div className="csp-bucket-track">
               <div
@@ -346,7 +342,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
                   width: `${Math.min(100, (buckets.fixed_costs.actual_pct / 60) * 100)}%`,
                   background:
                     buckets.fixed_costs.actual_pct > 60
-                      ? '#dc2626'
+                      ? 'var(--bad)'
                       : buckets.fixed_costs.color,
                 }}
               />
@@ -354,9 +350,9 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           </div>
 
           <p className="csp-bucket-desc">
-            Sewa/KPR, listrik, wifi, belanja dapur, transport dasar, asuransi & cicilan.
+            {buckets.fixed_costs.description}
             {unexpected_buffer_enabled && unexpected_buffer > 0 && (
-              <span style={{ display: 'block', marginTop: '4px', color: '#3b86dd', fontWeight: 600 }}>
+              <span style={{ display: 'block', marginTop: '4px', color: 'var(--primary)', fontWeight: 600 }}>
                 +15% Unexpected Buffer: {fBase(unexpected_buffer)}
               </span>
             )}
@@ -377,7 +373,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
             className="csp-bucket-footer-btn"
             onClick={() => openDrawerForBucket('fixed_costs')}
           >
-            Lihat Transaksi ({buckets.fixed_costs.transactions_count})
+            View Transactions ({buckets.fixed_costs.transactions_count})
           </button>
         </div>
 
@@ -395,8 +391,8 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
           <div className="csp-bucket-progress-wrap">
             <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.investments.color }}>{buckets.investments.actual_pct}% dari income</span>
-              <span style={{ color: 'var(--faint)' }}>Min 10%</span>
+              <span style={{ color: buckets.investments.color }}>{buckets.investments.actual_pct}% of income</span>
+              <span style={{ color: 'var(--muted)' }}>Min 10%</span>
             </div>
             <div className="csp-bucket-track">
               <div
@@ -410,7 +406,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           </div>
 
           <p className="csp-bucket-desc">
-            Reksadana, saham index fund, obligasi, crypto, dan dana pensiun hari tua.
+            {buckets.investments.description}
           </p>
 
           <div className="csp-bucket-cats">
@@ -428,7 +424,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
             className="csp-bucket-footer-btn"
             onClick={() => openDrawerForBucket('investments')}
           >
-            Lihat Transaksi ({buckets.investments.transactions_count})
+            View Transactions ({buckets.investments.transactions_count})
           </button>
         </div>
 
@@ -446,8 +442,8 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
           <div className="csp-bucket-progress-wrap">
             <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.savings.color }}>{buckets.savings.actual_pct}% dari income</span>
-              <span style={{ color: 'var(--faint)' }}>Target 5–10%</span>
+              <span style={{ color: buckets.savings.color }}>{buckets.savings.actual_pct}% of income</span>
+              <span style={{ color: 'var(--muted)' }}>Target 5–10%</span>
             </div>
             <div className="csp-bucket-track">
               <div
@@ -461,7 +457,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           </div>
 
           <p className="csp-bucket-desc">
-            Dana darurat, tabungan liburan, DP rumah, renovasi, dan target jangka pendek.
+            {buckets.savings.description}
           </p>
 
           <div className="csp-bucket-cats">
@@ -479,7 +475,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
             className="csp-bucket-footer-btn"
             onClick={() => openDrawerForBucket('savings')}
           >
-            Lihat Transaksi ({buckets.savings.transactions_count})
+            View Transactions ({buckets.savings.transactions_count})
           </button>
         </div>
 
@@ -497,8 +493,8 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
           <div className="csp-bucket-progress-wrap">
             <div className="csp-bucket-pct-row">
-              <span style={{ color: buckets.guilt_free.color }}>{buckets.guilt_free.actual_pct}% dari income</span>
-              <span style={{ color: 'var(--faint)' }}>Maks 35%</span>
+              <span style={{ color: buckets.guilt_free.color }}>{buckets.guilt_free.actual_pct}% of income</span>
+              <span style={{ color: 'var(--muted)' }}>Max 35%</span>
             </div>
             <div className="csp-bucket-track">
               <div
@@ -507,7 +503,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
                   width: `${Math.min(100, (buckets.guilt_free.actual_pct / 35) * 100)}%`,
                   background:
                     buckets.guilt_free.actual_pct > 35
-                      ? '#dc2626'
+                      ? 'var(--bad)'
                       : buckets.guilt_free.color,
                 }}
               />
@@ -515,7 +511,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
           </div>
 
           <p className="csp-bucket-desc">
-            Kulineran, ngopi, shopping, hobi, streaming, nonton, dan kesenangan pribadimu.
+            {buckets.guilt_free.description}
           </p>
 
           <div className="csp-bucket-cats">
@@ -533,7 +529,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
             className="csp-bucket-footer-btn"
             onClick={() => openDrawerForBucket('guilt_free')}
           >
-            Lihat Transaksi ({buckets.guilt_free.transactions_count})
+            View Transactions ({buckets.guilt_free.transactions_count})
           </button>
         </div>
       </div>
@@ -541,18 +537,18 @@ export function TrackTab({ onAskLucius, toast }: Props) {
       {/* ── Summary Strip: Take-Home vs Total Spent vs Net Savings ── */}
       <div className="csp-summary-strip">
         <div className="csp-summary-box">
-          <span className="csp-summary-label">Take-Home Pay (Pemasukan Bersih)</span>
+          <span className="csp-summary-label">Net Take-Home Pay</span>
           <span className="csp-summary-value">{fBaseWhole(net_income)}</span>
         </div>
         <div className="csp-summary-box">
-          <span className="csp-summary-label">Total Pengeluaran Bulan Ini</span>
+          <span className="csp-summary-label">Total Spending This Month</span>
           <span className="csp-summary-value">{fBaseWhole(total_spent)}</span>
         </div>
         <div className="csp-summary-box">
-          <span className="csp-summary-label">Sisa Kas Belum Teralokasi</span>
+          <span className="csp-summary-label">Unallocated Cash Flow</span>
           <span
             className="csp-summary-value"
-            style={{ color: unallocated >= 0 ? '#10b981' : '#dc2626' }}
+            style={{ color: unallocated >= 0 ? 'var(--good)' : 'var(--bad)' }}
           >
             {fBaseWhole(unallocated)}
           </span>
@@ -562,13 +558,13 @@ export function TrackTab({ onAskLucius, toast }: Props) {
       {/* ── Recent CSP Transactions ── */}
       <div className="csp-txns-section">
         <div className="csp-txns-head">
-          <h4>Daftar Transaksi Bulan Ini</h4>
+          <h4>Month Transactions</h4>
           <div style={{ display: 'flex', gap: '6px' }}>
             {[
-              { id: 'all', label: 'Semua' },
+              { id: 'all', label: 'All' },
               { id: 'fixed_costs', label: 'Fixed Costs' },
-              { id: 'investments', label: 'Investasi' },
-              { id: 'savings', label: 'Tabungan' },
+              { id: 'investments', label: 'Investments' },
+              { id: 'savings', label: 'Savings' },
               { id: 'guilt_free', label: 'Guilt-Free' },
             ].map((f) => (
               <button
@@ -592,8 +588,8 @@ export function TrackTab({ onAskLucius, toast }: Props) {
         </div>
 
         {filteredTxns.length === 0 ? (
-          <p style={{ textAlign: 'center', color: 'var(--faint)', padding: '24px 0', fontSize: '13px' }}>
-            Tidak ada transaksi untuk filter ini pada bulan yang dipilih.
+          <p style={{ textAlign: 'center', color: 'var(--muted)', padding: '24px 0', fontSize: '13px' }}>
+            No transactions found for this filter in the selected month.
           </p>
         ) : (
           <div className="csp-txns-list">

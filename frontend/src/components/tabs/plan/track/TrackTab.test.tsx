@@ -97,7 +97,7 @@ describe('TrackTab', () => {
 
     // Should show loading then content
     await waitFor(() => {
-      expect(screen.getByText('Sisa Uang Jajan Bebas Rasa Bersalah')).toBeDefined()
+      expect(screen.getByText('Guilt-Free Spending Balance')).toBeDefined()
     })
 
     expect(screen.getAllByText('Fixed Costs').length).toBeGreaterThan(0)

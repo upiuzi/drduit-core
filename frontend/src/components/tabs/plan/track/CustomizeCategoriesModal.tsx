@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { X, Check } from '../../../../ui/icons'
+import { X } from '../../../../ui/icons'
 import { Button } from '../../../ui'
 
 export interface CategoryCatalogItem {
@@ -76,7 +76,7 @@ export function CustomizeCategoriesModal({
     <div className="csp-modal-backdrop" onClick={onClose}>
       <div className="csp-modal-content" onClick={(e) => e.stopPropagation()}>
         <div className="csp-modal-head">
-          <h3>Atur Conscious Spending Plan</h3>
+          <h3>Configure Conscious Spending Plan</h3>
           <button className="csp-btn-icon" onClick={onClose} aria-label="Close">
             <X size={16} />
           </button>
@@ -101,7 +101,7 @@ export function CustomizeCategoriesModal({
                 15% Unexpected Costs Buffer
               </div>
               <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
-                Rekomendasi Ramit Sethi: tambahkan 15% cadangan biaya tak terduga pada Fixed Costs.
+                Ramit Sethi recommendation: add a 15% safety buffer for unplanned expenses to Fixed Costs.
               </div>
             </div>
             <input
@@ -115,11 +115,11 @@ export function CustomizeCategoriesModal({
           {/* Custom Monthly Income */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
             <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text)' }}>
-              Penghasilan Bersih Bulanan (Manual Override)
+              Monthly Net Take-Home Pay (Manual Override)
             </label>
             <input
               type="number"
-              placeholder="Kosongkan jika otomatis dari transaksi income"
+              placeholder="Leave empty to calculate automatically from income transactions"
               value={incomeVal}
               onChange={(e) => setIncomeVal(e.target.value)}
               style={{
@@ -132,7 +132,7 @@ export function CustomizeCategoriesModal({
               }}
             />
             <span style={{ fontSize: '11px', color: 'var(--faint)' }}>
-              Jika diisi, angka ini menggantikan kalkulasi income otomatis untuk pembagian persentase.
+              When specified, this overrides the automatically derived income for bucket percentage allocations.
             </span>
           </div>
 
@@ -140,11 +140,11 @@ export function CustomizeCategoriesModal({
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
               <span style={{ fontSize: '12px', fontWeight: 700, textTransform: 'uppercase', color: 'var(--faint)' }}>
-                Pemetaan Kategori ({filteredCats.length})
+                Category Mapping ({filteredCats.length})
               </span>
               <input
                 type="text"
-                placeholder="Cari kategori..."
+                placeholder="Search category..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 style={{
@@ -154,7 +154,7 @@ export function CustomizeCategoriesModal({
                   background: 'var(--bg-2)',
                   color: 'var(--text)',
                   fontSize: '12px',
-                  width: '150px',
+                  width: '160px',
                 }}
               />
             </div>
@@ -229,10 +229,10 @@ export function CustomizeCategoriesModal({
 
         <div className="csp-modal-footer">
           <Button variant="secondary" size="dense" onClick={onClose} disabled={saving}>
-            Batal
+            Cancel
           </Button>
           <Button variant="primary" size="dense" onClick={handleSave} disabled={saving}>
-            {saving ? 'Menyimpan...' : 'Simpan Pengaturan'}
+            {saving ? 'Saving...' : 'Save Settings'}
           </Button>
         </div>
       </div>

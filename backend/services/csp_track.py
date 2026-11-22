@@ -32,7 +32,7 @@ BUCKETS: dict[str, dict[str, Any]] = {
     "fixed_costs": {
         "key": "fixed_costs",
         "label": "Fixed Costs",
-        "description": "Biaya hidup pokok: sewa/KPR, listrik, air, internet, belanja dapur, transportasi dasar, asuransi, cicilan hutang.",
+        "description": "Essential living expenses: rent/mortgage, utilities, groceries, basic transport, insurance, and debt payments.",
         "target_min": 50.0,
         "target_max": 60.0,
         "color": "#3b86dd",  # Blue
@@ -40,7 +40,7 @@ BUCKETS: dict[str, dict[str, Any]] = {
     "investments": {
         "key": "investments",
         "label": "Investments",
-        "description": "Investasi jangka panjang untuk masa depan: reksadana, saham, ETF, crypto, dana pensiun.",
+        "description": "Long-term wealth building: mutual funds, index funds, stocks, crypto, retirement, and pension accounts.",
         "target_min": 10.0,
         "target_max": 100.0,
         "color": "#10b981",  # Green
@@ -48,7 +48,7 @@ BUCKETS: dict[str, dict[str, Any]] = {
     "savings": {
         "key": "savings",
         "label": "Savings Goals",
-        "description": "Tabungan target spesifik: dana darurat, liburan, DP rumah, renovasi, kado/hadiah.",
+        "description": "Targeted savings goals: emergency fund, vacations, down payment, home repairs, and gifts.",
         "target_min": 5.0,
         "target_max": 10.0,
         "color": "#f59e0b",  # Amber / Yellow
@@ -56,7 +56,7 @@ BUCKETS: dict[str, dict[str, Any]] = {
     "guilt_free": {
         "key": "guilt_free",
         "label": "Guilt-Free Spending",
-        "description": "Uang jajan bebas rasa bersalah: kulineran, ngopi, nonton, shopping, hobi, liburan santai, langganan hiburan.",
+        "description": "Guilt-free spending: dining out, drinks, entertainment, shopping, hobbies, streaming, and personal splurges.",
         "target_min": 20.0,
         "target_max": 35.0,
         "color": "#8b5cf6",  # Purple
