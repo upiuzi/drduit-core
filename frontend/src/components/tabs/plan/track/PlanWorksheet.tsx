@@ -353,7 +353,7 @@ export function PlanWorksheet({
             <label className="csp-mas-label">Nama Pengeluaran</label>
             <input
               type="text"
-              className="csp-form-input"
+              className="ui-input"
               placeholder="e.g. Kontrakan Rumah, Listrik, Bibit"
               value={quickName}
               onChange={(e) => setQuickName(e.target.value)}
@@ -366,7 +366,7 @@ export function PlanWorksheet({
           <div className="csp-mas-field" style={{ flex: 1, minWidth: '130px' }}>
             <label className="csp-mas-label">Ritme / Periode</label>
             <select
-              className="csp-form-input"
+              className="ui-select"
               value={quickFrequency}
               onChange={(e) => setQuickFrequency(e.target.value as 'monthly' | 'annual')}
             >
@@ -379,7 +379,7 @@ export function PlanWorksheet({
             <label className="csp-mas-label">Nominal</label>
             <input
               type="text"
-              className="csp-form-input"
+              className="ui-input"
               placeholder="e.g. 28jt atau 28000000"
               value={quickAmount}
               onChange={(e) => setQuickAmount(e.target.value)}
@@ -392,7 +392,7 @@ export function PlanWorksheet({
           <div className="csp-mas-field" style={{ flex: 1.5, minWidth: '150px' }}>
             <label className="csp-mas-label">Pos / Kategori</label>
             <select
-              className="csp-form-input"
+              className="ui-select"
               value={quickBucket}
               onChange={(e) => setQuickBucket(e.target.value as any)}
             >
@@ -407,7 +407,7 @@ export function PlanWorksheet({
             <label className="csp-mas-label">Tanggal (Opsional)</label>
             <input
               type="date"
-              className="csp-form-input"
+              className="ui-input"
               value={quickDueDate}
               onChange={(e) => setQuickDueDate(e.target.value)}
             />

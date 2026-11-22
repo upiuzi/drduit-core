@@ -1,6 +1,12 @@
-import React, { useState, useEffect } from 'react'
-import { X, CalendarDays, DollarSign } from '../../../../ui/icons'
-import { Button } from '../../../ui'
+import React, { useState, useEffect, type KeyboardEvent } from 'react'
+import { Modal } from '../../../ui/Modal'
+import { Button } from '../../../ui/Button'
+import { FormField } from '../../../ui/FormField'
+import { TextField } from '../../../ui/TextField'
+import { Select } from '../../../ui/Select'
+import { SegmentedControl } from '../../../ui/SegmentedControl'
+import { Stack } from '../../../ui/Stack'
+import { Text } from '../../../ui/Text'
 import { fBaseWhole } from '../../../../utils/format'
 
 export interface PlannedExpenseItem {
@@ -33,7 +39,7 @@ interface Props {
   defaultBucket?: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free'
 }
 
-function parseInputAmount(val: string): number {
+export function parseInputAmount(val: string): number {
   let s = (val || '').trim().toLowerCase()
   let mult = 1
   if (s.includes('jt') || s.includes('juta')) {
@@ -64,41 +70,11 @@ function parseInputAmount(val: string): number {
   return isNaN(num) ? 0 : Math.round(num * mult * 100) / 100
 }
 
-const BUCKET_OPTIONS: {
-  key: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free'
-  label: string
-  desc: string
-  target: string
-  color: string
-}[] = [
-  {
-    key: 'fixed_costs',
-    label: 'Fixed Costs',
-    desc: 'Rent/mortgage, utilities, food, transport, bills, debt',
-    target: '50%–60%',
-    color: '#3b86dd',
-  },
-  {
-    key: 'investments',
-    label: 'Investments',
-    desc: 'Index funds, stocks, crypto, retirement, mutual funds',
-    target: '10%+',
-    color: '#10b981',
-  },
-  {
-    key: 'savings',
-    label: 'Savings Goals',
-    desc: 'Emergency fund, vacation, wedding, big purchases',
-    target: '5%–10%',
-    color: '#f59e0b',
-  },
-  {
-    key: 'guilt_free',
-    label: 'Guilt-Free Spending',
-    desc: 'Dining out, shopping, drinks, entertainment, hobbies',
-    target: '20%–35%',
-    color: '#8b5cf6',
-  },
+const BUCKET_OPTIONS = [
+  { value: 'fixed_costs', label: 'Fixed Costs (Rent, bills, groceries — 50–60%)' },
+  { value: 'investments', label: 'Investments (Stocks, crypto, retirement — 10%+)' },
+  { value: 'savings', label: 'Savings Goals (Emergency fund, big goals — 5–10%)' },
+  { value: 'guilt_free', label: 'Guilt-Free Spending (Dining, hobbies, fun — 20–35%)' },
 ]
 
 export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, defaultBucket }: Props) {
@@ -135,8 +111,7 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
   const numAmount = parseInputAmount(amount)
   const monthlyEquivalent = frequency === 'annual' ? Math.round(numAmount / 12) : numAmount
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleSubmit = async () => {
     if (!name.trim()) {
       setError('Please enter an expense name.')
       return
@@ -166,163 +141,143 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
     }
   }
 
+  const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === 'Enter' && !e.repeat && !e.nativeEvent.isComposing) {
+      if (e.target instanceof HTMLInputElement && e.target.type !== 'button') {
+        e.preventDefault()
+        void handleSubmit()
+      }
+    }
+  }
+
+  const amountHelp =
+    numAmount > 0
+      ? frequency === 'annual'
+        ? `💡 Terhitung: ${fBaseWhole(monthlyEquivalent)} / bulan (${fBaseWhole(numAmount)} ÷ 12)`
+        : `💡 Terhitung: ${fBaseWhole(numAmount)} / bulan`
+      : 'Your best estimate is fine. Format fleksibel (28jt, 500k, 28.000.000)'
+
   return (
-    <div className="csp-modal-overlay" role="dialog" aria-modal="true">
-      <div className="csp-modal-card">
-        <div className="csp-modal-header">
-          <div>
-            <h2 className="csp-modal-title">
-              {initialData ? 'Edit Planned Expense' : 'Add Planned Expense'}
-            </h2>
-            <p className="csp-modal-subtitle">
-              Plan your monthly bills or annual lump-sum expenses (e.g. rent, insurance, tuition).
-            </p>
-          </div>
-          <button className="csp-modal-close-btn" onClick={onClose} aria-label="Close">
-            <X size={18} />
-          </button>
-        </div>
-
-        <form onSubmit={handleSubmit}>
-          <div className="csp-modal-body">
-            {error && <div className="csp-form-error">{error}</div>}
-
-            {/* Expense Name */}
-            <div className="csp-form-group">
-              <label className="csp-form-label" htmlFor="expense-name">
-                Expense Name <span style={{ color: 'var(--bad)' }}>*</span>
-              </label>
-              <input
-                id="expense-name"
-                className="csp-form-input"
-                type="text"
-                placeholder="e.g. Rent / Kontrakan Rumah, Internet, Gym, Asuransi"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                autoFocus
-                required
-              />
+    <Modal
+      open={isOpen}
+      onClose={onClose}
+      size="md"
+      title={initialData ? 'Edit planned expense' : 'Add planned expense'}
+      subtitle="Conscious Spending Plan · Rencana Pengeluaran"
+      footer={
+        <>
+          <Button
+            variant="ghost"
+            size="sm"
+            style={{ marginRight: 'auto' }}
+            onClick={onClose}
+            disabled={submitting}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => void handleSubmit()}
+            disabled={submitting || !name.trim() || numAmount <= 0}
+          >
+            {submitting ? 'Saving…' : initialData ? 'Save Changes' : 'Add to Plan'}
+          </Button>
+        </>
+      }
+    >
+      <div onKeyDown={handleKeyDown}>
+        <Stack gap="--space-5">
+          {error && (
+            <div role="alert">
+              <Text size="xs" tone="bad">
+                {error}
+              </Text>
             </div>
+          )}
 
-            {/* Frequency Toggle */}
-            <div className="csp-form-group">
-              <label className="csp-form-label">Payment Frequency</label>
-              <div className="csp-freq-toggle">
-                <button
-                  type="button"
-                  className={`csp-freq-btn ${frequency === 'monthly' ? 'active' : ''}`}
-                  onClick={() => setFrequency('monthly')}
-                >
-                  Monthly (Bulanan)
-                </button>
-                <button
-                  type="button"
-                  className={`csp-freq-btn ${frequency === 'annual' ? 'active' : ''}`}
-                  onClick={() => setFrequency('annual')}
-                >
-                  Annual / Yearly (Tahunan)
-                </button>
-              </div>
-            </div>
+          <FormField
+            label="Name"
+            htmlFor="expense-name"
+            required
+            error={error && !name.trim() ? error : undefined}
+          >
+            <TextField
+              id="expense-name"
+              autoFocus
+              invalid={!!(error && !name.trim())}
+              value={name}
+              placeholder="e.g. Rent / Kontrakan Rumah, Listrik, Netflix"
+              onChange={(e) => {
+                setName(e.target.value)
+                if (error) setError(null)
+              }}
+            />
+          </FormField>
 
-            {/* Amount */}
-            <div className="csp-form-group">
-              <label className="csp-form-label" htmlFor="expense-amount">
-                {frequency === 'annual' ? 'Annual Amount (Nominal per Tahun)' : 'Monthly Amount (Nominal per Bulan)'}{' '}
-                <span style={{ color: 'var(--bad)' }}>*</span>
-              </label>
-              <div className="csp-input-prefix-wrap">
-                <span className="csp-input-prefix">
-                  <DollarSign size={14} />
-                </span>
-                <input
+          <FormField label="Payment Frequency" htmlFor="expense-freq">
+            <SegmentedControl<'monthly' | 'annual'>
+              options={[
+                { value: 'monthly', label: 'Monthly (Bulanan)' },
+                { value: 'annual', label: 'Annual / Yearly (Tahunan)' },
+              ]}
+              value={frequency}
+              onChange={(v) => setFrequency(v)}
+            />
+          </FormField>
+
+          <FormField
+            label={frequency === 'annual' ? 'Annual Amount (Nominal per Tahun)' : 'Monthly Amount (Nominal per Bulan)'}
+            htmlFor="expense-amount"
+            required
+            help={amountHelp}
+            error={error && numAmount <= 0 ? error : undefined}
+          >
+            <div className="ui-money-field" style={{ '--ui-money-prefix-chars': 2 } as React.CSSProperties}>
+              <div className="ui-money-field__box">
+                <span className="ui-money-field__prefix">Rp</span>
+                <TextField
                   id="expense-amount"
-                  className="csp-form-input csp-input-with-prefix"
-                  type="text"
-                  placeholder={frequency === 'annual' ? 'e.g. 28jt or 28000000 / year' : 'e.g. 2.5jt or 2500000'}
+                  invalid={!!(error && numAmount <= 0)}
                   value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  required
-                />
-              </div>
-
-              {/* Live Preview */}
-              {numAmount > 0 && (
-                <div className="csp-prorated-callout">
-                  <span>💡 <strong>Calculated:</strong></span>{' '}
-                  <span className="csp-prorated-value">{fBaseWhole(monthlyEquivalent)} / month</span>{' '}
-                  {frequency === 'annual' && <span>({fBaseWhole(numAmount)} / year ÷ 12)</span>}
-                </div>
-              )}
-            </div>
-
-            {/* Bucket Choice */}
-            <div className="csp-form-group">
-              <label className="csp-form-label">Conscious Spending Bucket</label>
-              <div className="csp-bucket-options-grid">
-                {BUCKET_OPTIONS.map((opt) => (
-                  <button
-                    key={opt.key}
-                    type="button"
-                    className={`csp-bucket-option-btn ${bucket === opt.key ? 'selected' : ''}`}
-                    onClick={() => setBucket(opt.key)}
-                  >
-                    <div className="csp-bucket-option-top">
-                      <span className="csp-bucket-dot" style={{ backgroundColor: opt.color }} />
-                      <span className="csp-bucket-name">{opt.label}</span>
-                      <span className="csp-bucket-target-badge">{opt.target}</span>
-                    </div>
-                    <div className="csp-bucket-desc">{opt.desc}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Optional Due Date */}
-            <div className="csp-form-group">
-              <label className="csp-form-label" htmlFor="expense-due-date">
-                Optional Due Date / Next Renewal Date
-              </label>
-              <div className="csp-input-prefix-wrap">
-                <span className="csp-input-prefix">
-                  <CalendarDays size={14} />
-                </span>
-                <input
-                  id="expense-due-date"
-                  className="csp-form-input csp-input-with-prefix"
-                  type="date"
-                  value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
+                  placeholder={frequency === 'annual' ? 'e.g. 28jt or 28.000.000' : 'e.g. 2.5jt or 2.500.000'}
+                  onChange={(e) => {
+                    setAmount(e.target.value)
+                    if (error) setError(null)
+                  }}
                 />
               </div>
             </div>
+          </FormField>
 
-            {/* Optional Notes */}
-            <div className="csp-form-group">
-              <label className="csp-form-label" htmlFor="expense-notes">
-                Notes (Optional)
-              </label>
-              <input
-                id="expense-notes"
-                className="csp-form-input"
-                type="text"
-                placeholder="e.g. Bayar kontrakan tahunan tiap tanggal 25 Jan"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-              />
-            </div>
-          </div>
+          <FormField label="Conscious Spending Bucket (Pos)" htmlFor="expense-bucket" required>
+            <Select
+              id="expense-bucket"
+              value={bucket}
+              options={BUCKET_OPTIONS}
+              onChange={(e) => setBucket(e.target.value as any)}
+            />
+          </FormField>
 
-          <div className="csp-modal-footer">
-            <Button variant="secondary" type="button" onClick={onClose} disabled={submitting}>
-              Cancel
-            </Button>
-            <Button variant="primary" type="submit" disabled={submitting}>
-              {submitting ? 'Saving...' : initialData ? 'Update Expense' : 'Add to Plan'}
-            </Button>
-          </div>
-        </form>
+          <FormField label="Optional Due Date / Next Renewal" htmlFor="expense-due-date">
+            <TextField
+              id="expense-due-date"
+              type="date"
+              value={dueDate}
+              onChange={(e) => setDueDate(e.target.value)}
+            />
+          </FormField>
+
+          <FormField label="Notes (Optional)" htmlFor="expense-notes">
+            <TextField
+              id="expense-notes"
+              value={notes}
+              placeholder="e.g. Bayar kontrakan tahunan tiap tanggal 25 Jan"
+              onChange={(e) => setNotes(e.target.value)}
+            />
+          </FormField>
+        </Stack>
       </div>
-    </div>
+    </Modal>
   )
 }
