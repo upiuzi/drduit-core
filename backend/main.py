@@ -1388,10 +1388,12 @@ class _SPAStaticFiles(StaticFiles):
         return super().is_not_modified(response_headers, request_headers)
 
     async def get_response(self, path, scope):
+        if path.startswith(self._NEVER_SHELL):
+            raise StarletteHTTPException(404, detail=f"Path '{path}' not found")
         try:
             response = await super().get_response(path, scope)
         except StarletteHTTPException as exc:
-            if exc.status_code == 404 and not path.startswith(self._NEVER_SHELL):
+            if exc.status_code == 404:
                 response = await super().get_response("index.html", scope)
             else:
                 raise

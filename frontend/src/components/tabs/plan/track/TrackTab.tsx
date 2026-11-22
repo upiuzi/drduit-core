@@ -220,11 +220,23 @@ export function TrackTab({ onAskLucius, toast }: Props) {
     }
 
     try {
-      await fetchJson('/api/plan/track/planned-expenses', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(cleanPayload),
-      })
+      try {
+        await fetchJson('/api/plan/track/planned-expenses', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(cleanPayload),
+        })
+      } catch (err: any) {
+        if (String(err?.message || '').includes('405')) {
+          await fetchJson('/api/plan/track/planned-expenses', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cleanPayload),
+          })
+        } else {
+          throw err
+        }
+      }
       await loadData(month)
     } catch (err) {
       toast?.('Failed to save planned expense.')
@@ -234,9 +246,19 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
   const handleDeleteExpense = async (expenseId: string) => {
     try {
-      await fetchJson(`/api/plan/track/planned-expenses/${expenseId}`, {
-        method: 'DELETE',
-      })
+      try {
+        await fetchJson(`/api/plan/track/planned-expenses/${expenseId}`, {
+          method: 'DELETE',
+        })
+      } catch (err: any) {
+        if (String(err?.message || '').includes('405')) {
+          await fetchJson(`/api/plan/track/planned-expenses?expense_id=${expenseId}`, {
+            method: 'DELETE',
+          })
+        } else {
+          throw err
+        }
+      }
       await loadData(month)
     } catch {
       toast?.('Failed to delete planned expense.')
@@ -262,11 +284,23 @@ export function TrackTab({ onAskLucius, toast }: Props) {
     }
 
     try {
-      await fetchJson('/api/plan/track/planned-incomes', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(cleanPayload),
-      })
+      try {
+        await fetchJson('/api/plan/track/planned-incomes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(cleanPayload),
+        })
+      } catch (err: any) {
+        if (String(err?.message || '').includes('405')) {
+          await fetchJson('/api/plan/track/planned-incomes', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(cleanPayload),
+          })
+        } else {
+          throw err
+        }
+      }
       await loadData(month)
     } catch (err) {
       toast?.('Failed to save planned income.')
@@ -276,9 +310,19 @@ export function TrackTab({ onAskLucius, toast }: Props) {
 
   const handleDeleteIncomeSource = async (incomeId: string) => {
     try {
-      await fetchJson(`/api/plan/track/planned-incomes/${incomeId}`, {
-        method: 'DELETE',
-      })
+      try {
+        await fetchJson(`/api/plan/track/planned-incomes/${incomeId}`, {
+          method: 'DELETE',
+        })
+      } catch (err: any) {
+        if (String(err?.message || '').includes('405')) {
+          await fetchJson(`/api/plan/track/planned-incomes?income_id=${incomeId}`, {
+            method: 'DELETE',
+          })
+        } else {
+          throw err
+        }
+      }
       await loadData(month)
     } catch {
       toast?.('Failed to delete planned income.')

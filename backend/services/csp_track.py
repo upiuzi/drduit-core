@@ -1051,6 +1051,12 @@ def get_csp_plan() -> dict[str, Any]:
     }
 
 
+def get_csp_config() -> dict[str, Any]:
+    """Returns the custom Conscious Spending Plan settings (mappings, buffers, custom income)."""
+    store = _get_settings_store()
+    return store.get() or {}
+
+
 def update_csp_config(payload: dict[str, Any]) -> dict[str, Any]:
     """Updates custom Conscious Spending Plan settings (mappings, buffers, custom income)."""
     store = _get_settings_store()

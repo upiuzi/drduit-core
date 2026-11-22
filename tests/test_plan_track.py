@@ -292,7 +292,7 @@ class TestCspTrack(unittest.TestCase):
         self.assertEqual(plan_after["net_income"], 17000000.0)
 
     def test_api_planned_incomes_routes(self):
-        # 1. POST planned income
+        # 1. POST planned income (without and with trailing slash)
         post_res = self.client.post(
             "/api/plan/track/planned-incomes",
             json={
@@ -307,12 +307,33 @@ class TestCspTrack(unittest.TestCase):
         self.assertEqual(saved["monthly_amount"], 18000000.0)
         income_id = saved["id"]
 
-        # 2. GET planned incomes
+        # POST with trailing slash
+        post_slash_res = self.client.post(
+            "/api/plan/track/planned-incomes/",
+            json={
+                "name": "Freelance Side Gig",
+                "amount": 5000000,
+                "frequency": "monthly",
+            },
+        )
+        self.assertEqual(post_slash_res.status_code, 200)
+        side_id = post_slash_res.json()["id"]
+
+        # 2. GET planned incomes (both with and without trailing slash)
         get_res = self.client.get("/api/plan/track/planned-incomes")
         self.assertEqual(get_res.status_code, 200)
-        self.assertEqual(len(get_res.json()), 1)
+        self.assertEqual(len(get_res.json()), 2)
 
-        # 3. PUT update planned income
+        get_res_slash = self.client.get("/api/plan/track/planned-incomes/")
+        self.assertEqual(get_res_slash.status_code, 200)
+        self.assertEqual(len(get_res_slash.json()), 2)
+
+        # GET by ID
+        get_one = self.client.get(f"/api/plan/track/planned-incomes/{income_id}")
+        self.assertEqual(get_one.status_code, 200)
+        self.assertEqual(get_one.json()["name"], "Gaji Utama")
+
+        # 3. PUT update planned income by ID
         put_res = self.client.put(
             f"/api/plan/track/planned-incomes/{income_id}",
             json={
@@ -325,10 +346,49 @@ class TestCspTrack(unittest.TestCase):
         self.assertEqual(put_res.json()["name"], "Gaji Pokok & Tunjangan")
         self.assertEqual(put_res.json()["monthly_amount"], 20000000.0)
 
-        # 4. DELETE planned income
+        # POST to ID endpoint as fallback
+        post_id_res = self.client.post(
+            f"/api/plan/track/planned-incomes/{income_id}",
+            json={
+                "name": "Gaji Pokok & Bonus",
+                "amount": 21000000,
+                "frequency": "monthly",
+            },
+        )
+        self.assertEqual(post_id_res.status_code, 200)
+        self.assertEqual(post_id_res.json()["name"], "Gaji Pokok & Bonus")
+
+        # PATCH update
+        patch_res = self.client.patch(
+            "/api/plan/track/planned-incomes",
+            json={
+                "id": income_id,
+                "name": "Gaji Bersih Akhir",
+                "amount": 22000000,
+                "frequency": "monthly",
+            },
+        )
+        self.assertEqual(patch_res.status_code, 200)
+        self.assertEqual(patch_res.json()["name"], "Gaji Bersih Akhir")
+
+        # 4. GET and PUT on /api/plan/track/income
+        income_cfg_res = self.client.get("/api/plan/track/income")
+        self.assertEqual(income_cfg_res.status_code, 200)
+
+        # 5. DELETE planned income via query parameter fallback
+        del_fallback = self.client.delete(f"/api/plan/track/planned-incomes?income_id={side_id}")
+        self.assertEqual(del_fallback.status_code, 200)
+        self.assertTrue(del_fallback.json()["ok"])
+
+        # 6. DELETE planned income by ID path
         del_res = self.client.delete(f"/api/plan/track/planned-incomes/{income_id}")
         self.assertEqual(del_res.status_code, 200)
         self.assertTrue(del_res.json()["ok"])
+
+        # 7. Verify list is empty
+        empty_res = self.client.get("/api/plan/track/planned-incomes")
+        self.assertEqual(empty_res.status_code, 200)
+        self.assertEqual(len(empty_res.json()), 0)
 
     def test_parse_amount_and_normalize_frequency(self):
         self.assertEqual(csp_track.parse_amount(28000000), 28000000.0)

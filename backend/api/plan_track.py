@@ -112,18 +112,32 @@ def list_planned_expenses():
 @router.post("/api/plan/track/planned-expenses/")
 @router.put("/api/plan/track/planned-expenses")
 @router.put("/api/plan/track/planned-expenses/")
+@router.patch("/api/plan/track/planned-expenses")
+@router.patch("/api/plan/track/planned-expenses/")
 def save_planned_expense(body: PlannedExpensePayload):
     """Adds or updates a planned expense (monthly or annual) in the CSP worksheet."""
     payload = body.model_dump(exclude_unset=True)
     return _call(csp_track.add_or_update_planned_expense, payload)
 
 
+@router.get("/api/plan/track/planned-expenses/{expense_id}")
+@router.get("/api/plan/track/planned-expenses/{expense_id}/")
+@router.post("/api/plan/track/planned-expenses/{expense_id}")
+@router.post("/api/plan/track/planned-expenses/{expense_id}/")
 @router.put("/api/plan/track/planned-expenses/{expense_id}")
 @router.put("/api/plan/track/planned-expenses/{expense_id}/")
-def update_planned_expense_by_id(expense_id: str, body: PlannedExpensePayload):
+@router.patch("/api/plan/track/planned-expenses/{expense_id}")
+@router.patch("/api/plan/track/planned-expenses/{expense_id}/")
+def update_planned_expense_by_id(expense_id: str, body: PlannedExpensePayload | None = None):
     """Updates a planned expense by ID."""
-    payload = body.model_dump(exclude_unset=True)
+    payload = body.model_dump(exclude_unset=True) if body else {}
     payload["id"] = expense_id
+    if not payload.get("name") and not payload.get("amount"):
+        expenses = _call(csp_track.get_planned_expenses)
+        item = next((e for e in expenses if e["id"] == expense_id), None)
+        if not item:
+            raise HTTPException(404, f"Planned expense '{expense_id}' not found.")
+        return item
     return _call(csp_track.add_or_update_planned_expense, payload)
 
 
@@ -142,9 +156,10 @@ def delete_planned_expense(expense_id: str):
 def delete_planned_expense_fallback(
     expense_id: str | None = Query(default=None),
     id: str | None = Query(default=None),
+    body: dict | None = None,
 ):
-    """Fallback deletion via query parameter ?expense_id= or ?id=."""
-    target_id = expense_id or id
+    """Fallback deletion via query parameter ?expense_id= or ?id= or JSON body."""
+    target_id = expense_id or id or (body.get("id") or body.get("expense_id") if body else None)
     if not target_id:
         raise HTTPException(400, "Missing expense_id parameter.")
     deleted = _call(csp_track.delete_planned_expense, expense_id=target_id)
@@ -165,18 +180,32 @@ def list_planned_incomes():
 @router.post("/api/plan/track/planned-incomes/")
 @router.put("/api/plan/track/planned-incomes")
 @router.put("/api/plan/track/planned-incomes/")
+@router.patch("/api/plan/track/planned-incomes")
+@router.patch("/api/plan/track/planned-incomes/")
 def save_planned_income(body: PlannedIncomePayload):
     """Adds or updates a planned income source."""
     payload = body.model_dump(exclude_unset=True)
     return _call(csp_track.add_or_update_planned_income, payload)
 
 
+@router.get("/api/plan/track/planned-incomes/{income_id}")
+@router.get("/api/plan/track/planned-incomes/{income_id}/")
+@router.post("/api/plan/track/planned-incomes/{income_id}")
+@router.post("/api/plan/track/planned-incomes/{income_id}/")
 @router.put("/api/plan/track/planned-incomes/{income_id}")
 @router.put("/api/plan/track/planned-incomes/{income_id}/")
-def update_planned_income_by_id(income_id: str, body: PlannedIncomePayload):
+@router.patch("/api/plan/track/planned-incomes/{income_id}")
+@router.patch("/api/plan/track/planned-incomes/{income_id}/")
+def update_planned_income_by_id(income_id: str, body: PlannedIncomePayload | None = None):
     """Updates a planned income source by ID."""
-    payload = body.model_dump(exclude_unset=True)
+    payload = body.model_dump(exclude_unset=True) if body else {}
     payload["id"] = income_id
+    if not payload.get("name") and not payload.get("amount"):
+        incomes = _call(csp_track.get_planned_incomes)
+        item = next((i for i in incomes if i["id"] == income_id), None)
+        if not item:
+            raise HTTPException(404, f"Planned income source '{income_id}' not found.")
+        return item
     return _call(csp_track.add_or_update_planned_income, payload)
 
 
@@ -195,9 +224,10 @@ def delete_planned_income(income_id: str):
 def delete_planned_income_fallback(
     income_id: str | None = Query(default=None),
     id: str | None = Query(default=None),
+    body: dict | None = None,
 ):
-    """Fallback deletion via query parameter ?income_id= or ?id=."""
-    target_id = income_id or id
+    """Fallback deletion via query parameter ?income_id= or ?id= or JSON body."""
+    target_id = income_id or id or (body.get("id") or body.get("income_id") if body else None)
     if not target_id:
         raise HTTPException(400, "Missing income_id parameter.")
     deleted = _call(csp_track.delete_planned_income, income_id=target_id)
@@ -206,8 +236,20 @@ def delete_planned_income_fallback(
     return {"ok": True, "deleted_id": target_id}
 
 
+@router.get("/api/plan/track/income")
+@router.get("/api/plan/track/income/")
+def get_csp_income():
+    """Returns the custom take-home pay override if set."""
+    cfg = _call(csp_track.get_csp_config)
+    return {"custom_monthly_income": cfg.get("custom_monthly_income")}
+
+
 @router.post("/api/plan/track/income")
 @router.post("/api/plan/track/income/")
+@router.put("/api/plan/track/income")
+@router.put("/api/plan/track/income/")
+@router.patch("/api/plan/track/income")
+@router.patch("/api/plan/track/income/")
 def set_csp_income(body: IncomeUpdatePayload):
     """Updates take-home pay (net income) for the Conscious Spending Plan."""
     return _call(
