@@ -86,7 +86,8 @@ export function CustomizeCategoriesModal({
           {/* Unexpected Buffer Toggle */}
           <div
             style={{
-              background: 'var(--bg-hover, #f9fafb)',
+              background: 'var(--bg-2)',
+              border: '1px solid var(--line)',
               padding: '12px 14px',
               borderRadius: '10px',
               display: 'flex',
@@ -99,7 +100,7 @@ export function CustomizeCategoriesModal({
               <div style={{ fontWeight: 600, fontSize: '13px', color: 'var(--text)' }}>
                 15% Unexpected Costs Buffer
               </div>
-              <div style={{ fontSize: '12px', color: 'var(--faint)' }}>
+              <div style={{ fontSize: '12px', color: 'var(--muted)' }}>
                 Rekomendasi Ramit Sethi: tambahkan 15% cadangan biaya tak terduga pada Fixed Costs.
               </div>
             </div>
@@ -124,8 +125,8 @@ export function CustomizeCategoriesModal({
               style={{
                 padding: '8px 12px',
                 borderRadius: '8px',
-                border: '1px solid var(--border)',
-                background: 'var(--bg)',
+                border: '1px solid var(--line)',
+                background: 'var(--bg-2)',
                 color: 'var(--text)',
                 fontSize: '13px',
               }}
@@ -149,7 +150,9 @@ export function CustomizeCategoriesModal({
                 style={{
                   padding: '4px 8px',
                   borderRadius: '6px',
-                  border: '1px solid var(--border)',
+                  border: '1px solid var(--line)',
+                  background: 'var(--bg-2)',
+                  color: 'var(--text)',
                   fontSize: '12px',
                   width: '150px',
                 }}
@@ -163,9 +166,10 @@ export function CustomizeCategoriesModal({
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '6px',
-                border: '1px solid var(--border)',
+                border: '1px solid var(--line)',
                 borderRadius: '8px',
                 padding: '8px',
+                background: 'var(--panel)',
               }}
             >
               {filteredCats.map((cat) => {
@@ -179,7 +183,8 @@ export function CustomizeCategoriesModal({
                       justifyContent: 'space-between',
                       padding: '6px 8px',
                       borderRadius: '6px',
-                      background: 'var(--card-bg)',
+                      background: 'var(--bg-2)',
+                      border: '1px solid var(--line)',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -202,8 +207,8 @@ export function CustomizeCategoriesModal({
                       style={{
                         padding: '4px 8px',
                         borderRadius: '6px',
-                        border: '1px solid var(--border)',
-                        background: 'var(--bg)',
+                        border: '1px solid var(--line)',
+                        background: 'var(--panel)',
                         color: 'var(--text)',
                         fontSize: '12px',
                         fontWeight: 600,

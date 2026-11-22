@@ -48,8 +48,9 @@ export function TransactionsDrawer({
                 fontSize: '12px',
                 padding: '2px 8px',
                 borderRadius: '12px',
-                background: 'var(--bg-hover)',
-                color: 'var(--faint)',
+                background: 'var(--bg-2)',
+                color: 'var(--muted)',
+                border: '1px solid var(--line)',
               }}
             >
               {transactions.length} transaksi
@@ -100,8 +101,8 @@ export function TransactionsDrawer({
             style={{
               padding: '6px 16px',
               borderRadius: '8px',
-              border: '1px solid var(--border)',
-              background: 'transparent',
+              border: '1px solid var(--line)',
+              background: 'var(--panel)',
               fontSize: '13px',
               fontWeight: 600,
               cursor: 'pointer',

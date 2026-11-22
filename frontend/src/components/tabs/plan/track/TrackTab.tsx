@@ -577,9 +577,9 @@ export function TrackTab({ onAskLucius, toast }: Props) {
                 style={{
                   padding: '4px 10px',
                   borderRadius: '16px',
-                  border: '1px solid var(--border)',
-                  background: activeTxnFilter === f.id ? 'var(--text)' : 'transparent',
-                  color: activeTxnFilter === f.id ? 'var(--card-bg)' : 'var(--faint)',
+                  border: '1px solid var(--line)',
+                  background: activeTxnFilter === f.id ? 'var(--text)' : 'var(--bg-2)',
+                  color: activeTxnFilter === f.id ? 'var(--panel)' : 'var(--muted)',
                   fontSize: '11.5px',
                   fontWeight: 600,
                   cursor: 'pointer',
