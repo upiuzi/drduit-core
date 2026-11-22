@@ -1,0 +1,20 @@
+[package]
+name = "drduit-rust"
+version = "0.1.0"
+edition = "2021"
+description = "Dr Duit Core high-performance financial & Monte Carlo simulation engine in Rust"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rust_decimal = { version = "1.36", features = ["serde"] }
+rust_decimal_macros = "1.36"
+rand = "0.8"
+rand_distr = "0.4"
+rayon = "1.10"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4.5", features = ["derive"] }
+anyhow = "1.0"
+
+[dev-dependencies]
+criterion = "0.5"
