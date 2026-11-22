@@ -522,7 +522,7 @@ def test_search_and_read_give_a_link_that_opens_the_conversation():
     found = _search(query="renewal")
     read = _read(session_id="chat/odd id")
 
-    assert found["results"][0]["link"] == "/lucius?conversation=chat%2Fodd%20id"
-    assert read["link"] == "/lucius?conversation=chat%2Fodd%20id"
+    assert found["results"][0]["link"] == "/uzi?conversation=chat%2Fodd%20id"
+    assert read["link"] == "/uzi?conversation=chat%2Fodd%20id"
     assert "link" in found["link_hint"] and "link" in read["link_hint"]
     assert "link_hint" not in _search(query="nothing-like-this")

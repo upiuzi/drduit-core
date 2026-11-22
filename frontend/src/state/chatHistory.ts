@@ -6,10 +6,13 @@
 // it starts a new chat rather than pointing at one the server has never heard of.
 
 export const NEW_CHAT = 'new'
-export const LUCIUS_PATH = '/lucius'
+export const LUCIUS_PATH = '/uzi'
+
+export const isLuciusRoutePath = (pathname: string) =>
+  pathname === LUCIUS_PATH || pathname === '/lucius'
 
 export interface ChatEntry {
-  /** `?conversation=` — only ever set on the Lucius page. */
+  /** `?conversation=` — only ever set on the Lucius/Uzi page. */
   conversation: string | undefined
   /** The chat stamped in the entry's history state, or undefined for an entry this never wrote. */
   chat: string | undefined
@@ -25,14 +28,14 @@ export function readEntry(pathname: string, conversation: unknown, state: unknow
   const s = (state ?? {}) as ChatHistoryState
   return {
     conversation:
-      pathname === LUCIUS_PATH && typeof conversation === 'string' && conversation
+      isLuciusRoutePath(pathname) && typeof conversation === 'string' && conversation
         ? conversation
         : undefined,
     chat: typeof s.luciusChat === 'string' && s.luciusChat ? s.luciusChat : undefined,
   }
 }
 
-/** The chat an entry stands for. On the Lucius page the address wins, so a typed or opened
+/** The chat an entry stands for. On the Lucius/Uzi page the address wins, so a typed or opened
  *  link is honoured over whatever the entry last held. */
 export function chatOfEntry(entry: ChatEntry): string | undefined {
   return entry.conversation ?? entry.chat
@@ -41,21 +44,21 @@ export function chatOfEntry(entry: ChatEntry): string | undefined {
 /** The entry the open chat should have on this page. */
 export function entryFor(pathname: string, activeId: string, persisted: boolean): ChatEntry {
   return {
-    conversation: pathname === LUCIUS_PATH && persisted ? activeId : undefined,
+    conversation: isLuciusRoutePath(pathname) && persisted ? activeId : undefined,
     chat: persisted ? activeId : NEW_CHAT,
   }
 }
 
 export function sameEntry(pathname: string, a: ChatEntry, b: ChatEntry): boolean {
   if (a.chat !== b.chat) return false
-  return pathname !== LUCIUS_PATH || a.conversation === b.conversation
+  return !isLuciusRoutePath(pathname) || a.conversation === b.conversation
 }
 
 export type HistoryMove = 'push' | 'replace' | null
 
 /** How a change of open chat reaches history. A switch the person made gets its own entry; any
  *  other change (the first message giving a new chat its id, a deleted chat falling back to the
- *  next) rewrites the entry in place. Off the Lucius page an entry this never wrote is left
+ *  next) rewrites the entry in place. Off the Lucius/Uzi page an entry this never wrote is left
  *  alone unless the person switched — an Automation or a deletion shouldn't stamp the Dashboard. */
 export function moveFor(args: {
   pathname: string
@@ -66,7 +69,7 @@ export function moveFor(args: {
   const { pathname, current, desired, switched } = args
   if (sameEntry(pathname, current, desired)) return null
   if (switched) return 'push'
-  if (pathname === LUCIUS_PATH || current.chat !== undefined) return 'replace'
+  if (isLuciusRoutePath(pathname) || current.chat !== undefined) return 'replace'
   return null
 }
 

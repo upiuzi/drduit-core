@@ -7,12 +7,10 @@
 
 import type { TabId } from './tabs'
 
-// Every tab id now equals its own URL slug (2026-09-06 id/label cleanup — 'cash', 'overview',
-// 'transactions', 'integrations' and 'builder' were renamed to match what they'd always shown:
-// 'accounts', 'dashboard', 'plan', 'connectors', 'build'). Kept as a real (if currently empty)
-// map, not deleted, so a future tab needing a slug that diverges from its id has somewhere to
-// go without re-inventing this module.
-export const SLUG_MAP: Partial<Record<TabId, string>> = {}
+// Every tab id equals its own URL slug, except 'lucius' which maps to 'uzi' (rebranding to Dr Duit / Uzi).
+export const SLUG_MAP: Partial<Record<TabId, string>> = {
+  lucius: 'uzi',
+}
 
 // Inverts SLUG_MAP at module load — slug → tab id (for tab ids that have a
 // non-default mapping). Tabs not in SLUG_MAP use their id as the slug.
@@ -29,6 +27,7 @@ export const SLUG_ALIASES: Record<string, string> = {
   cash: 'accounts',
   transactions: 'plan',
   integrations: 'connectors',
+  lucius: 'uzi',
 }
 
 /** Convert a tab id to its URL slug (e.g. 'accounts' → 'accounts'; identity today — see

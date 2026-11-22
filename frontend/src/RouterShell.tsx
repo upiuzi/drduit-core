@@ -1007,7 +1007,7 @@ function RouterShellInner() {
   useEffect(() => {
     if (!isMobile) return
     const onDockOpen = () => {
-      void navigate({ to: '/lucius', search: { conversation: undefined } })
+      void navigate({ to: '/uzi', search: { conversation: undefined } })
     }
     window.addEventListener('lx-dock-open', onDockOpen)
     return () => window.removeEventListener('lx-dock-open', onDockOpen)
@@ -1121,13 +1121,13 @@ function RouterShellInner() {
           search: { account: undefined, txn: undefined, review: undefined },
         })
       } else if (command.type === 'open-lucius') {
-        void navigate({ to: '/lucius', search: { conversation: undefined } })
+        void navigate({ to: '/uzi', search: { conversation: undefined } })
       } else if (command.type === 'new-conversation') {
         routeNewConversation(luciusDockVisibleRef.current, {
           startFresh: () => chatStartFreshRef.current?.(),
           focusPanel: () => chatRequestOpenRef.current?.(),
           openLuciusTab: () =>
-            void navigate({ to: '/lucius', search: { conversation: undefined } }),
+            void navigate({ to: '/uzi', search: { conversation: undefined } }),
         })
       } else if (command.type === 'resume') {
         invalidateQueryCache(() => true)
@@ -1462,7 +1462,7 @@ function RouterShellInner() {
                     <VoiceCallFab
                       onLuciusTab={tabToRender === 'lucius'}
                       onOpenChat={() =>
-                        void navigate({ to: '/lucius', search: { conversation: undefined } })
+                        void navigate({ to: '/uzi', search: { conversation: undefined } })
                       }
                     />
                   )}
@@ -1903,10 +1903,10 @@ function RouterShellInner() {
                       // A restored (or moved) book already has its history: Lucius's new-user
                       // welcome would run onboarding over a full book.
                       setJustFinishedFirstRun(!restorePending)
-                      // Lucius is the main tab, not a floating dock over Dashboard — the
+                      // Uzi is the main tab, not a floating dock over Dashboard — the
                       // conversation that just onboarded the book should BE the screen you land
                       // on, not a panel over an empty net-worth chart with nothing in it yet.
-                      navigate({ to: '/lucius', search: { conversation: undefined } })
+                      navigate({ to: '/uzi', search: { conversation: undefined } })
                       setChatOpen(true)
                       setProfileVersion((v) => v + 1)
                       checkFreshSetup()

@@ -45,7 +45,7 @@ export function ChatHistorySync() {
   const write = (next: ChatEntry, replace: boolean) => {
     const nonce = `n${++navSeq}`
     ownNavs.current.add(nonce)
-    const onLucius = live.current.pathname === LUCIUS_PATH
+    const onLucius = live.current.pathname === LUCIUS_PATH || live.current.pathname === '/lucius'
     return navigate({
       search: ((prev: Record<string, unknown>) =>
         onLucius ? { ...prev, conversation: next.conversation } : prev) as never,
@@ -78,7 +78,7 @@ export function ChatHistorySync() {
     } else if (action?.kind === 'fresh') {
       opening.current = NEW_CHAT
       startFreshConversation(chat, { replaceHistory: true })
-    } else if (pathname === LUCIUS_PATH) {
+    } else if (pathname === LUCIUS_PATH || pathname === '/lucius') {
       const desired = entryFor(pathname, chat.activeId, persisted)
       if (!sameEntry(pathname, entry, desired)) void write(desired, true)
     }

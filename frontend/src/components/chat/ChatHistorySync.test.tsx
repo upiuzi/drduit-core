@@ -64,7 +64,7 @@ async function setup(initial: string) {
   })
   const lucius = createRoute({
     getParentRoute: () => rootRoute,
-    path: '/lucius',
+    path: '/uzi',
     validateSearch: (s: Record<string, unknown>) => ({
       conversation: typeof s.conversation === 'string' ? s.conversation : undefined,
     }),
@@ -86,56 +86,56 @@ beforeEach(() => {
   store = { activeId: 'a', conversations: [{ id: 'a' }, { id: 'b' }, { id: 'old' }] }
 })
 
-describe('ChatHistorySync — the Lucius page', () => {
+describe('ChatHistorySync — the Uzi page', () => {
   it('shows the open chat in the address, and Back/Forward move between chats', async () => {
-    const { history, href } = await setup('/lucius')
-    await waitFor(() => expect(href()).toBe('/lucius?conversation=a'))
+    const { history, href } = await setup('/uzi')
+    await waitFor(() => expect(href()).toBe('/uzi?conversation=a'))
 
     act(() => chatApi.switchConversation('b'))
-    await waitFor(() => expect(href()).toBe('/lucius?conversation=b'))
+    await waitFor(() => expect(href()).toBe('/uzi?conversation=b'))
 
     act(() => history.back())
     await waitFor(() => expect(store.activeId).toBe('a'))
-    expect(href()).toBe('/lucius?conversation=a')
+    expect(href()).toBe('/uzi?conversation=a')
 
     act(() => history.forward())
     await waitFor(() => expect(store.activeId).toBe('b'))
-    expect(href()).toBe('/lucius?conversation=b')
+    expect(href()).toBe('/uzi?conversation=b')
   })
 
-  it('a new chat is plain /lucius until its first message, and Back returns to the chat before', async () => {
-    const { history, href } = await setup('/lucius')
-    await waitFor(() => expect(href()).toBe('/lucius?conversation=a'))
+  it('a new chat is plain /uzi until its first message, and Back returns to the chat before', async () => {
+    const { history, href } = await setup('/uzi')
+    await waitFor(() => expect(href()).toBe('/uzi?conversation=a'))
 
     act(() => void chatApi.createConversation())
-    await waitFor(() => expect(href()).toBe('/lucius'))
+    await waitFor(() => expect(href()).toBe('/uzi'))
 
     act(() => persist('new1'))
-    await waitFor(() => expect(href()).toBe('/lucius?conversation=new1'))
+    await waitFor(() => expect(href()).toBe('/uzi?conversation=new1'))
 
     act(() => history.back())
     await waitFor(() => expect(store.activeId).toBe('a'))
-    expect(href()).toBe('/lucius?conversation=a')
+    expect(href()).toBe('/uzi?conversation=a')
   })
 
   it('Back from an untouched new chat drops it, and Forward starts a new one again', async () => {
-    const { history, href } = await setup('/lucius')
-    await waitFor(() => expect(href()).toBe('/lucius?conversation=a'))
+    const { history, href } = await setup('/uzi')
+    await waitFor(() => expect(href()).toBe('/uzi?conversation=a'))
     act(() => void chatApi.createConversation())
-    await waitFor(() => expect(href()).toBe('/lucius'))
+    await waitFor(() => expect(href()).toBe('/uzi'))
 
     act(() => history.back())
     await waitFor(() => expect(store.activeId).toBe('a'))
 
     act(() => history.forward())
     await waitFor(() => expect(store.activeId).toBe('new2'))
-    expect(href()).toBe('/lucius')
+    expect(href()).toBe('/uzi')
   })
 
   it('an opened link switches to its chat and keeps it in the address', async () => {
-    const { href } = await setup('/lucius?conversation=old')
+    const { href } = await setup('/uzi?conversation=old')
     await waitFor(() => expect(store.activeId).toBe('old'))
-    expect(href()).toBe('/lucius?conversation=old')
+    expect(href()).toBe('/uzi?conversation=old')
   })
 })
 

@@ -82,10 +82,10 @@ const dashboardRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/dashboard',
 })
-// ?conversation=<id> opens that conversation — the link Lucius gives to a past chat he found.
+// ?conversation=<id> opens that conversation — the link Uzi gives to a past chat found.
 const luciusRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/lucius',
+  path: '/uzi',
   validateSearch: (search: Record<string, unknown>) => ({
     conversation: typeof search.conversation === 'string' ? search.conversation : undefined,
   }),
@@ -268,14 +268,14 @@ export const intelMonitorsRoute = createRoute({
 })
 
 // Backward-compat redirect routes — old slugs redirect to canonical slugs so
-// existing bookmarks (e.g. #/cash, #/cash/payees, #/transactions) keep working.
+// existing bookmarks (e.g. #/cash, #/cash/payees, #/transactions, #/lucius) keep working.
 const legacyRedirectRoutes = Object.entries(SLUG_ALIASES).flatMap(([oldSlug, newSlug]) => {
   const base = createRoute({
     getParentRoute: () => rootRoute,
     path: `/${oldSlug}`,
-    beforeLoad: () => {
+    beforeLoad: ({ location }) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      throw redirect({ to: `/${newSlug}` as any, replace: true })
+      throw redirect({ to: `/${newSlug}` as any, search: location.search as any, replace: true })
     },
   })
   // Also redirect known sub-routes (only /cash/payees → /accounts/payees for now).

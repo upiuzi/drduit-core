@@ -19,7 +19,7 @@ beforeEach(() => {
 
 describe('ChatLink', () => {
   it('switches the chat it sits in to a past conversation, without navigating', () => {
-    render(<ChatLink href="/lucius?conversation=chat%2Fold">Car insurance renewal</ChatLink>)
+    render(<ChatLink href="/uzi?conversation=chat%2Fold">Car insurance renewal</ChatLink>)
 
     fireEvent.click(screen.getByText('Car insurance renewal'))
 
@@ -27,21 +27,30 @@ describe('ChatLink', () => {
     expect(navigate).not.toHaveBeenCalled()
   })
 
+  it('switches the chat from legacy /lucius link without navigating', () => {
+    render(<ChatLink href="/lucius?conversation=chat%2Fold">Car insurance renewal legacy</ChatLink>)
+
+    fireEvent.click(screen.getByText('Car insurance renewal legacy'))
+
+    expect(switchConversation).toHaveBeenCalledWith('chat/old')
+    expect(navigate).not.toHaveBeenCalled()
+  })
+
   it('navigates to the deep link when there is no chat to switch', () => {
     chat = null
-    render(<ChatLink href="/lucius?conversation=abc">Old chat</ChatLink>)
+    render(<ChatLink href="/uzi?conversation=abc">Old chat</ChatLink>)
 
     fireEvent.click(screen.getByText('Old chat'))
 
     expect(navigate).toHaveBeenCalledWith(
-      expect.objectContaining({ to: '/lucius', search: { conversation: 'abc' } }),
+      expect.objectContaining({ to: '/uzi', search: { conversation: 'abc' } }),
     )
   })
 
   it('leaves a modified click to the browser and other in-app links to the router', () => {
     render(
       <>
-        <ChatLink href="/lucius?conversation=abc">New tab</ChatLink>
+        <ChatLink href="/uzi?conversation=abc">New tab</ChatLink>
         <ChatLink href="/accounts">Accounts</ChatLink>
       </>,
     )

@@ -260,7 +260,7 @@ describe('index route redirect (router integration)', () => {
     const investmentsRoute = createRoute({ getParentRoute: () => rootRoute, path: '/investments' })
     const accountsRoute = createRoute({ getParentRoute: () => rootRoute, path: '/accounts' })
     const intelRoute = createRoute({ getParentRoute: () => rootRoute, path: '/intel' })
-    const luciusRoute = createRoute({ getParentRoute: () => rootRoute, path: '/lucius' })
+    const luciusRoute = createRoute({ getParentRoute: () => rootRoute, path: '/uzi' })
 
     const routeTree = rootRoute.addChildren([
       indexRoute,
@@ -276,9 +276,9 @@ describe('index route redirect (router integration)', () => {
     return router
   }
 
-  it('redirects / to /lucius (desktop default) when no wealthTab is saved', async () => {
+  it('redirects / to /uzi (desktop default) when no wealthTab is saved', async () => {
     const router = await buildRouter('/')
-    expect(router.state.location.pathname).toBe('/lucius')
+    expect(router.state.location.pathname).toBe('/uzi')
   })
 
   it('redirects / to /accounts when wealthTab=accounts', async () => {
@@ -287,10 +287,10 @@ describe('index route redirect (router integration)', () => {
     expect(router.state.location.pathname).toBe('/accounts')
   })
 
-  it('redirects / to /lucius (desktop default) when wealthTab is an unrecognized value', async () => {
+  it('redirects / to /uzi (desktop default) when wealthTab is an unrecognized value', async () => {
     localStorageMock['wealthTab'] = 'old-tab-name'
     const router = await buildRouter('/')
-    expect(router.state.location.pathname).toBe('/lucius')
+    expect(router.state.location.pathname).toBe('/uzi')
   })
 
   it('does not redirect when navigating directly to /intel', async () => {
@@ -302,20 +302,15 @@ describe('index route redirect (router integration)', () => {
 // ── Slug mapping (tabToSlug / slugToTab) ─────────────────────────────────────
 
 describe('slug mapping — every tab id now equals its own URL slug', () => {
-  // 2026-09-06 id/label cleanup: 'cash', 'overview', 'transactions', 'integrations' and
-  // 'builder' were renamed to what they'd always displayed as ('accounts', 'dashboard',
-  // 'plan', 'connectors', 'build'), so SLUG_MAP's remaps became identity and were removed.
-  // SLUG_ALIASES is unrelated — it redirects OLD, already-bookmarked URLs, independent of
-  // whatever the internal id is called today.
-
-  it('SLUG_MAP has no remaps left — every tab id is its own slug', () => {
-    expect(SLUG_MAP).toEqual({})
+  it('SLUG_MAP maps lucius to uzi', () => {
+    expect(SLUG_MAP).toEqual({ lucius: 'uzi' })
+    expect(tabToSlug('lucius')).toBe('uzi')
+    expect(slugToTab('uzi')).toBe('lucius')
   })
 
-  it('tabToSlug and slugToTab are the identity for every tab', () => {
+  it('tabToSlug and slugToTab round-trip for every tab', () => {
     for (const tabId of TABS) {
-      expect(tabToSlug(tabId)).toBe(tabId)
-      expect(slugToTab(tabId)).toBe(tabId)
+      expect(slugToTab(tabToSlug(tabId))).toBe(tabId)
     }
   })
 

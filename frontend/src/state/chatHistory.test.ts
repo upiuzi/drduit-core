@@ -4,13 +4,15 @@ import { NEW_CHAT, entryFor, moveFor, openFor, readEntry } from './chatHistory'
 const known = (ids: string[]) => (id: string) => ids.includes(id)
 
 describe('chat history rules', () => {
-  it('puts a written chat in the Lucius address and a new one only in history state', () => {
+  it('puts a written chat in the Uzi address and a new one only in history state', () => {
+    expect(entryFor('/uzi', 'a', true)).toEqual({ conversation: 'a', chat: 'a' })
+    expect(entryFor('/uzi', 'draft', false)).toEqual({ conversation: undefined, chat: NEW_CHAT })
     expect(entryFor('/lucius', 'a', true)).toEqual({ conversation: 'a', chat: 'a' })
-    expect(entryFor('/lucius', 'draft', false)).toEqual({ conversation: undefined, chat: NEW_CHAT })
     expect(entryFor('/dashboard', 'a', true)).toEqual({ conversation: undefined, chat: 'a' })
   })
 
-  it('reads ?conversation= only on the Lucius page', () => {
+  it('reads ?conversation= only on the Uzi page', () => {
+    expect(readEntry('/uzi', 'a', { luciusChat: 'a' })).toEqual({ conversation: 'a', chat: 'a' })
     expect(readEntry('/lucius', 'a', { luciusChat: 'a' })).toEqual({ conversation: 'a', chat: 'a' })
     expect(readEntry('/dashboard', 'a', null)).toEqual({ conversation: undefined, chat: undefined })
   })
@@ -18,15 +20,15 @@ describe('chat history rules', () => {
   it('gives a switch the person made its own entry, and rewrites in place otherwise', () => {
     const current = { conversation: 'a', chat: 'a' }
     const desired = { conversation: 'b', chat: 'b' }
-    expect(moveFor({ pathname: '/lucius', current, desired, switched: true })).toBe('push')
-    expect(moveFor({ pathname: '/lucius', current, desired, switched: false })).toBe('replace')
-    expect(moveFor({ pathname: '/lucius', current: desired, desired, switched: true })).toBeNull()
+    expect(moveFor({ pathname: '/uzi', current, desired, switched: true })).toBe('push')
+    expect(moveFor({ pathname: '/uzi', current, desired, switched: false })).toBe('replace')
+    expect(moveFor({ pathname: '/uzi', current: desired, desired, switched: true })).toBeNull()
   })
 
   it('the first message gives a new chat its address without adding an entry', () => {
     const current = { conversation: undefined, chat: NEW_CHAT }
-    const desired = entryFor('/lucius', 'n1', true)
-    expect(moveFor({ pathname: '/lucius', current, desired, switched: false })).toBe('replace')
+    const desired = entryFor('/uzi', 'n1', true)
+    expect(moveFor({ pathname: '/uzi', current, desired, switched: false })).toBe('replace')
   })
 
   it('leaves a page it never wrote alone unless the person switched', () => {

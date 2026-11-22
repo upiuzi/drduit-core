@@ -23,7 +23,7 @@ _ELLIPSIS = "…"
 _UNTITLED = "New conversation"
 _LINK_HINT = (
     "When you mention a conversation you found, link it with its `link` so the user can open it, "
-    "e.g. [Car insurance renewal](/lucius?conversation=…)."
+    "e.g. [Car insurance renewal](/uzi?conversation=…)."
 )
 _ATTACHMENT_REF = re.compile(r"ref_id:\s*([\w.-]+)")
 _TERM = re.compile(r'"([^"]+)"|(\S+)')
@@ -119,7 +119,7 @@ def _shows_private_attachment(*blocks: str) -> bool:
 
 def conversation_link(session_id: str) -> str:
     """The in-app path that opens ``session_id`` — a plain click on it in a reply switches the chat."""
-    return f"/lucius?conversation={quote(session_id, safe='')}"
+    return f"/uzi?conversation={quote(session_id, safe='')}"
 
 
 def _refusal(message: str) -> tuple[str, None]:
