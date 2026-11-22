@@ -202,8 +202,13 @@ export function PlanWorksheet({
     }
   }
 
-  const handleOpenAdd = (bucket?: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free') => {
-    setSelectedBucket(bucket || 'fixed_costs')
+  const handleOpenAdd = (bucket?: unknown) => {
+    const validBuckets = ['fixed_costs', 'investments', 'savings', 'guilt_free']
+    const safeBucket =
+      typeof bucket === 'string' && validBuckets.includes(bucket)
+        ? (bucket as 'fixed_costs' | 'investments' | 'savings' | 'guilt_free')
+        : 'fixed_costs'
+    setSelectedBucket(safeBucket)
     setEditingItem(null)
     setModalOpen(true)
   }
@@ -295,7 +300,7 @@ export function PlanWorksheet({
                     onChange={(e) => setIncomeInput(e.target.value)}
                     autoFocus
                   />
-                  <Button variant="primary" size="dense" onClick={handleSaveIncome}>Save</Button>
+                  <Button variant="primary" size="dense" onClick={() => void handleSaveIncome()}>Save</Button>
                   <Button variant="secondary" size="dense" onClick={() => setEditingIncome(false)}>X</Button>
                 </div>
               ) : (
@@ -841,7 +846,7 @@ export function PlanWorksheet({
             <Button
               variant="primary"
               size="dense"
-              onClick={handleOpenAdd}
+              onClick={() => handleOpenAdd('fixed_costs')}
               style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}
             >
               <Plus size={14} />

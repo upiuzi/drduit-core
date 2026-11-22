@@ -99,8 +99,13 @@ export function TrackTab({ onAskLucius, toast }: Props) {
   const [addModalOpen, setAddModalOpen] = useState(false)
   const [addModalBucket, setAddModalBucket] = useState<'fixed_costs' | 'investments' | 'savings' | 'guilt_free'>('fixed_costs')
 
-  const handleOpenAddModal = (bucket: 'fixed_costs' | 'investments' | 'savings' | 'guilt_free' = 'fixed_costs') => {
-    setAddModalBucket(bucket)
+  const handleOpenAddModal = (bucket?: unknown) => {
+    const validBuckets = ['fixed_costs', 'investments', 'savings', 'guilt_free']
+    const safeBucket =
+      typeof bucket === 'string' && validBuckets.includes(bucket)
+        ? (bucket as 'fixed_costs' | 'investments' | 'savings' | 'guilt_free')
+        : 'fixed_costs'
+    setAddModalBucket(safeBucket)
     setAddModalOpen(true)
   }
 
@@ -170,7 +175,7 @@ export function TrackTab({ onAskLucius, toast }: Props) {
     }
   }
 
-  const handleSaveExpense = async (payload: {
+  const handleSaveExpense = async (rawPayload: {
     id?: string
     name: string
     amount: number
@@ -179,11 +184,33 @@ export function TrackTab({ onAskLucius, toast }: Props) {
     due_date?: string | null
     notes?: string | null
   }) => {
+    const validBuckets = ['fixed_costs', 'investments', 'savings', 'guilt_free']
+    const safeBucket =
+      typeof rawPayload.bucket === 'string' && validBuckets.includes(rawPayload.bucket)
+        ? rawPayload.bucket
+        : 'fixed_costs'
+
+    const cleanPayload = {
+      id: rawPayload.id ? String(rawPayload.id) : undefined,
+      name: String(rawPayload.name || '').trim(),
+      amount: Number(rawPayload.amount) || 0,
+      frequency: rawPayload.frequency === 'annual' ? ('annual' as const) : ('monthly' as const),
+      bucket: safeBucket as 'fixed_costs' | 'investments' | 'savings' | 'guilt_free',
+      due_date:
+        typeof rawPayload.due_date === 'string' && rawPayload.due_date.trim()
+          ? rawPayload.due_date.trim()
+          : null,
+      notes:
+        typeof rawPayload.notes === 'string' && rawPayload.notes.trim()
+          ? rawPayload.notes.trim()
+          : null,
+    }
+
     try {
       await fetchJson('/api/plan/track/planned-expenses', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
+        body: JSON.stringify(cleanPayload),
       })
       await loadData(month)
     } catch (err) {

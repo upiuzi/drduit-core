@@ -77,11 +77,21 @@ const BUCKET_OPTIONS = [
   { value: 'guilt_free', label: 'Guilt-Free Spending (Dining, hobbies, fun — 20–35%)' },
 ]
 
+export const VALID_BUCKETS = ['fixed_costs', 'investments', 'savings', 'guilt_free'] as const
+export type BucketKey = (typeof VALID_BUCKETS)[number]
+
+export function sanitizeBucket(b: unknown): BucketKey {
+  if (typeof b === 'string' && (VALID_BUCKETS as readonly string[]).includes(b)) {
+    return b as BucketKey
+  }
+  return 'fixed_costs'
+}
+
 export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, defaultBucket }: Props) {
   const [name, setName] = useState('')
   const [amount, setAmount] = useState<string>('')
   const [frequency, setFrequency] = useState<'monthly' | 'annual'>('monthly')
-  const [bucket, setBucket] = useState<'fixed_costs' | 'investments' | 'savings' | 'guilt_free'>('fixed_costs')
+  const [bucket, setBucket] = useState<BucketKey>('fixed_costs')
   const [dueDate, setDueDate] = useState('')
   const [notes, setNotes] = useState('')
   const [submitting, setSubmitting] = useState(false)
@@ -89,17 +99,17 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
 
   useEffect(() => {
     if (initialData) {
-      setName(initialData.name)
-      setAmount(String(initialData.amount))
-      setFrequency(initialData.frequency)
-      setBucket(initialData.bucket)
-      setDueDate(initialData.due_date || '')
-      setNotes(initialData.notes || '')
+      setName(String(initialData.name || ''))
+      setAmount(String(initialData.amount ?? ''))
+      setFrequency(initialData.frequency === 'annual' ? 'annual' : 'monthly')
+      setBucket(sanitizeBucket(initialData.bucket))
+      setDueDate(initialData.due_date ? String(initialData.due_date) : '')
+      setNotes(initialData.notes ? String(initialData.notes) : '')
     } else {
       setName('')
       setAmount('')
       setFrequency('monthly')
-      setBucket(defaultBucket || 'fixed_costs')
+      setBucket(sanitizeBucket(defaultBucket))
       setDueDate('')
       setNotes('')
     }
@@ -112,7 +122,8 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
   const monthlyEquivalent = frequency === 'annual' ? Math.round(numAmount / 12) : numAmount
 
   const handleSubmit = async () => {
-    if (!name.trim()) {
+    const cleanName = String(name || '').trim()
+    if (!cleanName) {
       setError('Please enter an expense name.')
       return
     }
@@ -124,15 +135,16 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
     setSubmitting(true)
     setError(null)
     try {
-      await onSave({
-        id: initialData?.id,
-        name: name.trim(),
-        amount: numAmount,
-        frequency,
-        bucket,
-        due_date: dueDate.trim() || null,
-        notes: notes.trim() || null,
-      })
+      const safePayload = {
+        id: initialData?.id ? String(initialData.id) : undefined,
+        name: cleanName,
+        amount: Number(numAmount) || 0,
+        frequency: frequency === 'annual' ? ('annual' as const) : ('monthly' as const),
+        bucket: sanitizeBucket(bucket),
+        due_date: typeof dueDate === 'string' && dueDate.trim() ? dueDate.trim() : null,
+        notes: typeof notes === 'string' && notes.trim() ? notes.trim() : null,
+      }
+      await onSave(safePayload)
       onClose()
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Failed to save planned expense.')
@@ -255,7 +267,7 @@ export function AddPlannedExpenseModal({ isOpen, onClose, onSave, initialData, d
               id="expense-bucket"
               value={bucket}
               options={BUCKET_OPTIONS}
-              onChange={(e) => setBucket(e.target.value as any)}
+              onChange={(e) => setBucket(sanitizeBucket(e.target.value))}
             />
           </FormField>
 
