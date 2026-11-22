@@ -23,7 +23,7 @@ you press Send.
 
 ## Compared with Claude and ChatGPT Personal Finance
 
-|  | Claude Personal Finance | ChatGPT Personal Finance | Open Net Worth |
+|  | Claude Personal Finance | ChatGPT Personal Finance | Dr Duit |
 |---|---|---|---|
 | **Can it act?** | No, it reads your accounts | No, it can't change your accounts | Yes: books transactions, runs your budget, places trades through your broker (approval by default) |
 | **Comes to you first** | No, it waits for you to ask | No, it waits for you to ask | Daily briefings, weekly and monthly reports, Telegram pings when news hits what you hold |
@@ -39,25 +39,22 @@ you press Send.
 ## The open-source alternative to Monarch, YNAB, Actual Budget, Firefly III and Ghostfolio
 
 Monarch Money and YNAB keep your budget on their servers. Actual Budget and Firefly III keep it on
-yours, and Ghostfolio does the same for a portfolio. Open Net Worth puts the budget, the holdings,
-the loans and the property in one book on your own machine, and gives an AI agent the tools to keep
+yours, and Ghostfolio does the same for a portfolio. Dr Duit puts the budget, the holdings,
+the loans and the property in one book on your own machine, and gives an AI assistant (Uzi) the tools to keep
 that book. If you searched for an open-source Monarch Money alternative, a YNAB alternative you can
 self-host, or a Ghostfolio alternative that also budgets, this is the repository.
 
-| Looking for | What it is | How Open Net Worth differs | Read more |
+| Looking for | What it is | How Dr Duit differs | Keunggulan Dr Duit |
 |---|---|---|---|
-| **Open-source Monarch Money alternative** | Hosted budgeting and net worth app, US and Canada only, $99.99 a year | Free and self-hosted; any currency; you pick the AI model, a local one included; the MCP server runs where your data lives | [Monarch Money alternative](https://opennetworth.ai/blog/open-net-worth-vs-monarch-money/) |
-| **Open-source YNAB alternative** | A zero-based budgeting method and its hosted app, from $109 a year | Zero-Based envelopes, Ready to Assign and targets, beside your investments and property; the YNAB import is on by default | [YNAB alternative](https://opennetworth.ai/blog/open-net-worth-vs-ynab/) · [Migrate from YNAB](https://opennetworth.ai/blog/migrate-from-ynab/) |
-| **Actual Budget alternative** | Local-first envelope budget, MIT, no AI in the app | Adds holdings with live prices, accounts in any currency, and an agent that changes the books under rules you set | [Actual Budget alternative](https://opennetworth.ai/blog/open-net-worth-vs-actual-budget/) |
-| **Firefly III alternative** | Self-hosted income and expense manager with rules, recurring transactions and a REST API, no AI by design | Adds holdings, property, a zero-based budget and the agent in the same book | [Firefly III alternative](https://opennetworth.ai/blog/firefly-iii-alternative/) |
-| **Ghostfolio or Wealthfolio alternative** | Portfolio trackers: Ghostfolio is AGPL-3.0 and free to self-host, Wealthfolio is local-first | Your budget, loans and property sit beside the holdings | [Ghostfolio alternative](https://opennetworth.ai/blog/ghostfolio-alternative/) |
-| **Open-source Claude Personal Finance alternative** | Anthropic's read-only view of your accounts inside Claude, US only, through Plaid | Works in any country; the data stays on your machine; the agent can change the books; runs on a Claude plan that includes Claude Code | [Claude Personal Finance alternative](https://opennetworth.ai/blog/claude-personal-finance-alternative/) |
-| **Open Muse or dots for your money** | Meta's and OpenAI's general agents, running in their makers' clouds | One ledger of everything you own and owe, in a file on your computer; the agent asks first by default | [Muse vs dots vs Open Net Worth](https://opennetworth.ai/blog/muse-vs-dots-vs-self-hosted-ai-wealth-assistant/) |
+| **Open-source Monarch Money alternative** | Hosted budgeting and net worth app, US and Canada only, $99.99 a year | Free and self-hosted; any currency; you pick the AI model, a local one included; the MCP server runs where your data lives | Gratis & self-hosted di VPS/PC sendiri |
+| **Open-source YNAB alternative** | A zero-based budgeting method and its hosted app, from $109 a year | Zero-Based envelopes, Ready to Assign and targets, beside your investments and property; the YNAB import is on by default | Zero-based envelope & Conscious Spending Plan |
+| **Actual Budget alternative** | Local-first envelope budget, MIT, no AI in the app | Adds holdings with live prices, accounts in any currency, and an agent that changes the books under rules you set | Dilengkapi AI agent (Uzi) & multi-currency |
+| **Firefly III alternative** | Self-hosted income and expense manager with rules, recurring transactions and a REST API, no AI by design | Adds holdings, property, a zero-based budget and the agent in the same book | Portofolio, investasi, dan budgeting dalam 1 aplikasi |
+| **Ghostfolio or Wealthfolio alternative** | Portfolio trackers: Ghostfolio is AGPL-3.0 and free to self-host, Wealthfolio is local-first | Your budget, loans and property sit beside the holdings | Pelacakan aset riil, properti, dan utang |
+| **Open-source Claude Personal Finance alternative** | Anthropic's read-only view of your accounts inside Claude, US only, through Plaid | Works in any country; the data stays on your machine; the agent can change the books; runs on a Claude plan that includes Claude Code | Data tetap privat & lokal di server Anda |
+| **Open Muse or dots for your money** | Meta's and OpenAI's general agents, running in their makers' clouds | One ledger of everything you own and owe, in a file on your computer; the agent asks first by default | Kendali penuh, open-source tanpa vendor lock-in |
 
-Each post also says where the other tool is the better pick. Monarch and YNAB have phone apps and
-household sharing, Actual Budget is the more established budget, and Ghostfolio is the more focused
-portfolio tracker. All of them side by side:
-[Open source net worth trackers compared](https://opennetworth.ai/blog/open-source-net-worth-tracker/).
+Each tool has its own strengths. Dr Duit unifies personal budgeting, wealth tracking, and AI assistance into one private, self-hosted system.
 
 ## What's inside
 
@@ -67,8 +64,8 @@ portfolio tracker. All of them side by side:
 | **Budget** | Zero-based envelopes (Ready to Assign, targets, credit card payments) or a simple 50/30/20 split, plus a cash flow projection. |
 | **Investments** | Holdings, buys, sales, dividends, lots and realized gains, options, RSU and other equity grants, watchlists and price alerts. |
 | **Planning** | Big dated commitments and how each is funded, and a retirement outlook: the odds your money lasts and the age you could retire. |
-| **Lucius** | The AI agent on every screen. He works your real book through real tools: logs and sorts transactions, reconciles accounts, builds reports. Connect an MCP server and he acts in other apps too, like placing a trade with your broker. You choose what he does on his own and what he asks you first. |
-| **Automations** | Jobs Lucius runs on a schedule or when something happens: a daily briefing, a weekly report, a bank sync, logging purchases from email. |
+| **Uzi** | The AI assistant on every screen. Works your real book through real tools: logs and sorts transactions, reconciles accounts, builds reports. Connect an MCP server and he acts in other apps too, like placing a trade with your broker. You choose what he does on his own and what he asks you first. |
+| **Automations** | Jobs Uzi runs on a schedule or when something happens: a daily briefing, a weekly report, a bank sync, logging purchases from email. |
 | **Skills and memory** | Saved playbooks he follows for a job (built in, or your own), and facts he remembers about you between conversations. |
 | **Connectors** | Bank and broker sync (SimpleFIN, Plaid, Enable Banking, Lunch Flow, Alpaca, Interactive Brokers), YNAB, Lunch Money, your mailbox, Telegram, web search, and any MCP server. |
 | **Your AI** | An API key (Anthropic, OpenAI or any OpenAI-compatible endpoint, including a local model), or the Claude Code, Codex or Antigravity sign-in you already have. Other AI apps can use your book too, through `onw mcp`. |
@@ -96,57 +93,42 @@ accounts, or mobile apps.
 
 ## Getting started
 
-### Option A — the desktop app (recommended)
+### Option A — Desktop App
 
-Download it from [opennetworth.ai](https://opennetworth.ai), or from the public
-[releases page](https://github.com/open-net-worth-ai/open-net-worth-releases/releases/latest):
+Unduh atau install Dr Duit untuk desktop atau server lokal:
 
-| Platform | Download | Terminal install |
+| Platform | Download / Setup | Terminal install |
 |---|---|---|
-| macOS (Apple Silicon; signed and notarized DMG) | [opennetworth.ai/download/mac](https://opennetworth.ai/download/mac) | `curl -fsSL https://opennetworth.ai/install.sh \| sh` |
-| Windows 10/11 x64 (installer) | [opennetworth.ai/download/windows](https://opennetworth.ai/download/windows) | `irm https://opennetworth.ai/install.ps1 \| iex` (PowerShell) |
-| Linux x86_64 (AppImage, or `.deb` from the releases page) | [opennetworth.ai/download/linux](https://opennetworth.ai/download/linux) | `curl -fsSL https://opennetworth.ai/install.sh \| sh` |
+| macOS (Apple Silicon) | [GitHub Releases](https://github.com/upiuzi/drduit-core/releases) | `git clone https://github.com/upiuzi/drduit-core.git && cd drduit-core && make setup` |
+| Windows 10/11 x64 | [GitHub Releases](https://github.com/upiuzi/drduit-core/releases) | Jalankan via WSL2 atau Docker Compose |
+| Linux x86_64 / VPS Ubuntu | [GitHub Setup](https://github.com/upiuzi/drduit-core) | `git clone https://github.com/upiuzi/drduit-core.git && cd drduit-core && make setup` |
 
-The Windows installer is **not code-signed yet**, so SmartScreen may show a warning: choose
-**More info → Run anyway**. `install.ps1` verifies the download against the release's
-`SHA256SUMS`; add `-RequireSigned` to refuse an unsigned installer. `install.sh` verifies the same
-checksum before it installs anything. The macOS and Windows apps update themselves in place;
-a Linux AppImage replaces itself after checking its SHA-256, and a `.deb` points you to the
-releases page.
+Lalu ikuti panduan layar pertama: pilih lokasi penyimpanan data (folder lokal atau server VPS), buat login/keamanan, tentukan mata uang dasar (misal IDR), dan Uzi siap membantu mengelola buku keuangan Anda. Data Anda tersimpan di direktori privat `~/.open-net-worth/` (atau direktori yang Anda tentukan).
 
-Then follow the first-run screen: it asks where your book lives (a local folder, or an existing
-server), creates your login, picks a base currency, and hands off to Lucius to add your first
-account. Your data defaults to `~/.open-net-worth/`, outside the app, so updating or reinstalling
-never touches it. See the
-[desktop guide](docs/product/operations/desktop.md) for background mode, start at login, watched
-folders and keyboard shortcuts.
+### Option B — Run Local Server
 
-### Option B — a server
-
-**1. Install it.** You don't need Python or Node.js on your system. This is for macOS and Linux;
-on Windows, follow [these steps](docs/product/getting-started/installation.md#windows) instead.
+**1. Clone dan setup otomatis:**
 
 ```bash
-curl -fsSL https://github.com/open-net-worth-ai/open-net-worth-releases/releases/latest/download/install-server.sh | sh
+git clone https://github.com/upiuzi/drduit-core.git
+cd drduit-core
+make setup
 ```
 
-If it says `onw` was added to your `PATH`, run the `source` line it shows (for zsh,
-`source ~/.zshenv`) or open a new terminal. It finishes by listing the commands you're likely to
-need next.
+Setelah `make setup` selesai, jalankan server:
 
-**2. Start it.** Your browser opens the app, and first run takes it from there.
+**2. Start server:**
 
 ```bash
-onw start --open
+make start
+# atau
+.venv/bin/onw start --open
 ```
 
-**3. Optional: keep it running and up to date.** Press <kbd>Ctrl</kbd>+<kbd>C</kbd> to stop the
-copy from step 2, then run the command below. It starts the app at login, restarts it after a
-crash and installs each new signed release. Leave out `--auto-upgrade` to update by hand. See
-[Keeping it running](#keeping-it-running).
+**3. Optional: keep it running and up to date.** Tekan <kbd>Ctrl</kbd>+<kbd>C</kbd> untuk menghentikan server sementara, lalu jalankan:
 
 ```bash
-onw start --autostart --auto-upgrade
+onw autostart on
 ```
 
 Other commands you may need ([full list](docs/product/getting-started/installation.md#the-onw-command)):
@@ -174,16 +156,11 @@ Good to know:
 
 ### Option C — Docker
 
-**1. Download the Compose file** into an empty folder.
+**1. Jalankan via Docker Compose:**
 
 ```bash
-curl -fsSLO https://github.com/open-net-worth-ai/open-net-worth-releases/releases/latest/download/docker-compose.yml
-```
-
-**2. Pick a password and start it.** Use at least 8 characters. Compose won't start without a
-password.
-
-```bash
+git clone https://github.com/upiuzi/drduit-core.git
+cd drduit-core
 AUTH_PASSWORD='pick a password' docker compose up -d
 ```
 
@@ -203,10 +180,7 @@ Good to know:
   [first-run guide](docs/product/getting-started/first-run.md#docker).
 - **Your data** lives in a named volume that survives `docker compose down`. Migrations run at
   boot.
-- **The version** is the public image `ghcr.io/open-net-worth-ai/open-net-worth`, pinned by that
-  Compose file to the release it came with. `ONW_VERSION=x.y.z` runs another.
-- **Working on the code?** From a checkout, add `-f compose.build.yml --build` to build the image
-  locally.
+- **Build or image:** To build the Docker image locally from source, use `docker compose -f compose.build.yml up --build -d`.
 
 ### Option D — VPS Ubuntu (Self-Hosted + Autostart)
 
@@ -373,14 +347,14 @@ Jika Anda ingin mengakses menggunakan domain (misal `duit.domainanda.com`) denga
 
 Add the **YNAB** or **Lunch Money** connector with a personal access token and your transactions
 flow in, refreshed every 6 hours. Categories and budgets are not copied: set them up here, or let
-Lucius or an Automation categorize as transactions arrive. The budget works the way YNAB's does
+Uzi or an Automation categorize as transactions arrive. The budget works the way YNAB's does
 (every dollar assigned, Ready to Assign, envelopes that hold their overspend until month end).
-Steps: [Bank and brokerage connectors](https://docs.opennetworth.ai/connectors/bank-brokerage/).
+Langkah-langkah: Lihat panduan di menu **/help** aplikasi (Connectors).
 
 ## Keeping it running
 
 The desktop app does this itself: **Settings → Desktop** has *Keep running in the background* and
-*Start at login*. For a server, Open Net Worth is one Python process (`onw start`, which runs uvicorn and serves both the API and
+*Start at login*. For a server, Dr Duit is one Python process (`onw start`, which runs uvicorn and serves both the API and
 the built frontend on the same port) — there is no separate web server (no Apache, no nginx) in
 front of it, and none is required.
 
@@ -410,13 +384,13 @@ front of it, and none is required.
   `LOGS_DIR`, `UV_TOOL_DIR`, `UV_TOOL_BIN_DIR`, `UV_CACHE_DIR`, `UV_PYTHON_INSTALL_DIR`,
   `XDG_DATA_HOME` that were set when you installed it.
 
-  macOS (`~/Library/LaunchAgents/ai.opennetworth.app.plist`):
+  macOS (`~/Library/LaunchAgents/id.drduit.app.plist`):
 
   ```xml
   <?xml version="1.0" encoding="UTF-8"?>
   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
   <plist version="1.0"><dict>
-    <key>Label</key><string>ai.opennetworth.app</string>
+    <key>Label</key><string>id.drduit.app</string>
     <key>ProgramArguments</key>
     <array>
       <string>/path/to/python3</string>
@@ -428,11 +402,11 @@ front of it, and none is required.
   </dict></plist>
   ```
 
-  Linux (`~/.config/systemd/user/open-net-worth.service`):
+  Linux (`~/.config/systemd/user/drduit.service`):
 
   ```ini
   [Unit]
-  Description=Open Net Worth
+  Description=Dr Duit
   After=network.target
 
   [Service]
@@ -481,7 +455,7 @@ restore-from-backup — a checkpoint is saved first, so a restore is itself undo
 
 ## Running it beyond localhost
 
-Open Net Worth is built for **one operator on a machine you control**. Treat it like a
+Dr Duit is built for **one operator on a machine you control**. Treat it like a
 self-hosted password manager, not a public web app.
 
 - **The local machine is trusted by default.** With `AUTH_TRUST_LOOPBACK=true` (the default), any
@@ -500,8 +474,8 @@ Found a vulnerability? See [`SECURITY.md`](SECURITY.md) — please do not open a
 
 ## Documentation
 
-- **[docs.opennetworth.ai](https://docs.opennetworth.ai)** — the full user guide. The same docs
-  are built into the app, searchable, under `/help`.
+- **Dokumentasi Dr Duit** — panduan lengkap pengguna. Dokumentasi yang sama
+  terintegrasi di dalam aplikasi, dapat dicari langsung di menu `/help`.
 - [`docs/DATA_MODEL.md`](docs/DATA_MODEL.md) — stores, fields, and how the money math works.
 - [`CLAUDE.md`](CLAUDE.md) — the codebase map, if you are reading code rather than using the app.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — dev setup, the dependency rule, test policy.
