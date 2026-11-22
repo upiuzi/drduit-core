@@ -48,6 +48,11 @@ const DETECTABLE: { key: string; label: string; blurb: string }[] = [
     label: 'Antigravity CLI',
     blurb: 'Uses your existing Google Antigravity account.',
   },
+  {
+    key: 'hermes_cli',
+    label: 'Hermes CLI',
+    blurb: 'Uses your local Hermes Agent CLI setup.',
+  },
 ]
 
 // Which catalogue entries first run offers when nothing is detected. The full list lives in
@@ -57,7 +62,7 @@ const DETECTABLE: { key: string; label: string; blurb: string }[] = [
 // here without anyone remembering to update a second list — first run was showing three of
 // the eleven that shipped, and there was no way to reach the rest without finishing setup and
 // going to Settings.
-const CLI_KEYS = new Set(['claude_cli', 'codex_cli', 'antigravity_cli'])
+const CLI_KEYS = new Set(['claude_cli', 'codex_cli', 'antigravity_cli', 'hermes_cli'])
 // Preferred order for the ones people ask for by name; anything else follows, catalog order.
 // OpenRouter leads — one key, and it shops the same models plus cheaper capable ones (GLM,
 // DeepSeek) instead of defaulting someone onto Anthropic's full-price Sonnet.

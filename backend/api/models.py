@@ -159,6 +159,21 @@ _CLI_TRANSPORTS: dict = {
             "then restart this app."
         ),
     },
+    "hermes_cli": {
+        "name": "Hermes Agent CLI",
+        "models": lambda: [
+            "hermes-3-llama-3.1-8b",
+            "hermes-3-llama-3.1-70b",
+            "hermes-3-llama-3.1-405b",
+            "deephermes-3-llama-3-8b-preview",
+        ],
+        "min_version": None,
+        "upgrade": "curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash",
+        "install": (
+            "Install it from https://hermes-agent.nousresearch.com, run `hermes` once to configure, "
+            "then restart this app."
+        ),
+    },
 }
 
 # How long a live model list is trusted before we re-fetch (the dropdown is opened

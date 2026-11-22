@@ -214,6 +214,12 @@ _OPENAI_PRICING: list[tuple[str, float, float]] = [
     ("glm-4.5-flash", 0.0, 0.0),  # GLM-4.5-Flash (free)
     ("glm-4.5", 0.60, 2.20),  # GLM-4.5
     ("glm-4-32b", 0.10, 0.10),  # GLM-4-32B-0414-128K
+    # ── Nous Research Hermes ──────────────────────────────────────────────
+    ("hermes-3-llama-3.1-405b", 1.50, 3.00),  # Hermes 3 405B
+    ("hermes-3-llama-3.1-70b", 0.35, 0.40),   # Hermes 3 70B
+    ("hermes-3-llama-3.1-8b", 0.05, 0.08),    # Hermes 3 8B
+    ("deephermes-3", 0.20, 0.30),             # DeepHermes
+    ("hermes", 0.10, 0.20),                   # Hermes generic
 ]
 
 # ---------------------------------------------------------------------------

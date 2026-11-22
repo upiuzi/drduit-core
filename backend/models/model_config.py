@@ -26,8 +26,9 @@ from backend.models.base import ONBaseModel
 # subscription instead of API credits (RFC 2026-07-22-claude-code-cli-provider);
 # ``codex_cli`` = the same idea for OpenAI's Codex CLI (``codex exec``), spending a
 # ChatGPT plan (RFC 2026-07-22-codex-cli-provider); ``antigravity_cli`` = the locally-installed
-# Google Antigravity CLI (``agy -p``).
-VALID_PROVIDERS = ("anthropic", "openai_compatible", "claude_cli", "codex_cli", "antigravity_cli")
+# Google Antigravity CLI (``agy -p``); ``hermes_cli`` = the locally-installed
+# Nous Research Hermes Agent CLI (``hermes chat``).
+VALID_PROVIDERS = ("anthropic", "openai_compatible", "claude_cli", "codex_cli", "antigravity_cli", "hermes_cli")
 
 
 class ModelConfigUpdate(ONBaseModel):

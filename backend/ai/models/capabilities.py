@@ -120,6 +120,9 @@ def effort_levels(
             return ["low", "medium", "high"]
         return []
 
+    if transport == "hermes_cli":
+        return []
+
     base = (base_url or "").lower()
     lc = (model_id or "").lower()
 

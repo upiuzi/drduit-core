@@ -202,6 +202,17 @@ PROVIDER_HINTS: dict = {
             "gpt-oss-120b-medium",
         ],
     },
+    "hermes_cli": {
+        "label": "Hermes Agent CLI (uses your local Hermes setup)",
+        "needs_base_url": False,
+        "base_url_hints": [],
+        "model_hints": [
+            "hermes-3-llama-3.1-8b",
+            "hermes-3-llama-3.1-70b",
+            "hermes-3-llama-3.1-405b",
+            "deephermes-3-llama-3-8b-preview",
+        ],
+    },
 }
 
 # Presentation catalog — named provider presets the UI shows in the provider
@@ -346,6 +357,22 @@ PROVIDER_CATALOG: list = [
             "claude-opus-4-6-thinking",
             "claude-sonnet-4-6",
             "gpt-oss-120b-medium",
+        ],
+    },
+    {
+        # The locally-installed Nous Research Hermes Agent CLI (`hermes chat`).
+        "key": "hermes_cli",
+        "label": "Hermes Agent CLI",
+        "transport": "hermes_cli",
+        "base_url": "",
+        "needs_api_key": False,
+        "editable_base_url": True,
+        "cli_binary": "hermes",
+        "model_hints": [
+            "hermes-3-llama-3.1-8b",
+            "hermes-3-llama-3.1-70b",
+            "hermes-3-llama-3.1-405b",
+            "deephermes-3-llama-3-8b-preview",
         ],
     },
     {
@@ -721,9 +748,9 @@ class ModelConfigStore(NamespacedSettingsStore):
             raise ConfigurationError(
                 f"Unknown AI provider {key!r}. Choose a valid provider in Settings → AI Models."
             )
-        # A blank Codex CLI / Antigravity CLI model deliberately means "use the CLI's current
+        # A blank Codex CLI / Antigravity CLI / Hermes CLI model deliberately means "use the CLI's current
         # account-compatible default"; every other transport requires an explicit model.
-        if not model and key not in ("codex_cli", "antigravity_cli"):
+        if not model and key not in ("codex_cli", "antigravity_cli", "hermes_cli"):
             raise ConfigurationError(
                 "AI model is not configured. Choose one in Settings → AI Models."
             )
@@ -1071,7 +1098,7 @@ class ModelConfigStore(NamespacedSettingsStore):
         if ":" in override:
             prefix, _, rest = override.partition(":")
             entry = _provider_entry(prefix)
-            if entry is not None and (rest or prefix in ("codex_cli", "antigravity_cli")):
+            if entry is not None and (rest or prefix in ("codex_cli", "antigravity_cli", "hermes_cli")):
                 creds = self.resolve_for_provider(prefix)
                 if creds is None:
                     return None  # should not happen after the entry check
@@ -1345,9 +1372,9 @@ class ModelConfigStore(NamespacedSettingsStore):
         # turn while Settings still looks fine, so the failure lands far from the action
         # that caused it. "Set as default" on a provider with no remembered model sent
         # exactly that. Refuse it at the choke — every writer (REST, the
-        # update_model_config tool, Telegram /model) goes through here. codex_cli / antigravity_cli are the
+        # update_model_config tool, Telegram /model) goes through here. codex_cli / antigravity_cli / hermes_cli are the
         # documented exceptions: blank means "use the CLI's own default".
-        if not model and key not in ("codex_cli", "antigravity_cli"):
+        if not model and key not in ("codex_cli", "antigravity_cli", "hermes_cli"):
             raise ConfigurationError(
                 "AI model is not configured. Pick a model for this provider first."
             )
@@ -1428,7 +1455,7 @@ def _infer_provider_key(
         return _custom_key_for(base_url, providers)
     if transport == "anthropic":
         return "anthropic"
-    if transport in ("claude_cli", "codex_cli", "antigravity_cli"):
+    if transport in ("claude_cli", "codex_cli", "antigravity_cli", "hermes_cli"):
         # base_url is the CLI PATH on these transports, so a non-default path must still
         # resolve to the one catalog entry that owns the transport (the exact-match loop
         # above only fires when the path is blank).

@@ -73,9 +73,11 @@ def cli_default_model(provider_key: str) -> str:
         return _claude_configured_model() or _CLAUDE_FALLBACK
     if provider_key == "antigravity_cli":
         return "gemini-3.8-flash-medium"
+    if provider_key == "hermes_cli":
+        return "hermes-3-llama-3.1-8b"
     return ""
 
 
 def cli_default_models() -> dict[str, str]:
     """``{provider_key: default}`` for every CLI transport that has a notion of one."""
-    return {key: cli_default_model(key) for key in ("claude_cli", "codex_cli", "antigravity_cli")}
+    return {key: cli_default_model(key) for key in ("claude_cli", "codex_cli", "antigravity_cli", "hermes_cli")}

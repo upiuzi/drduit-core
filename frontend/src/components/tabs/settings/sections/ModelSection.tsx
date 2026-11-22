@@ -105,6 +105,7 @@ const CLI_DEFAULT_NOTE: Record<string, string> = {
   claude_cli: 'Claude Code default',
   codex_cli: 'Default in Codex',
   antigravity_cli: 'Default in Antigravity',
+  hermes_cli: 'Default in Hermes',
 }
 
 /** Tags the row a CLI would run on its own, so picking it is a recognised choice. */

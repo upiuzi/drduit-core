@@ -48,7 +48,7 @@ def canonical_model_ref(
                 "Settings → AI Models."
             )
         if provider_entry(provider_key) is not None:
-            if not model_id and provider_key not in ("codex_cli", "antigravity_cli"):
+            if not model_id and provider_key not in ("codex_cli", "antigravity_cli", "hermes_cli"):
                 raise ConfigurationError(
                     "AI model is not configured. Choose one in Settings → AI Models."
                 )

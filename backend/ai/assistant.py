@@ -1249,6 +1249,10 @@ def _build_provider(*, transport: str, base_url: str, api_key: str) -> AIProvide
         from backend.ai.models.antigravity_cli_provider import AntigravityCliProvider
 
         return AntigravityCliProvider(cli_path=base_url, api_key=api_key)
+    if transport == "hermes_cli":
+        from backend.ai.models.hermes_cli_provider import HermesCliProvider
+
+        return HermesCliProvider(cli_path=base_url, api_key=api_key)
     from backend.models.model_config import VALID_PROVIDERS
 
     raise ValueError(
