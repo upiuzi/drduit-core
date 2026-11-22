@@ -165,7 +165,7 @@ class TestCspTrack(unittest.TestCase):
         self.assertNotIn("Kontrakan Rumah", remaining_names)
 
     def test_api_planned_expenses_routes(self):
-        # 1. POST planned expense
+        # 1. POST planned expense (no trailing slash)
         post_res = self.client.post(
             "/api/plan/track/planned-expenses",
             json={
@@ -181,14 +181,52 @@ class TestCspTrack(unittest.TestCase):
         self.assertEqual(saved["monthly_amount"], 400000.0)
         expense_id = saved["id"]
 
-        # 2. POST income
+        # 2. GET planned expenses (both / and non-/)
+        get_res1 = self.client.get("/api/plan/track/planned-expenses")
+        self.assertEqual(get_res1.status_code, 200)
+        self.assertEqual(len(get_res1.json()), 1)
+        self.assertEqual(get_res1.json()[0]["name"], "Gym Membership")
+
+        get_res2 = self.client.get("/api/plan/track/planned-expenses/")
+        self.assertEqual(get_res2.status_code, 200)
+        self.assertEqual(len(get_res2.json()), 1)
+
+        # 3. PUT update planned expense
+        put_res = self.client.put(
+            f"/api/plan/track/planned-expenses/{expense_id}",
+            json={
+                "name": "Gym & Pool Membership",
+                "amount": 550000,
+                "frequency": "monthly",
+                "bucket": "fixed_costs",
+            },
+        )
+        self.assertEqual(put_res.status_code, 200)
+        self.assertEqual(put_res.json()["name"], "Gym & Pool Membership")
+        self.assertEqual(put_res.json()["monthly_amount"], 550000.0)
+
+        # 4. PUT without path param (using payload.id)
+        put_res2 = self.client.put(
+            "/api/plan/track/planned-expenses",
+            json={
+                "id": expense_id,
+                "name": "Gym, Pool & Sauna",
+                "amount": 600000,
+                "frequency": "monthly",
+                "bucket": "fixed_costs",
+            },
+        )
+        self.assertEqual(put_res2.status_code, 200)
+        self.assertEqual(put_res2.json()["name"], "Gym, Pool & Sauna")
+
+        # 5. POST income
         inc_res = self.client.post(
             "/api/plan/track/income",
             json={"monthly_net_income": 10000000},
         )
         self.assertEqual(inc_res.status_code, 200)
 
-        # 3. GET plan
+        # 6. GET plan
         plan_res = self.client.get("/api/plan/track/plan")
         self.assertEqual(plan_res.status_code, 200)
         plan_data = plan_res.json()
@@ -199,10 +237,15 @@ class TestCspTrack(unittest.TestCase):
         self.assertIn("points", plan_data["score"])
         self.assertIn("grade", plan_data["score"])
 
-        # 4. DELETE planned expense
-        del_res = self.client.delete(f"/api/plan/track/planned-expenses/{expense_id}")
-        self.assertEqual(del_res.status_code, 200)
-        self.assertTrue(del_res.json()["ok"])
+        # 7. DELETE planned expense via query param fallback
+        del_fallback = self.client.delete(f"/api/plan/track/planned-expenses?expense_id={expense_id}")
+        self.assertEqual(del_fallback.status_code, 200)
+        self.assertTrue(del_fallback.json()["ok"])
+
+        # 8. Verify list is empty
+        empty_res = self.client.get("/api/plan/track/planned-expenses")
+        self.assertEqual(empty_res.status_code, 200)
+        self.assertEqual(len(empty_res.json()), 0)
 
     def test_parse_amount_and_normalize_frequency(self):
         self.assertEqual(csp_track.parse_amount(28000000), 28000000.0)
